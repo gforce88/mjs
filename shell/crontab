@@ -1,0 +1,15 @@
+crontab -l for display
+crontab -e for edit
+
+* * * * *           /root/workspace/AnonCall/shell/Timer.php > /root/res.log
+* * * * * sleep 5;  /root/workspace/AnonCall/shell/Timer.php > /root/res.log
+* * * * * sleep 10; /root/workspace/AnonCall/shell/Timer.php > /root/res.log
+* * * * * sleep 15; /root/workspace/AnonCall/shell/Timer.php > /root/res.log
+* * * * * sleep 20; /root/workspace/AnonCall/shell/Timer.php > /root/res.log
+* * * * * sleep 25; /root/workspace/AnonCall/shell/Timer.php > /root/res.log
+* * * * * sleep 30; /root/workspace/AnonCall/shell/Timer.php > /root/res.log
+* * * * * sleep 35; /root/workspace/AnonCall/shell/Timer.php > /root/res.log
+* * * * * sleep 40; /root/workspace/AnonCall/shell/Timer.php > /root/res.log
+* * * * * sleep 45; /root/workspace/AnonCall/shell/Timer.php > /root/res.log
+* * * * * sleep 50; /root/workspace/AnonCall/shell/Timer.php > /root/res.log
+* * * * * sleep 55; /root/workspace/AnonCall/shell/Timer.php > /root/res.log

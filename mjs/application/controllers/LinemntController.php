@@ -18,12 +18,12 @@ class LinemntController extends Zend_Controller_Action {
 		$params = $this->initSessionParameters ($session);
 		
 		$tropo = new Tropo();
-		$tropo->call("+12176507163");
+		$tropo->call("+815031364068");
 		$tropo->say("Welcome to Mjs Application! Please waiting for join the conference");
 		$confOptions = array (
 			"name" => "conference",
-			//"id" => "mjsconf".$params["sessionid"],
-			"id" => "123123321",
+			"id" => "mjsconf".$params["sessionid"],
+			//"id" => "123123321",
 			"mute" => false,
 			"allowSignals" => array (
 				"playremind",

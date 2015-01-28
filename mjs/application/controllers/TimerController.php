@@ -31,7 +31,7 @@ class TimerController extends Zend_Controller_Action {
 			$paramArr ["stuid"] = $row ["b_inx"];
 			$paramArr ["mntphone"] = $row ["c_phone"];
 			$paramArr ["trlphone"] = $row ["d_phone"];
-			// $troposervice->callstu ( $paramArr );
+			$troposervice->callstu ( $paramArr );
 			$this->logger->logInfo ( "TimerController", "indexAction", "call stu app" );
 		}
 	}

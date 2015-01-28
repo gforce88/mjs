@@ -36,6 +36,9 @@ class LinestuController extends Zend_Controller_Action {
 		$tropo->conference ( null, $confOptions );
 		$troposervice = new TropoService ();
 		$troposervice->callmnt($params);
+		if($params ["trlphone"]!=""){
+			$troposervice->calltrl($params);
+		}
 		// $tropo->say("http://115.28.40.165/audio/WeAreNowConnecting.mp3");
 		
 		$tropo->on ( array (

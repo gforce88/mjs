@@ -18,7 +18,7 @@ class LinestuController extends Zend_Controller_Action {
 		$this->logger->logInfo ( "LinestuController", "indexAction", "session  is: " . $session->getId () );
 		$params = $this->initSessionParameters ($session);
 		$tropo = new Tropo ();
-		$tropo->call ( "+815058066904" );
+		$tropo->call ( $params ["stuphone"].";pause=5000ms" );
 		$tropo->say ( "Welcome to Mjs Application! Please waiting for join the conference" );
 // 		$tropo->say ( "你好，欢迎使用 MJS 系统", array (
 // 				"voice" => "Linlin" 
@@ -67,6 +67,20 @@ class LinestuController extends Zend_Controller_Action {
 	}
 	public function continueAction() {
 		$tropoJson = file_get_contents ( "php://input" );
+		$this->logger->logInfo ( "LinestuController", "indexAction", "recieve from tropo server message is: " . $tropoJson );
+		$session = new Session ( $tropoJson );
+		$params = $this->initSessionParameters ($session);
+		sleep(10);
+		$confOptions = array (
+				"name" => "conference",
+				//"id" => "mjsconf".$params["sessionid"],
+				"id" => "123123321",
+				"mute" => false,
+				"allowSignals" => array (
+						"playremind",
+						"exit"
+				)
+		);
 		$this->logger->logInfo ( "LinestuController", "continueAction", "continue message: " . $tropoJson );
 	}
 	public function incompleteAction() {

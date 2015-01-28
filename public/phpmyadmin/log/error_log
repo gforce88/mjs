@@ -1,0 +1,61 @@
+[Wed Aug 20 15:31:43 2014] [error] [client ::1] (13)Permission denied: access to /index.php denied (filesystem path '/Users/xuweiming/Documents/mysite') because search permissions are missing on a component of the path
+[Wed Aug 20 15:31:44 2014] [error] [client ::1] (13)Permission denied: access to /index.php denied (filesystem path '/Users/xuweiming/Documents/mysite') because search permissions are missing on a component of the path
+[Wed Aug 20 15:31:44 2014] [error] [client ::1] (13)Permission denied: access to /index.php denied (filesystem path '/Users/xuweiming/Documents/mysite') because search permissions are missing on a component of the path
+[Wed Aug 20 15:31:44 2014] [error] [client ::1] (13)Permission denied: access to /index.php denied (filesystem path '/Users/xuweiming/Documents/mysite') because search permissions are missing on a component of the path
+[Wed Aug 20 15:31:47 2014] [error] [client ::1] (13)Permission denied: access to / denied (filesystem path '/Users/xuweiming/Documents/mysite') because search permissions are missing on a component of the path
+[Wed Aug 20 15:35:35 2014] [error] [client ::1] (13)Permission denied: access to / denied (filesystem path '/Users/xuweiming/Documents/mysite') because search permissions are missing on a component of the path
+[Wed Aug 20 15:35:36 2014] [error] [client ::1] (13)Permission denied: access to / denied (filesystem path '/Users/xuweiming/Documents/mysite') because search permissions are missing on a component of the path
+[Wed Aug 20 15:35:37 2014] [error] [client ::1] (13)Permission denied: access to / denied (filesystem path '/Users/xuweiming/Documents/mysite') because search permissions are missing on a component of the path
+[Wed Aug 20 15:36:38 2014] [error] [client ::1] (13)Permission denied: access to /index.php denied (filesystem path '/Users/xuweiming/Documents/mysite') because search permissions are missing on a component of the path
+[Wed Aug 20 15:45:53 2014] [error] [client ::1] (13)Permission denied: access to / denied (filesystem path '/Users/xuweiming/Documents/mysite') because search permissions are missing on a component of the path
+[Wed Aug 20 15:51:30 2014] [error] [client ::1] (13)Permission denied: access to / denied (filesystem path '/Users/xuweiming/Documents/mysite') because search permissions are missing on a component of the path
+[Wed Aug 20 15:51:31 2014] [error] [client ::1] (13)Permission denied: access to / denied (filesystem path '/Users/xuweiming/Documents/mysite') because search permissions are missing on a component of the path
+[Wed Aug 20 15:51:31 2014] [error] [client ::1] (13)Permission denied: access to / denied (filesystem path '/Users/xuweiming/Documents/mysite') because search permissions are missing on a component of the path
+[Wed Aug 20 15:51:31 2014] [error] [client ::1] (13)Permission denied: access to / denied (filesystem path '/Users/xuweiming/Documents/mysite') because search permissions are missing on a component of the path
+[Wed Aug 20 15:51:31 2014] [error] [client ::1] (13)Permission denied: access to / denied (filesystem path '/Users/xuweiming/Documents/mysite') because search permissions are missing on a component of the path
+[Wed Aug 20 15:51:32 2014] [error] [client ::1] (13)Permission denied: access to / denied (filesystem path '/Users/xuweiming/Documents/mysite') because search permissions are missing on a component of the path
+[Wed Aug 20 15:51:32 2014] [error] [client ::1] (13)Permission denied: access to / denied (filesystem path '/Users/xuweiming/Documents/mysite') because search permissions are missing on a component of the path
+[Wed Aug 20 15:51:32 2014] [error] [client ::1] (13)Permission denied: access to / denied (filesystem path '/Users/xuweiming/Documents/mysite') because search permissions are missing on a component of the path
+[Wed Aug 20 15:51:32 2014] [error] [client ::1] (13)Permission denied: access to / denied (filesystem path '/Users/xuweiming/Documents/mysite') because search permissions are missing on a component of the path
+[Wed Aug 20 15:51:32 2014] [error] [client ::1] (13)Permission denied: access to / denied (filesystem path '/Users/xuweiming/Documents/mysite') because search permissions are missing on a component of the path
+[Wed Aug 20 15:51:33 2014] [error] [client ::1] (13)Permission denied: access to / denied (filesystem path '/Users/xuweiming/Documents/mysite') because search permissions are missing on a component of the path
+[Wed Aug 20 15:51:33 2014] [error] [client ::1] (13)Permission denied: access to / denied (filesystem path '/Users/xuweiming/Documents/mysite') because search permissions are missing on a component of the path
+[Wed Aug 20 15:51:33 2014] [error] [client ::1] (13)Permission denied: access to / denied (filesystem path '/Users/xuweiming/Documents/mysite') because search permissions are missing on a component of the path
+[Wed Aug 20 15:51:33 2014] [error] [client ::1] (13)Permission denied: access to / denied (filesystem path '/Users/xuweiming/Documents/mysite') because search permissions are missing on a component of the path
+[Wed Aug 20 15:51:33 2014] [error] [client ::1] (13)Permission denied: access to / denied (filesystem path '/Users/xuweiming/Documents/mysite') because search permissions are missing on a component of the path
+[Wed Aug 20 15:51:34 2014] [error] [client ::1] (13)Permission denied: access to / denied (filesystem path '/Users/xuweiming/Documents/mysite') because search permissions are missing on a component of the path
+[Wed Aug 20 15:51:34 2014] [error] [client ::1] (13)Permission denied: access to / denied (filesystem path '/Users/xuweiming/Documents/mysite') because search permissions are missing on a component of the path
+[Wed Aug 20 15:51:34 2014] [error] [client ::1] (13)Permission denied: access to / denied (filesystem path '/Users/xuweiming/Documents/mysite') because search permissions are missing on a component of the path
+[Wed Aug 20 15:57:47 2014] [error] [client ::1] PHP Warning:  phpinfo(): It is not safe to rely on the system's timezone settings. You are *required* to use the date.timezone setting or the date_default_timezone_set() function. In case you used any of those methods and you are still getting this warning, you most likely misspelled the timezone identifier. We selected the timezone 'UTC' for now, but please set date.timezone to select your timezone. in /Users/xuweiming/mysite/index.php on line 2
+[Wed Aug 20 15:57:58 2014] [error] [client ::1] PHP Warning:  phpinfo(): It is not safe to rely on the system's timezone settings. You are *required* to use the date.timezone setting or the date_default_timezone_set() function. In case you used any of those methods and you are still getting this warning, you most likely misspelled the timezone identifier. We selected the timezone 'UTC' for now, but please set date.timezone to select your timezone. in /Users/xuweiming/mysite/index.php on line 2
+[Wed Aug 20 15:57:58 2014] [error] [client ::1] PHP Warning:  phpinfo(): It is not safe to rely on the system's timezone settings. You are *required* to use the date.timezone setting or the date_default_timezone_set() function. In case you used any of those methods and you are still getting this warning, you most likely misspelled the timezone identifier. We selected the timezone 'UTC' for now, but please set date.timezone to select your timezone. in /Users/xuweiming/mysite/index.php on line 2
+[Wed Aug 20 18:41:31 2014] [error] [client ::1] File does not exist: /Users/xuweiming/mysite/admin
+[Wed Aug 20 18:41:39 2014] [error] [client ::1] File does not exist: /Users/xuweiming/mysite/admin
+[Wed Aug 20 18:47:30 2014] [error] [client ::1] File does not exist: /Users/xuweiming/mysite/xmt3/admin/index_c, referer: http://localhost/xmt3/admin/index.php
+[Wed Aug 20 18:47:35 2014] [error] [client ::1] File does not exist: /Users/xuweiming/mysite/xmt3/admin/index_c, referer: http://localhost/xmt3/admin/index.php
+[Wed Aug 20 18:47:36 2014] [error] [client ::1] File does not exist: /Users/xuweiming/mysite/xmt3/admin/index_c, referer: http://localhost/xmt3/admin/index.php
+[Wed Aug 20 18:47:36 2014] [error] [client ::1] File does not exist: /Users/xuweiming/mysite/xmt3/admin/index_c, referer: http://localhost/xmt3/admin/index.php
+[Wed Aug 20 18:47:38 2014] [error] [client ::1] File does not exist: /Users/xuweiming/mysite/xmt3/admin/index_c, referer: http://localhost/xmt3/admin/index.php
+[Wed Aug 20 18:47:38 2014] [error] [client ::1] File does not exist: /Users/xuweiming/mysite/xmt3/admin/index_c, referer: http://localhost/xmt3/admin/index.php
+[Wed Aug 20 18:47:39 2014] [error] [client ::1] File does not exist: /Users/xuweiming/mysite/xmt3/admin/index_c, referer: http://localhost/xmt3/admin/index.php
+[Wed Aug 20 18:47:39 2014] [error] [client ::1] File does not exist: /Users/xuweiming/mysite/xmt3/admin/index_c, referer: http://localhost/xmt3/admin/index.php
+[Wed Aug 20 18:47:39 2014] [error] [client ::1] File does not exist: /Users/xuweiming/mysite/xmt3/admin/index_c, referer: http://localhost/xmt3/admin/index.php
+[Wed Aug 20 18:47:39 2014] [error] [client ::1] File does not exist: /Users/xuweiming/mysite/xmt3/admin/index_c, referer: http://localhost/xmt3/admin/index.php
+[Wed Aug 20 18:47:39 2014] [error] [client ::1] File does not exist: /Users/xuweiming/mysite/xmt3/admin/index_c, referer: http://localhost/xmt3/admin/index.php
+[Wed Aug 20 18:47:39 2014] [error] [client ::1] File does not exist: /Users/xuweiming/mysite/xmt3/admin/index_c, referer: http://localhost/xmt3/admin/index.php
+[Wed Aug 20 18:48:10 2014] [error] [client ::1] File does not exist: /Users/xuweiming/mysite/xmt3/webmis/plugin/jquery/jquery.min.map, referer: http://localhost/xmt3/admin/index.php
+[Wed Aug 20 18:48:23 2014] [error] [client ::1] File does not exist: /Users/xuweiming/mysite/xmt3/webmis/plugin/jquery/jquery.min.map, referer: http://localhost/xmt3/admin/index.php
+[Wed Aug 20 18:48:34 2014] [error] [client ::1] File does not exist: /Users/xuweiming/mysite/xmt3/admin/index_c, referer: http://localhost/xmt3/admin/index.php
+[Wed Aug 20 18:50:22 2014] [error] [client ::1] File does not exist: /Users/xuweiming/mysite/xmt3/webmis/plugin/jquery/jquery.min.map, referer: http://localhost/xmt3/admin/index.php
+[Wed Aug 20 18:50:31 2014] [error] [client ::1] File does not exist: /Users/xuweiming/mysite/xmt3/admin/index_c, referer: http://localhost/xmt3/admin/index.php
+[Wed Aug 20 18:50:50 2014] [error] [client ::1] File does not exist: /Users/xuweiming/mysite/xmt3/webmis/plugin/jquery/jquery.min.map, referer: http://localhost/xmt3/admin/
+[Wed Aug 20 18:56:15 2014] [error] [client ::1] File does not exist: /Users/xuweiming/mysite/xmt3/admin/index_c, referer: http://localhost/xmt3/admin/
+[Wed Aug 20 18:56:39 2014] [error] [client ::1] File does not exist: /Users/xuweiming/mysite/xmt3/admin/index_c, referer: http://localhost/xmt3/admin/
+[Wed Aug 20 18:56:51 2014] [error] [client ::1] File does not exist: /Users/xuweiming/mysite/xmt3/admin/index_c, referer: http://localhost/xmt3/admin/
+[Wed Aug 20 19:01:39 2014] [error] [client ::1] File does not exist: /Users/xuweiming/mysite/xmt3/admin/index_c, referer: http://localhost/xmt3/admin/index.php
+[Wed Aug 20 19:03:30 2014] [error] [client ::1] File does not exist: /Users/xuweiming/mysite/xmt3/webmis/plugin/jquery/jquery.min.map, referer: http://localhost/xmt3/admin/index.php
+[Wed Aug 20 19:03:37 2014] [error] [client ::1] File does not exist: /Users/xuweiming/mysite/xmt3/admin/index_c
+[Wed Aug 20 19:05:13 2014] [error] [client ::1] File does not exist: /Users/xuweiming/mysite/xmt3/webmis/plugin/jquery/jquery.min.map, referer: http://localhost/xmt3/admin/index.php
+[Wed Aug 20 19:06:05 2014] [error] [client ::1] File does not exist: /Users/xuweiming/mysite/xmt3/admin/index_c, referer: http://localhost/xmt3/admin/index.php
+[Wed Aug 20 19:08:52 2014] [error] [client ::1] File does not exist: /Users/xuweiming/mysite/xmt3/admin/index_c, referer: http://localhost/xmt3/admin/index.php
+[Wed Aug 20 19:09:18 2014] [error] [client ::1] File does not exist: /Users/xuweiming/mysite/xmt3/admin/index_c

@@ -18,7 +18,6 @@ class Application_Model_Translator extends Zend_Db_Table_Abstract {
 	
 	// 根据firstname lastname创建或者增加translator
 	public function saveOrupdateTranslator($where = array()) {
-		$log = Zend_Registry::get ( 'IVR_LOGGER' );
 		$select = $this->select ();
 		$select->where ( 'firstName= ?', $where ['tFirstName'] );
 		$select->where ( 'lastName= ?', $where ['tLastName'] );
@@ -31,14 +30,12 @@ class Application_Model_Translator extends Zend_Db_Table_Abstract {
 			$newrow->lastName = $where ["tLastName"];
 			$newrow->acctCreateDate = date ( 'Y-m-d H:i:s' );
 			$id = $newrow->save ();
-			$log->info ( "create new Translator Id is:" . $id );
 			return $id;
 		} else {
 			$newrow = $this->find ( $row ["inx"] )->current ();
 			$newrow->email = $where ["tEmail"];
 			$newrow->phone = $where ["tPhone"];
 			$newrow->save ();
-			$log->info ( "update new Translator Id is:" . $newrow->inx );
 			return $newrow->inx;
 		}
 	}

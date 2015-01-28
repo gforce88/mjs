@@ -6,13 +6,13 @@ class IndexController extends Zend_Controller_Action {
 		$filename=APPLICATION_PATH ."/configs/application.ini";
 		$config = new Zend_Config_Ini($filename,'production');
 		$translate->setlocale ( $config->mjs->locale );
+		$this->_helper->viewRenderer->setNeverRender ();
 	}
 	public function indexAction() {
-		$log = Zend_Registry::get('IVR_LOGGER');
-		date_default_timezone_set("UTC");
-		$dt = new DateTime();
-		
-		$log->info($dt->format("Y-m-d"));
+		$data = array();
+		$data["name"] = 'xwm';
+		$data["age"] = '12';
+		$this->_helper->json ( $data, true, false, true );
 	}
 	public function loginAction() {
 		// action body

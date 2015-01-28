@@ -24,8 +24,8 @@ class LinetrlController extends Zend_Controller_Action
 		$tropo->say("Welcome to Mjs Application! Please waiting for join the conference");
 		$confOptions = array (
 			"name" => "conference",
-			//"id" => "mjsconf".$params["sessionid"],
-			"id" => "123123321",
+			"id" => "mjsconf".$params["sessionid"],
+			//"id" => "123123321",
 			"mute" => false,
 			"allowSignals" => array (
 				"playremind",

@@ -18,7 +18,7 @@ class LinestuController extends Zend_Controller_Action {
 		$this->logger->logInfo ( "LinestuController", "indexAction", "session  is: " . $session->getId () );
 		$params = $this->initSessionParameters ($session);
 		$tropo = new Tropo ();
-		$tropo->call ( "+815031368852" );
+		$tropo->call ( "+12176507163" );
 		$tropo->say ( "Welcome to Mjs Application! Please waiting for join the conference" );
 // 		$tropo->say ( "你好，欢迎使用 MJS 系统", array (
 // 				"voice" => "Linlin" 

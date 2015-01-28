@@ -1,0 +1,7 @@
+2015-01-24|13:42:02|INFO |LoginController|indexAction|login to index site
+2015-01-24|14:01:21|INFO |LoginController|indexAction|  get in to the login index page
+2015-01-24|15:41:50|INFO |LoginController|indexAction|  get in to the login index page
+2015-01-24|15:41:54|INFO |LoginController|indexAction|  get in to the login index page
+2015-01-24|15:57:18|INFO |LoginController|indexAction|  get in to the login index page
+2015-01-24|15:57:22|INFO |LoginController|indexAction|  get in to the login index page
+2015-01-24|16:07:38|INFO |SessionController|createAction| enter create Session

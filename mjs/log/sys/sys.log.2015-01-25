@@ -1,0 +1,224 @@
+2015-01-25|02:26:29|INFO |SessionController|createAction| enter create Session
+2015-01-25|02:26:48|INFO |SessionController|createAction| enter create Session
+2015-01-25|02:59:17|INFO |SessionController|createAction| enter create Session
+2015-01-25|02:59:36|INFO |SessionController|createAction| enter create Session
+2015-01-25|02:59:37|INFO |SessionController|checkStudentRemainMin|remainMIn: 60 dur:30
+2015-01-25|03:00:55|INFO |LoginController|indexAction|  get in to the login index page
+2015-01-25|03:00:59|INFO |LoginController|indexAction|  get in to the login index page
+2015-01-25|03:01:01|INFO |SessionController|createAction| enter create Session
+2015-01-25|03:01:11|INFO |SessionController|createAction| enter create Session
+2015-01-25|03:01:11|INFO |SessionController|checkStudentRemainMin|remainMIn: 60 dur:30
+2015-01-25|03:02:02|INFO |SessionController|createAction| enter create Session
+2015-01-25|03:02:04|INFO |SessionController|createAction| enter create Session
+2015-01-25|03:02:04|INFO |SessionController|checkStudentRemainMin|remainMIn: 60 dur:30
+2015-01-25|03:06:17|INFO |SessionController|createAction| enter create Session
+2015-01-25|03:06:18|INFO |SessionController|createAction| enter create Session
+2015-01-25|03:06:18|INFO |SessionController|checkStudentRemainMin|remainMIn: 60 dur:30
+2015-01-25|03:06:18|INFO |SessionController|sendCreateEmail|xuweiming@qdone.com.cn-11@11-
+2015-01-25|03:06:40|INFO |SessionController|editAction| enter edit Session
+2015-01-25|03:06:51|INFO |SessionController|createAction| enter create Session
+2015-01-25|03:07:00|INFO |SessionController|createAction| enter create Session
+2015-01-25|03:07:00|INFO |SessionController|checkStudentRemainMin|remainMIn: 60 dur:30
+2015-01-25|03:07:00|INFO |SessionController|sendCreateEmail|xuweiming@qdone.com.cn-11@11-
+2015-01-25|03:07:02|INFO |SessionController|createAction| enter create Session
+2015-01-25|03:45:25|INFO |LoginController|indexAction|  get in to the login index page
+2015-01-25|03:45:27|INFO |LoginController|indexAction|  get in to the login index page
+2015-01-25|03:45:32|INFO |LoginController|indexAction|  get in to the login index page
+2015-01-25|04:04:49|INFO |SessionController|sendReportEmail|
+2015-01-25|04:06:29|INFO |SessionController|indexAction|2015-01-25---2015-01-18
+2015-01-25|04:06:29|INFO |SessionController|sendReportEmail|
+2015-01-25|04:08:05|INFO |SessionController|indexAction|2015-01-18---2015-01-25
+2015-01-25|04:08:05|INFO |SessionController|sendReportEmail|
+2015-01-25|04:11:47|INFO |SessionController|indexAction|2015-01-18---2015-01-25
+2015-01-25|04:11:47|INFO |Application_Model_Session|getReportSessionList|sql is : select
+		b.inx b_inx,b.firstName b_firstName,b.lastName b_lastName,b.phone b_phone,
+		c.inx c_inx,c.firstName c_firstName,c.lastName c_lastName,c.phone c_phone,
+		d.inx d_inx,d.firstName d_firstName,d.lastName d_lastName,d.phone d_phone,
+		a.inx inx,a.scheduleStartTime a_scheduleStartTime,a.scheduleEndTime a_scheduleEndTime,a.actualEndTime a_actualEndTime
+		from mjs.tutorsessions a
+		left join mjs.students b on a.studentInx = b.inx
+		left join mjs.instructors c on a.instructorInx = c.inx
+		left join mjs.translators d on a.translatorInx = d.inx
+		where a.actualEndTime IS NOT NULL
+		and a.actualEndTime > 2015-01-18 
+		and a.actualEndTime < 2015-01-25 
+		order by b.inx
+2015-01-25|04:11:47|INFO |SessionController|sendReportEmail|
+2015-01-25|04:18:03|INFO |SessionController|indexAction|2015-01-18---2015-01-26
+2015-01-25|04:18:03|INFO |Application_Model_Session|getReportSessionList|sql is : select
+		b.inx b_inx,b.firstName b_firstName,b.lastName b_lastName,b.phone b_phone,
+		c.inx c_inx,c.firstName c_firstName,c.lastName c_lastName,c.phone c_phone,
+		d.inx d_inx,d.firstName d_firstName,d.lastName d_lastName,d.phone d_phone,
+		a.inx inx,a.scheduleStartTime a_scheduleStartTime,a.scheduleEndTime a_scheduleEndTime,a.actualEndTime a_actualEndTime
+		from mjs.tutorsessions a
+		left join mjs.students b on a.studentInx = b.inx
+		left join mjs.instructors c on a.instructorInx = c.inx
+		left join mjs.translators d on a.translatorInx = d.inx
+		where a.actualEndTime IS NOT NULL
+		and a.actualEndTime > 2015-01-18 
+		and a.actualEndTime < 2015-01-26 
+		order by b.inx
+2015-01-25|04:18:03|INFO |SessionController|sendReportEmail|
+2015-01-25|04:19:00|INFO |SessionController|indexAction|2015-01-18---2015-01-26
+2015-01-25|04:19:00|INFO |Application_Model_Session|getReportSessionList|sql is : select
+		b.inx b_inx,b.firstName b_firstName,b.lastName b_lastName,b.phone b_phone,
+		c.inx c_inx,c.firstName c_firstName,c.lastName c_lastName,c.phone c_phone,
+		d.inx d_inx,d.firstName d_firstName,d.lastName d_lastName,d.phone d_phone,
+		a.inx inx,a.scheduleStartTime a_scheduleStartTime,a.scheduleEndTime a_scheduleEndTime,a.actualEndTime a_actualEndTime
+		from mjs.tutorsessions a
+		left join mjs.students b on a.studentInx = b.inx
+		left join mjs.instructors c on a.instructorInx = c.inx
+		left join mjs.translators d on a.translatorInx = d.inx
+		where a.actualEndTime IS NOT NULL
+		and a.actualEndTime > '2015-01-18' 
+		and a.actualEndTime < '2015-01-26' 
+		order by b.inx
+2015-01-25|04:19:00|INFO |SessionController|sendReportEmail|1-weiming-18986245088-11-1111---39-2015-01-25 11:00:00-90
+2015-01-25|04:22:24|INFO |SessionController|indexAction|2015-01-18---2015-01-26
+2015-01-25|04:22:24|INFO |Application_Model_Session|getReportSessionList|sql is : select
+		b.inx b_inx,b.firstName b_firstName,b.lastName b_lastName,b.phone b_phone,
+		c.inx c_inx,c.firstName c_firstName,c.lastName c_lastName,c.phone c_phone,
+		d.inx d_inx,d.firstName d_firstName,d.lastName d_lastName,d.phone d_phone,
+		a.inx inx,a.scheduleStartTime a_scheduleStartTime,a.scheduleEndTime a_scheduleEndTime,a.actualEndTime a_actualEndTime
+		from mjs.tutorsessions a
+		left join mjs.students b on a.studentInx = b.inx
+		left join mjs.instructors c on a.instructorInx = c.inx
+		left join mjs.translators d on a.translatorInx = d.inx
+		where a.actualEndTime IS NOT NULL
+		and a.actualEndTime > '2015-01-18' 
+		and a.actualEndTime < '2015-01-26' 
+		order by b.inx
+2015-01-25|04:22:24|INFO |SessionController|sendReportEmail|0
+2015-01-25|04:23:08|INFO |SessionController|indexAction|2015-01-18---2015-01-26
+2015-01-25|04:23:08|INFO |Application_Model_Session|getReportSessionList|sql is : select
+		b.inx b_inx,b.firstName b_firstName,b.lastName b_lastName,b.phone b_phone,
+		c.inx c_inx,c.firstName c_firstName,c.lastName c_lastName,c.phone c_phone,
+		d.inx d_inx,d.firstName d_firstName,d.lastName d_lastName,d.phone d_phone,
+		a.inx inx,a.scheduleStartTime a_scheduleStartTime,a.scheduleEndTime a_scheduleEndTime,a.actualEndTime a_actualEndTime
+		from mjs.tutorsessions a
+		left join mjs.students b on a.studentInx = b.inx
+		left join mjs.instructors c on a.instructorInx = c.inx
+		left join mjs.translators d on a.translatorInx = d.inx
+		where a.actualEndTime IS NOT NULL
+		and a.actualEndTime > '2015-01-18' 
+		and a.actualEndTime < '2015-01-26' 
+		order by b.inx
+2015-01-25|04:23:08|INFO |SessionController|sendReportEmail|0
+2015-01-25|04:24:06|INFO |SessionController|indexAction|2015-01-18---2015-01-26
+2015-01-25|04:24:06|INFO |Application_Model_Session|getReportSessionList|sql is : select
+		b.inx b_inx,b.firstName b_firstName,b.lastName b_lastName,b.phone b_phone,
+		c.inx c_inx,c.firstName c_firstName,c.lastName c_lastName,c.phone c_phone,
+		d.inx d_inx,d.firstName d_firstName,d.lastName d_lastName,d.phone d_phone,
+		a.inx inx,a.scheduleStartTime a_scheduleStartTime,a.scheduleEndTime a_scheduleEndTime,a.actualEndTime a_actualEndTime
+		from mjs.tutorsessions a
+		left join mjs.students b on a.studentInx = b.inx
+		left join mjs.instructors c on a.instructorInx = c.inx
+		left join mjs.translators d on a.translatorInx = d.inx
+		where a.actualEndTime IS NOT NULL
+		and a.actualEndTime > '2015-01-18' 
+		and a.actualEndTime < '2015-01-26' 
+		order by b.inx
+2015-01-25|04:24:06|INFO |SessionController|sendReportEmail|<table><br />1-weiming-18986245088-11-1111---39-2015-01-25 11:00:00-90<br /></table>
+2015-01-25|04:32:40|INFO |SessionController|indexAction|2015-01-18---2015-01-26
+2015-01-25|04:32:40|INFO |Application_Model_Session|getReportSessionList|sql is : select
+		b.inx b_inx,b.firstName b_firstName,b.lastName b_lastName,b.phone b_phone,
+		c.inx c_inx,c.firstName c_firstName,c.lastName c_lastName,c.phone c_phone,
+		d.inx d_inx,d.firstName d_firstName,d.lastName d_lastName,d.phone d_phone,
+		a.inx inx,a.scheduleStartTime a_scheduleStartTime,a.scheduleEndTime a_scheduleEndTime,a.actualEndTime a_actualEndTime
+		from mjs.tutorsessions a
+		left join mjs.students b on a.studentInx = b.inx
+		left join mjs.instructors c on a.instructorInx = c.inx
+		left join mjs.translators d on a.translatorInx = d.inx
+		where a.actualEndTime IS NOT NULL
+		and a.actualEndTime > '2015-01-18' 
+		and a.actualEndTime < '2015-01-26' 
+		order by b.inx
+2015-01-25|04:32:40|INFO |SessionController|sendReportEmail|0
+2015-01-25|04:33:15|INFO |SessionController|indexAction|2015-01-18---2015-01-26
+2015-01-25|04:33:15|INFO |Application_Model_Session|getReportSessionList|sql is : select
+		b.inx b_inx,b.firstName b_firstName,b.lastName b_lastName,b.phone b_phone,
+		c.inx c_inx,c.firstName c_firstName,c.lastName c_lastName,c.phone c_phone,
+		d.inx d_inx,d.firstName d_firstName,d.lastName d_lastName,d.phone d_phone,
+		a.inx inx,a.scheduleStartTime a_scheduleStartTime,a.scheduleEndTime a_scheduleEndTime,a.actualEndTime a_actualEndTime
+		from mjs.tutorsessions a
+		left join mjs.students b on a.studentInx = b.inx
+		left join mjs.instructors c on a.instructorInx = c.inx
+		left join mjs.translators d on a.translatorInx = d.inx
+		where a.actualEndTime IS NOT NULL
+		and a.actualEndTime > '2015-01-18' 
+		and a.actualEndTime < '2015-01-26' 
+		order by b.inx
+2015-01-25|04:33:15|INFO |SessionController|sendReportEmail|<table><tr><td>Student Id</td><td>Student Name</td><td>Student Phone</td>
+    			<td>Mentor Name</td><td>Mentor Phone</td><td>Translator Name</td><td>Translator Phone</td>
+    			<td>Session Id</td><td>Session Date</td><td>Session Duration</td><tr/><tr><td>1</td><td>weimingxu</td><td>18986245088</td><td>1111</td><td>1111</td><td></td><td></td><td>39</td><td>2015-01-25 11:00:00</td><td>90</td></tr></table>
+2015-01-25|04:34:38|INFO |SessionController|indexAction|2015-01-18---2015-01-26
+2015-01-25|04:34:38|INFO |Application_Model_Session|getReportSessionList|sql is : select
+		b.inx b_inx,b.firstName b_firstName,b.lastName b_lastName,b.phone b_phone,
+		c.inx c_inx,c.firstName c_firstName,c.lastName c_lastName,c.phone c_phone,
+		d.inx d_inx,d.firstName d_firstName,d.lastName d_lastName,d.phone d_phone,
+		a.inx inx,a.scheduleStartTime a_scheduleStartTime,a.scheduleEndTime a_scheduleEndTime,a.actualEndTime a_actualEndTime
+		from mjs.tutorsessions a
+		left join mjs.students b on a.studentInx = b.inx
+		left join mjs.instructors c on a.instructorInx = c.inx
+		left join mjs.translators d on a.translatorInx = d.inx
+		where a.actualEndTime IS NOT NULL
+		and a.actualEndTime > '2015-01-18' 
+		and a.actualEndTime < '2015-01-26' 
+		order by b.inx
+2015-01-25|04:34:38|INFO |SessionController|sendReportEmail|<table><tr><td>Student Id</td><td>Student Name</td><td>Student Phone</td>
+    			<td>Mentor Name</td><td>Mentor Phone</td><td>Translator Name</td><td>Translator Phone</td>
+    			<td>Session Id</td><td>Session Date</td><td>Session Duration</td><tr/><tr><td>1</td><td>weimingxu</td><td>18986245088</td><td>1111</td><td>1111</td><td></td><td></td><td>39</td><td>2015-01-25 11:00:00</td><td>90</td></tr></table>
+2015-01-25|04:35:23|INFO |SessionController|indexAction|2015-01-18---2015-01-26
+2015-01-25|04:35:23|INFO |Application_Model_Session|getReportSessionList|sql is : select
+		b.inx b_inx,b.firstName b_firstName,b.lastName b_lastName,b.phone b_phone,
+		c.inx c_inx,c.firstName c_firstName,c.lastName c_lastName,c.phone c_phone,
+		d.inx d_inx,d.firstName d_firstName,d.lastName d_lastName,d.phone d_phone,
+		a.inx inx,a.scheduleStartTime a_scheduleStartTime,a.scheduleEndTime a_scheduleEndTime,a.actualEndTime a_actualEndTime
+		from mjs.tutorsessions a
+		left join mjs.students b on a.studentInx = b.inx
+		left join mjs.instructors c on a.instructorInx = c.inx
+		left join mjs.translators d on a.translatorInx = d.inx
+		where a.actualEndTime IS NOT NULL
+		and a.actualEndTime > '2015-01-18' 
+		and a.actualEndTime < '2015-01-26' 
+		order by b.inx
+2015-01-25|04:35:23|INFO |SessionController|sendReportEmail|<table><tr><td>Student Id</td><td>Student Name</td><td>Student Phone</td>
+    			<td>Mentor Name</td><td>Mentor Phone</td><td>Translator Name</td><td>Translator Phone</td>
+    			<td>Session Id</td><td>Session Date</td><td>Session Duration</td><tr/><tr><td>1</td><td>weimingxu</td><td>18986245088</td><td>1111</td><td>1111</td><td></td><td></td><td>39</td><td>2015-01-25 11:00:00</td><td>90</td></tr></table>
+2015-01-25|04:37:44|INFO |SessionController|indexAction|2015-01-18---2015-01-26
+2015-01-25|04:37:44|INFO |Application_Model_Session|getReportSessionList|sql is : select
+		b.inx b_inx,b.firstName b_firstName,b.lastName b_lastName,b.phone b_phone,
+		c.inx c_inx,c.firstName c_firstName,c.lastName c_lastName,c.phone c_phone,
+		d.inx d_inx,d.firstName d_firstName,d.lastName d_lastName,d.phone d_phone,
+		a.inx inx,a.scheduleStartTime a_scheduleStartTime,a.scheduleEndTime a_scheduleEndTime,a.actualEndTime a_actualEndTime
+		from mjs.tutorsessions a
+		left join mjs.students b on a.studentInx = b.inx
+		left join mjs.instructors c on a.instructorInx = c.inx
+		left join mjs.translators d on a.translatorInx = d.inx
+		where a.actualEndTime IS NOT NULL
+		and a.actualEndTime > '2015-01-18' 
+		and a.actualEndTime < '2015-01-26' 
+		order by b.inx
+2015-01-25|04:37:44|INFO |SessionController|sendReportEmail|<table><tr><td>Student Id</td><td>Student Name</td><td>Student Phone</td>
+    			<td>Mentor Name</td><td>Mentor Phone</td><td>Translator Name</td><td>Translator Phone</td>
+    			<td>Session Id</td><td>Session Date</td><td>Session Duration</td><tr/><tr><td>1</td><td>weimingxu</td><td>18986245088</td><td>1111</td><td>1111</td><td></td><td></td><td>39</td><td>2015-01-25 11:00:00</td><td>90</td></tr></table>
+2015-01-25|04:37:44|INFO |SessionController|sendReportEmail|mail has send to xuweiming@qdone.com.cn
+2015-01-25|04:40:06|INFO |SessionController|createAction| enter create Session
+2015-01-25|04:40:25|INFO |SessionController|createAction| enter create Session
+2015-01-25|04:40:25|INFO |SessionController|checkStudentRemainMin|remainMIn: 60 dur:30
+2015-01-25|04:40:25|INFO |SessionController|sendCreateEmail|xuweiming@qdone.com.cn-1274263@qq.com-
+2015-01-25|08:54:29|INFO |LoginController|indexAction|  get in to the login index page
+2015-01-25|08:54:38|INFO |LoginController|indexAction|  get in to the login index page
+2015-01-25|08:54:51|INFO |LoginController|indexAction|  get in to the login index page
+2015-01-25|08:55:09|INFO |LoginController|indexAction|  get in to the login index page
+2015-01-25|08:55:10|INFO |LoginController|indexAction|  get in to the login index page
+2015-01-25|08:55:15|INFO |LoginController|indexAction|  get in to the login index page
+2015-01-25|08:55:24|INFO |LoginController|indexAction|  get in to the login index page
+2015-01-25|08:55:59|INFO |LoginController|indexAction|  get in to the login index page
+2015-01-25|08:56:03|INFO |LoginController|indexAction|  get in to the login index page
+2015-01-25|08:56:04|INFO |LoginController|indexAction|  get in to the login index page
+2015-01-25|08:56:10|INFO |LoginController|indexAction|  get in to the login index page
+2015-01-25|08:56:22|INFO |LoginController|indexAction|  get in to the login index page
+2015-01-25|08:56:27|INFO |LoginController|indexAction|  get in to the login index page
+2015-01-25|08:56:32|INFO |LoginController|indexAction|  get in to the login index page
+2015-01-25|13:28:57|INFO |LoginController|indexAction|  get in to the login index page

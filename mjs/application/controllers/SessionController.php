@@ -261,7 +261,7 @@ class SessionController extends Zend_Controller_Action {
 		if($session->actualEndTime){
 			return false;
 		}
-		if(strtotime($session->scheduleStartTime)>time()){
+		if(strtotime($session->scheduleStartTime)<time()){
 			return false;
 		}
 		return true;

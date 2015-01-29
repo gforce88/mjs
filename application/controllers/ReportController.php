@@ -42,9 +42,9 @@ class ReportController extends Zend_Controller_Action
     //发送邮件到管理员
     private function sendReportEmail($userEmail, $sessionList) {
     	$loginfo = "report will be sent to ".$userEmail;
-    	$mailcontent = "<table><tr><td>Student Id</td><td>Student Name</td><td>Student Phone</td>
+    	$mailcontent = "<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"></head><body><table><tr><td>Student Id</td><td>Student Name</td><td>Student Phone</td>
     			<td>Mentor Name</td><td>Mentor Phone</td><td>Translator Name</td><td>Translator Phone</td>
-    			<td>Session Id</td><td>Session Date</td><td>Session Duration</td><tr/>";
+    			<td>Session Id</td><td>Session Date</td><td>Session Duration</td></tr>";
     	foreach ($sessionList as $row){
     		$d1=strtotime($row["a_actualEndTime"]);
     		$d2=strtotime($row["a_scheduleStartTime"]);
@@ -56,7 +56,7 @@ class ReportController extends Zend_Controller_Action
     		"</td><td>".$row["d_phone"]."</td><td>".$row["inx"]."</td><td>"
     				.$row["a_scheduleStartTime"]."</td><td>".$sessionduration."</td></tr>";
     	}
-    	$mailcontent = $mailcontent."</table>";
+    	$mailcontent = $mailcontent."</table></body></html>";
     	$this->logger->logInfo("SessionController", "sendReportEmail", $mailcontent);
     	
     	try {

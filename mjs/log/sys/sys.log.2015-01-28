@@ -14,3 +14,60 @@
 2015-01-28|17:28:04|INFO |LoginController|indexAction|  get in to the login index page
 2015-01-28|19:10:14|INFO |LoginController|indexAction|  get in to the login index page
 2015-01-28|19:10:18|INFO |LoginController|indexAction|  get in to the login index page
+2015-01-28|19:52:58|INFO |LoginController|indexAction|  get in to the login index page
+2015-01-28|20:11:42|INFO |LoginController|indexAction|  get in to the login index page
+2015-01-28|20:12:26|INFO |SessionController|editAction| enter edit Session
+2015-01-28|20:12:29|INFO |SessionController|editAction| enter edit Session
+2015-01-28|20:12:29|INFO |SessionController|checkStudentRemainMin|remainMIn: 60 dur:30
+2015-01-28|20:12:30|INFO |SessionController|editAction| studentId:1
+2015-01-28|20:12:30|INFO |SessionController|editAction| firstName:weiming
+2015-01-28|20:12:30|INFO |SessionController|sendEditEmail|1274263@qq.qq-qq@qq-
+2015-01-28|20:12:33|INFO |SessionController|createAction| enter create Session
+2015-01-28|20:12:52|INFO |SessionController|createAction| enter create Session
+2015-01-28|20:12:53|INFO |SessionController|checkStudentRemainMin|remainMIn: 60 dur:30
+2015-01-28|20:13:56|INFO |SessionController|createAction| enter create Session
+2015-01-28|20:13:57|INFO |SessionController|checkStudentRemainMin|remainMIn: 60 dur:30
+2015-01-28|20:14:48|INFO |SessionController|createAction| enter create Session
+2015-01-28|20:14:49|INFO |SessionController|checkStudentRemainMin|remainMIn: 60 dur:30
+2015-01-28|20:14:49|INFO |SessionController|createAction| 1111
+2015-01-28|20:15:39|INFO |SessionController|createAction| enter create Session
+2015-01-28|20:15:39|INFO |SessionController|checkStudentRemainMin|remainMIn: 60 dur:30
+2015-01-28|20:15:39|INFO |SessionController|createAction| 1111
+2015-01-28|20:15:39|INFO |SessionController|createAction| 2222
+2015-01-28|20:15:39|INFO |SessionController|createAction| 3333
+2015-01-28|20:15:39|INFO |SessionController|sendEditEmail|xuweiming@qdone.com.cn-11@qq.com-
+2015-01-28|20:16:45|INFO |SessionController|createAction| enter create Session
+2015-01-28|20:16:48|INFO |SessionController|sendEditEmail|xuweiming@qdone.com.cn-11@qq.com-
+2015-01-28|20:16:50|INFO |SessionController|sendEditEmail|xuweiming@qdone.com.cn-11@qq.com-22@qq.com
+2015-01-28|20:16:52|INFO |SessionController|sendEditEmail|xuweiming@qdone.com.cn-11@qq.com-
+2015-01-28|20:17:10|INFO |SessionController|editAction| enter edit Session
+2015-01-28|20:17:13|INFO |SessionController|editAction| enter edit Session
+2015-01-28|20:17:13|INFO |SessionController|checkStudentRemainMin|remainMIn: 60 dur:30
+2015-01-28|20:17:14|INFO |SessionController|editAction| studentId:1
+2015-01-28|20:17:14|INFO |SessionController|editAction| firstName:weiming
+2015-01-28|20:17:14|INFO |SessionController|sendEditEmail|1274263@qq.qq-qq@qq-
+2015-01-28|20:17:22|INFO |SessionController|createAction| enter create Session
+2015-01-28|20:17:37|INFO |SessionController|createAction| enter create Session
+2015-01-28|20:17:38|INFO |SessionController|checkStudentRemainMin|remainMIn: 60 dur:30
+2015-01-28|20:17:38|INFO |SessionController|createAction| 1111
+2015-01-28|20:19:33|INFO |SessionController|createAction| enter create Session
+2015-01-28|20:19:33|INFO |SessionController|checkStudentRemainMin|remainMIn: 60 dur:30
+2015-01-28|20:19:33|INFO |SessionController|createAction| 1111
+2015-01-28|20:19:46|INFO |SessionController|createAction| enter create Session
+2015-01-28|20:19:46|INFO |SessionController|checkStudentRemainMin|remainMIn: 60 dur:30
+2015-01-28|20:19:46|INFO |SessionController|createAction| 1111
+2015-01-28|20:19:46|INFO |SessionController|createAction| 222
+2015-01-28|20:20:34|INFO |SessionController|createAction| enter create Session
+2015-01-28|20:20:34|INFO |SessionController|checkStudentRemainMin|remainMIn: 60 dur:30
+2015-01-28|20:20:34|INFO |Application_Model_Session|createSession| 333
+2015-01-28|20:20:34|INFO |Application_Model_Session|createSession| 444
+2015-01-28|20:20:48|INFO |SessionController|createAction| enter create Session
+2015-01-28|20:20:48|INFO |SessionController|checkStudentRemainMin|remainMIn: 60 dur:30
+2015-01-28|20:20:49|INFO |Application_Model_Session|createSession| 333
+2015-01-28|20:31:12|INFO |SessionController|createAction| enter create Session
+2015-01-28|20:31:24|INFO |SessionController|createAction| enter create Session
+2015-01-28|20:31:24|INFO |SessionController|checkStudentRemainMin|remainMIn: 60 dur:30
+2015-01-28|20:31:24|INFO |Application_Model_Session|createSession| 333
+2015-01-28|20:31:24|INFO |Application_Model_Session|createSession| 444
+2015-01-28|20:31:24|INFO |SessionController|sendEditEmail|xuweiming@qdone.com.cn-11@qq-
+2015-01-28|23:05:17|INFO |SessionController|createAction| enter create Session

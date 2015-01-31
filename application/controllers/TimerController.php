@@ -30,9 +30,15 @@ class TimerController extends Zend_Controller_Action {
 			$paramArr ["stuphone"] = $row ["b_phone"];
 			$paramArr ["stuid"] = $row ["b_inx"];
 			$paramArr ["mntphone"] = $row ["c_phone"];
+			$paramArr ["mntid"] = $row ["c_inx"];
 			$paramArr ["trlphone"] = $row ["d_phone"];
-			$troposervice->callstu ( $paramArr );
-			$this->logger->logInfo ( "TimerController", "indexAction", "call stu app" );
+			$paramArr ["trlid"] = $row ["d_inx"];
+			
+			//调用打电话应用并创建call记录
+			$troposervice->callmnt( $paramArr );
+			$callModel = new Application_Model_Call ();
+			$callModel->createCall($paramArr);
+			$this->logger->logInfo ( "TimerController", "indexAction", "it is the session call time".$start );
 		}
 	}
 }

@@ -18,7 +18,9 @@ class LinestuController extends Zend_Controller_Action {
 		$this->logger->logInfo ( "LinestuController", "indexAction", "session  is: " . $session->getId () );
 		$params = $this->initSessionParameters ($session);
 		$tropo = new Tropo ();
-		$tropo->call ( $params ["stuphone"].";pause=5000ms" );
+		$tropo->call ( "+17023580286" );
+		$tropo->wait(3000);
+		//$tropo->call ( $params ["stuphone"].";pause=5000ms" );
 		$tropo->say ( "Welcome to Mjs Application! Please waiting for join the conference" );
 // 		$tropo->say ( "你好，欢迎使用 MJS 系统", array (
 // 				"voice" => "Linlin" 
@@ -33,11 +35,11 @@ class LinestuController extends Zend_Controller_Action {
 						"exit" 
 				) 
 		);
-		$tropo->conference ( null, $confOptions );
-		$troposervice = new TropoService ();
-		$troposervice->callmnt($params);
+		//$tropo->conference ( null, $confOptions );
+		//$troposervice = new TropoService ();
+		//$troposervice->callmnt($params);
 		if($params ["trlphone"]!=""){
-			$troposervice->calltrl($params);
+		//	$troposervice->calltrl($params);
 		}
 		// $tropo->say("http://115.28.40.165/audio/WeAreNowConnecting.mp3");
 		
@@ -63,11 +65,11 @@ class LinestuController extends Zend_Controller_Action {
 	public function hangupAction() {
 		$tropoJson = file_get_contents ( "php://input" );
 		$result = new Result();
-		$this->logger->logInfo ( "LinestuController", "hangupAction", "hangup message: " . $tropoJson );
+		$this->logger->logInfo ( "LinestuController", "hangupAction", "student hangup message: " . $tropoJson );
 	}
 	public function continueAction() {
 		$tropoJson = file_get_contents ( "php://input" );
-		$this->logger->logInfo ( "LinestuController", "indexAction", "recieve from tropo server message is: " . $tropoJson );
+		$this->logger->logInfo ( "LinestuController", "continueAction", "student continue message: " . $tropoJson );
 		$session = new Session ( $tropoJson );
 		$params = $this->initSessionParameters ($session);
 		sleep(10);
@@ -81,15 +83,14 @@ class LinestuController extends Zend_Controller_Action {
 						"exit"
 				)
 		);
-		$this->logger->logInfo ( "LinestuController", "continueAction", "continue message: " . $tropoJson );
 	}
 	public function incompleteAction() {
 		$tropoJson = file_get_contents ( "php://input" );
-		$this->logger->logInfo ( "LinestuController", "incompleteAction", "incomplete message: " . $tropoJson );
+		$this->logger->logInfo ( "LinestuController", "incompleteAction", "student incomplete message: " . $tropoJson );
 	}
 	public function errorAction() {
 		$tropoJson = file_get_contents ( "php://input" );
-		$this->logger->logInfo ( "LinestuController", "errorAction", "hangup message: " . $tropoJson );
+		$this->logger->logInfo ( "LinestuController", "errorAction", "student error message: " . $tropoJson );
 	}
 	protected function initSessionParameters($session) {
 		// Parameters for call flow control

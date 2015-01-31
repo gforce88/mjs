@@ -64,6 +64,7 @@
         <modelFile modelName="Instructor"/>
         <modelFile modelName="Translator"/>
         <modelFile modelName="User"/>
+        <modelFile modelName="Call"/>
       </modelsDirectory>
       <modulesDirectory enabled="false"/>
       <servicesDirectory enabled="false"/>

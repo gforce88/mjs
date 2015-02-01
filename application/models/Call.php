@@ -1,4 +1,5 @@
 <?php
+require_once 'log/LoggerFactory.php';
 class Application_Model_Call extends Zend_Db_Table_Abstract {
 	protected $_name = 'calls';
 	public function createCall($callData) {
@@ -7,7 +8,11 @@ class Application_Model_Call extends Zend_Db_Table_Abstract {
 			$row->party1Inx = $callData ["mntid"];
 			$row->party1CallRes = "1";
 			$row->party2Inx = $callData ["stuid"];
-			$row->party3Inx = $callData ["trlid"];
+			$row->party2CallRes = "1";
+			if($callData ["trlid"]!=null){
+				$row->party3Inx = $callData ["trlid"];
+				$row->party3CallRes = 1;
+			}
 			$row->inx = $callData ["sessionid"];
 			$row->save ();
 			return $row->inx;
@@ -42,7 +47,10 @@ class Application_Model_Call extends Zend_Db_Table_Abstract {
 	
 	// 检查老师 重拨次数
 	public function checkMntCallTimes($callData) {
+		$logger = LoggerFactory::getSysLogger ();
+		$logger->logInfo ( "Application_Model_Call", "checkMntCallTimes", "session id" . $callData ["sessionid"] );
 		$row = $this->find ( $callData ["sessionid"] )->current();
+		$logger->logInfo ( "Application_Model_Call", "checkMntCallTimes", "party1CallRes :" .  $row ["party1CallRes"] );
 		return $row ["party1CallRes"];
 	}
 	// 检查学生 重拨次数
@@ -62,6 +70,26 @@ class Application_Model_Call extends Zend_Db_Table_Abstract {
 		$select->where ( 'party1SessionId = ?', $callSessionId );
 		$row = $this->fetchRow($select);
 		$row->party1CallRes = $row["party1CallRes"]+1;
+		$row->save();
+		return $row;
+	}
+	
+	//学生拨号次数加1
+	public function findSessionIdByStuCallsessionIdAndUpdateCallTimes($callSessionId = null) {
+		$select = $this->select ();
+		$select->where ( 'party2SessionId = ?', $callSessionId );
+		$row = $this->fetchRow($select);
+		$row->party2CallRes = $row["party2CallRes"]+1;
+		$row->save();
+		return $row;
+	}
+	
+	//翻译拨号次数加1
+	public function findSessionIdByTrlCallsessionIdAndUpdateCallTimes($callSessionId = null) {
+		$select = $this->select ();
+		$select->where ( 'party3SessionId = ?', $callSessionId );
+		$row = $this->fetchRow($select);
+		$row->party3CallRes = $row["party3CallRes"]+1;
 		$row->save();
 		return $row;
 	}

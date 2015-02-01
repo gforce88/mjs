@@ -19,52 +19,91 @@ class LinetrlController extends Zend_Controller_Action
 		$this->logger->logInfo ( "LinestuController", "indexAction", "session  is: " . $session->getId () );
 		$params = $this->initSessionParameters ($session);
 		
-		$tropo = new Tropo();
-		$tropo->call($params["trlphone"]);
-		$tropo->say("Welcome to Mjs Application! Please waiting for join the conference");
-		$confOptions = array (
-			"name" => "conference",
-			"id" => "mjsconf".$params["sessionid"],
-			//"id" => "123123321",
-			"mute" => false,
-			"allowSignals" => array (
-				"playremind",
-				"exit" 
-			) 
-		);
-		$tropo->conference(null, $confOptions);
-		$this->logger->logInfo ( "LinetrlController", "indexAction", "mentor join conoference, id is :" . "conf".$params["sessionid"] );
+		$callModel = new Application_Model_Call ();
+		$callModel->updateTrlCallSession ( $params ["sessionid"], $session->getId () );
 		
-		$tropo->on ( array (
-				"event" => "hangup",
-				"next" => "/linemnt/hangup"
-		) );
-		$tropo->on ( array (
-				"event" => "continue",
-				"next" => "/linemnt/continue"
-		) );
-		$tropo->on ( array (
-				"event" => "incomplete",
-				"next" => "/linemnt/incomplete"
-		) );
-		$tropo->on ( array (
-				"event" => "error",
-				"next" => "/linemnt/error"
-		) );
-		$tropo->renderJSON();
+		if ($callModel->checkTrlCallTimes ( $params ) > 3) {
+			$this->logger->logInfo ( "LinetrlController", "indexAction", "translator didn't answer the call for 3 times" );
+			$this->sendNotification ();
+		}else{
+			$this->logger->logInfo ( "LinetrlController", "indexAction", "call translator:" . $params ["trlphone"] );
+			$tropo = new Tropo ();
+			$tropo->call ( $params ["trlphone"] );
+			// 电话接通后
+			$tropo->on ( array (
+					"event" => "continue",
+					"next" => "/linetrl/welcome",
+					"say" => "Welcome to Mjs Application! You will joining the conference soon."
+			) );
+			// 电话未拨通
+			$tropo->on ( array (
+					"event" => "incomplete",
+					"next" => "/linetrl/incomplete"
+			) );
+			// tropo应用发生错误
+			$tropo->on ( array (
+					"event" => "error",
+					"next" => "/linetrl/error"
+			) );
+			$tropo->renderJSON ();
+		}
 	}
 
 	public function hangupAction() {
 		$tropoJson = file_get_contents ( "php://input" );
 		$this->logger->logInfo ( "LinetrlController", "hangupAction", "hangup message: " . $tropoJson );
 	}
-	public function continueAction() {
+	public function welcomeAction() {
 		$tropoJson = file_get_contents ( "php://input" );
-		$this->logger->logInfo ( "LinetrlController", "continueAction", "continue message: " . $tropoJson );
+		$this->logger->logInfo ( "LinetrlController", "continueAction", "translator continue message: " . $tropoJson );
+		$result = new Result ( $tropoJson );
+		$callModel = new Application_Model_Call ();
+		$row = $callModel->findSessionIdByTrlCallsessionIdAndUpdateCallTimes ( $result->getSessionId () );
+		$this->logger->logInfo ( "LinetrlController", "welcomeAction", "session id: " . $result->getSessionId () );
+		$tropo = new Tropo ();
+		$confOptions = array (
+				"name" => "conference",
+				"id" => "mjsconf" . $row ["inx"],
+				"mute" => false,
+				"allowSignals" => array (
+						"playremind",
+						"exit"
+				)
+		);
+		$tropo->on ( array (
+				"event" => "hangup",
+				"next" => "/linestu/hangup"
+		) );
+		$tropo->conference ( null, $confOptions );
+		$tropo->renderJSON ();
+		
 	}
 	public function incompleteAction() {
 		$tropoJson = file_get_contents ( "php://input" );
 		$this->logger->logInfo ( "LinetrlController", "incompleteAction", "incomplete message: " . $tropoJson );
+		
+		$result = new Result ( $tropoJson );
+		$callModel = new Application_Model_Call ();
+		$session = $callModel->findSessionIdByTrlCallsessionIdAndUpdateCallTimes ( $result->getSessionId () );
+		$this->logger->logInfo ( "LinetrlController", "incompleteAction", "session id: " . $session ["inx"] );
+		$sessionModel = new Application_Model_Session ();
+		$row = $sessionModel->getSessionForCallBySessionId ( $session ["inx"] );
+		$this->logger->logInfo ( "LinetrlController", "incompleteAction", "row: " . $row ["inx"] );
+		
+		$paramArr = array ();
+		$paramArr ["sessionid"] = $row ["inx"];
+		$paramArr ["stuphone"] = $row ["b_phone"];
+		$paramArr ["stuid"] = $row ["b_inx"];
+		$paramArr ["mntphone"] = $row ["c_phone"];
+		$paramArr ["mntid"] = $row ["c_inx"];
+		$paramArr ["trlphone"] = $row ["d_phone"];
+		$paramArr ["trlid"] = $row ["d_inx"];
+		// 调用打电话应用并创建call记录
+		$this->logger->logInfo ( "LinetrlController", "incompleteAction", "call translator for : " . $session ["party3CallRes"] . " times" );
+		sleep ( 5 );
+		$this->logger->logInfo ( "LinetrlController", "incompleteAction", "sleep 5 seconds " );
+		$troposervice = new TropoService ();
+		$troposervice->calltrl ( $paramArr );
 	}
 	public function errorAction() {
 		$tropoJson = file_get_contents ( "php://input" );

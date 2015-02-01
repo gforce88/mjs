@@ -3,6 +3,7 @@ require_once 'log/LoggerFactory.php';
 require_once 'tropo/tropo.class.php';
 require_once 'util/HttpUtil.php';
 require_once 'service/TropoService.php';
+require_once 'phpmailer/class.phpmailer.php';
 class LinemntController extends Zend_Controller_Action {
 	protected $logger;
 	public function init() {
@@ -24,7 +25,7 @@ class LinemntController extends Zend_Controller_Action {
 		// 判断拨号次数是否达到3次
 		if ($times > 3) {
 			$this->logger->logInfo ( "LinemntController", "indexAction", "instructor didn't answer the call for 3times" );
-			$this->sendNotification ();
+			$this->sendNotification ( $params ["sessionid"] );
 		} else {
 			$this->logger->logInfo ( "LinemntController", "indexAction", "call instructor:" . $params ["mntphone"] );
 			$tropo = new Tropo ();
@@ -54,12 +55,12 @@ class LinemntController extends Zend_Controller_Action {
 		$result = new Result ( $tropoJson );
 		// 找到session call 将 call的inx做为conference的id 并建立会议
 		$callModel = new Application_Model_Call ();
-		$row = $callModel->findSessionIdByMntCallsessionIdAndUpdateCallTimes ( $result->getSessionId () );
+		$row = $callModel->findSessionIdByMntCallsessionIdAndRecordTime ( $result->getSessionId () );
 		$this->logger->logInfo ( "LinemntController", "welcomeAction", "session id: " . $result->getSessionId () );
 		$tropo = new Tropo ();
 		$confOptions = array (
 				"name" => "conference",
-				"id" => "mjsconf" . $row["inx"],
+				"id" => "mjsconf" . $row ["inx"],
 				"mute" => false,
 				"allowSignals" => array (
 						"playremind",
@@ -73,13 +74,13 @@ class LinemntController extends Zend_Controller_Action {
 		) );
 		$tropo->on ( array (
 				"event" => "continue",
-				"next" => "/linemnt/conference"
+				"next" => "/linemnt/conference" 
 		) );
 		$tropo->conference ( null, $confOptions );
 		$tropo->renderJSON ();
-		//call student
+		// call student
 		$sessionModel = new Application_Model_Session ();
-		$row = $sessionModel->getSessionForCallBySessionId ( $row ["inx"]);
+		$row = $sessionModel->getSessionForCallBySessionId ( $row ["inx"] );
 		$paramArr = array ();
 		$paramArr ["sessionid"] = $row ["inx"];
 		$paramArr ["stuphone"] = $row ["b_phone"];
@@ -91,7 +92,6 @@ class LinemntController extends Zend_Controller_Action {
 		$troposervice = new TropoService ();
 		$troposervice->callstu ( $paramArr );
 		$this->logger->logInfo ( "LinemntController", "welcomeAction", "call student phone:--- " . $paramArr ["stuphone"] );
-		
 	}
 	public function conferenceAction() {
 		$tropoJson = file_get_contents ( "php://input" );
@@ -139,8 +139,55 @@ class LinemntController extends Zend_Controller_Action {
 		$paramArr ["trlphone"] = $session->getParameters ( "trlphone" );
 		return $paramArr;
 	}
-	protected function sendNotification() {
+	protected function sendNotification($callinx = null) {
 		$this->logger->logInfo ( "LinemntController", "sendNotification", "send email to 3 part, cause  instructor" );
+		$callModel = new Application_Model_Call ();
+		$call = $callModel->find ( $callinx )->current ();
+		
+		$instructorModel = new Application_Model_Instructor ();
+		$instructorEmail = $instructorModel->find ( $call ["party1Inx"] )->current ()->email;
+		
+		$studentModel = new Application_Model_Student ();
+		$studentEmail = $studentModel->find ( $call ["party2Inx"] )->current ()->email;
+		
+		$translatorModel = new Application_Model_Translator ();
+		$translatorEmail = "";
+		if($call ["party3Inx"]!=null){
+			$translatorEmail = $translatorModel->find ( $call ["party3Inx"] )->current ()->email;
+		}
+		$mailcontent = "session canceled As Instructor didn't answer the call";
+		$this->sendEmail ( $studentEmail, $instructorEmail, $translatorEmail, $mailcontent,"session canceled As Instructor didn't answer the call" );
+		
+	}
+	private function sendEmail($studentEmail, $instructorEmail, $translatorEmail, $mailcontent, $subject) {
+		$loginfo = $studentEmail . "-" . $instructorEmail . "-" . $translatorEmail;
+		$this->logger->logInfo ( "LinemntController", "sendEmail", $loginfo );
+		try {
+			$filename = APPLICATION_PATH . "/configs/application.ini";
+			$config = new Zend_Config_Ini ( $filename, 'production' );
+			$mail = new PHPMailer ( true ); // New instance, with exceptions
+			$body = file_get_contents ( APPLICATION_PATH . '/configs/mail_groupfail.html' );
+			$body = preg_replace ( '/mailcontent/', $mailcontent, $body ); // Strip
+			$mail->IsSMTP (); // tell the class to use SMTP
+			$mail->SMTPAuth = true; // enable SMTP authentication
+			$mail->Port = $config->mail->port; // set the SMTP server port
+			$mail->Host = $config->mail->host; // SMTP server
+			$mail->Username = $config->mail->username; // SMTP server username
+			$mail->Password = $config->mail->password; // SMTP server password
+			$mail->IsSendmail (); // tell the class to use Sendmail
+			$mail->AddReplyTo ( $mail->Username, $mail->Username );
+			$mail->SetFrom ( $mail->Username, $mail->Username );
+			$mail->AddAddress ( $studentEmail );
+			$mail->AddAddress ( $instructorEmail );
+			$mail->AddAddress ( $translatorEmail );
+			$mail->Subject = $subject;
+			$mail->AltBody = "To view the message, please use an HTML compatible email viewer!"; // optional,
+			$mail->WordWrap = 80; // set word wrap
+			$mail->MsgHTML ( $body );
+			$mail->IsHTML ( true ); // send as HTML
+			$mail->Send ();
+		} catch ( phpmailerException $e ) {
+		}
 	}
 }
 

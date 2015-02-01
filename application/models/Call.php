@@ -9,7 +9,7 @@ class Application_Model_Call extends Zend_Db_Table_Abstract {
 			$row->party1CallRes = "1";
 			$row->party2Inx = $callData ["stuid"];
 			$row->party2CallRes = "1";
-			if($callData ["trlid"]!=null){
+			if ($callData ["trlid"] != null) {
 				$row->party3Inx = $callData ["trlid"];
 				$row->party3CallRes = 1;
 			}
@@ -49,48 +49,102 @@ class Application_Model_Call extends Zend_Db_Table_Abstract {
 	public function checkMntCallTimes($callData) {
 		$logger = LoggerFactory::getSysLogger ();
 		$logger->logInfo ( "Application_Model_Call", "checkMntCallTimes", "session id" . $callData ["sessionid"] );
-		$row = $this->find ( $callData ["sessionid"] )->current();
-		$logger->logInfo ( "Application_Model_Call", "checkMntCallTimes", "party1CallRes :" .  $row ["party1CallRes"] );
+		$row = $this->find ( $callData ["sessionid"] )->current ();
+		$logger->logInfo ( "Application_Model_Call", "checkMntCallTimes", "party1CallRes :" . $row ["party1CallRes"] );
 		return $row ["party1CallRes"];
 	}
 	// 检查学生 重拨次数
 	public function checkStuCallTimes($callData) {
-		$row = $this->find ( $callData ["sessionid"] )->current();
+		$row = $this->find ( $callData ["sessionid"] )->current ();
 		return $row ["party2CallRes"];
 	}
 	// 检查翻译 重拨次数
 	public function checkTrlCallTimes($callData) {
-		$row = $this->find ( $callData ["sessionid"] )->current();
+		$row = $this->find ( $callData ["sessionid"] )->current ();
 		return $row ["party3CallRes"];
 	}
 	
-	//老师拨号次数加1
+	// 老师拨号次数加1
 	public function findSessionIdByMntCallsessionIdAndUpdateCallTimes($callSessionId = null) {
 		$select = $this->select ();
 		$select->where ( 'party1SessionId = ?', $callSessionId );
-		$row = $this->fetchRow($select);
-		$row->party1CallRes = $row["party1CallRes"]+1;
-		$row->save();
+		$row = $this->fetchRow ( $select );
+		$row->party1CallRes = $row ["party1CallRes"] + 1;
+		$row->save ();
 		return $row;
 	}
 	
-	//学生拨号次数加1
+	// 记录老师开始接通时间
+	public function findSessionIdByMntCallsessionIdAndRecordTime($callSessionId = null) {
+		$time = date ( 'Y-m-d H:i:s' );
+		$select = $this->select ();
+		$select->where ( 'party1SessionId = ?', $callSessionId );
+		$row = $this->fetchRow ( $select );
+		$row->party1CallTime = $time;
+		$row->save ();
+		return $row;
+	}
+	
+	// 学生拨号次数加1
 	public function findSessionIdByStuCallsessionIdAndUpdateCallTimes($callSessionId = null) {
 		$select = $this->select ();
 		$select->where ( 'party2SessionId = ?', $callSessionId );
-		$row = $this->fetchRow($select);
-		$row->party2CallRes = $row["party2CallRes"]+1;
-		$row->save();
+		$row = $this->fetchRow ( $select );
+		$row->party2CallRes = $row ["party2CallRes"] + 1;
+		$row->save ();
 		return $row;
 	}
 	
-	//翻译拨号次数加1
+	// 记录学生开始接通时间
+	public function findSessionIdByStuCallsessionIdAndRecordTime($callSessionId = null) {
+		$time = date ( 'Y-m-d H:i:s' );
+		$select = $this->select ();
+		$select->where ( 'party2SessionId = ?', $callSessionId );
+		$row = $this->fetchRow ( $select );
+		$row->party2CallTime = $time;
+		$row->save ();
+		return $row;
+	}
+	
+	// 翻译拨号次数加1
 	public function findSessionIdByTrlCallsessionIdAndUpdateCallTimes($callSessionId = null) {
 		$select = $this->select ();
 		$select->where ( 'party3SessionId = ?', $callSessionId );
-		$row = $this->fetchRow($select);
-		$row->party3CallRes = $row["party3CallRes"]+1;
-		$row->save();
+		$row = $this->fetchRow ( $select );
+		$row->party3CallRes = $row ["party3CallRes"] + 1;
+		$row->save ();
+		return $row;
+	}
+	
+	// 记录翻译开始接通时间
+	public function findSessionIdByTrlCallsessionIdAndRecordTime($callSessionId = null) {
+		$time = date ( 'Y-m-d H:i:s' );
+		$select = $this->select ();
+		$select->where ( 'party3SessionId = ?', $callSessionId );
+		$row = $this->fetchRow ( $select );
+		$row->party2CallTime = $time;
+		$row->save ();
+		return $row;
+	}
+	
+	// 记录会议开始时间
+	public function groupStart($callInx = null) {
+		$time = date ( 'Y-m-d H:i:s' );
+		$row = $this->find ( $callInx )->current ();
+		if ($row) {
+			$row->grpCallStartTime = $time;
+			$row->save ();
+		}
+	}
+	
+	// 记录会议结束时间
+	public function groupEnd($callSessionId = null) {
+		$time = date ( 'Y-m-d H:i:s' );
+		$select = $this->select ();
+		$select->where ( 'party2SessionId = ?', $callSessionId );
+		$row = $this->fetchRow ( $select );
+		$row->grpCallEndTime = $time;
+		$row->save ();
 		return $row;
 	}
 }

@@ -52,11 +52,13 @@ class StudentController extends Zend_Controller_Action {
 		$inx = $this->_getParam ( "inx" );
 		$student = new Application_Model_Student ();
 		$studentlist = $student->find ( $inx );
-		$data = array("err"=>0);
+		
 		if (count($studentlist)>0) {
 			$this->view->studentlist = $studentlist [0];
 			$data = $studentlist [0];
-		} 
+		}else{
+			$data = array("err"=>0);
+		}
 		$this->_helper->json ( $data, true, false, true );
 	}
 }

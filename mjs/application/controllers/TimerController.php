@@ -41,5 +41,31 @@ class TimerController extends Zend_Controller_Action {
 			$this->logger->logInfo ( "TimerController", "indexAction", "it is the session call time".$start );
 		}
 	}
+	
+	public function fireAction(){
+		$sessionModel = new Application_Model_Session ();
+		$start = date ( 'Y-m-d H:i:s' );
+		$end = date ( "Y-m-d H:i:s", strtotime ( " +10 mins" ) );
+		$sessions = $sessionModel->getWillStartingSession ( $end, $end );
+		foreach ( $sessions as $row ) {
+			$troposervice = new TropoService ();
+			$paramArr = array ();
+			$paramArr ["sessionid"] = $row ["inx"];
+			$paramArr ["stuphone"] = $row ["b_phone"];
+			$paramArr ["stuid"] = $row ["b_inx"];
+			$paramArr ["mntphone"] = $row ["c_phone"];
+			$paramArr ["mntid"] = $row ["c_inx"];
+			$paramArr ["trlphone"] = $row ["d_phone"];
+			$paramArr ["trlid"] = $row ["d_inx"];
+				
+			//调用打电话应用并创建call记录
+			$troposervice->callmnt( $paramArr );
+			$callModel = new Application_Model_Call ();
+			$callModel->createCall($paramArr);
+			$this->logger->logInfo ( "TimerController", "indexAction", "it is the session call time".$start );
+			echo "call instructor ";
+		}
+		echo "time is :".$start;
+	}
 }
 

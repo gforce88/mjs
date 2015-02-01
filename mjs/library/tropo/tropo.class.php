@@ -1348,22 +1348,22 @@ class Result {
     if (!is_object($result) || !property_exists($result, "result")) {
       throw new TropoException('Not a result object.');
     }
-    $this->_sessionId = $result->result->sessionId;
-    $this->_callId = $result->result->callId;
-    $this->_state = $result->result->state;
-    $this->_sessionDuration = $result->result->sessionDuration;
-    $this->_sequence = $result->result->sequence;
-    $this->_complete = $result->result->complete;
-    $this->_error = $result->result->error;
-    $this->_userType = $result->result->userType;
-    $this->_actions = $result->result->actions;
-    $this->_name = $result->result->actions->name;
-    $this->_attempts = $result->result->actions->attempts;
-    $this->_disposition = $result->result->actions->disposition;
-    $this->_confidence = $result->result->actions->confidence;
-    $this->_interpretation = $result->result->actions->interpretation;
-    $this->_utterance = $result->result->actions->utterance;
-    $this->_value = $result->result->actions->value;
+    $this->_sessionId = isset($result->result->sessionId)?$result->result->sessionId:null;
+    $this->_callId = isset($result->result->callId)?$result->result->callId:null;
+    $this->_state = isset($result->result->state)?$result->result->state:null;
+    $this->_sessionDuration = isset($result->result->sessionDuration)?$result->result->sessionDuration:null;
+    $this->_sequence = isset($result->result->sequence)?$result->result->sequence:null;
+    $this->_complete = isset($result->result->complete)?$result->result->complete:null;
+    $this->_error = isset($result->result->error)?$result->result->error:null;
+    $this->_userType = isset($result->result->userType)?$result->result->userType:null;
+    $this->_actions = isset($result->result->actions)?$result->result->actions:null;
+    $this->_name = isset($result->result->actions->name)?$result->result->actions->name:null;
+    $this->_attempts = isset($result->result->actions->attempts)?$result->result->actions->attempts:null;
+    $this->_disposition = isset($result->result->actions->disposition)?$result->result->actions->disposition:null;
+    $this->_confidence = isset($result->result->actions->confidence)?$result->result->actions->confidence:null;
+    $this->_interpretation = isset($result->result->actions->interpretation)?$result->result->actions->interpretation:null;
+    $this->_utterance = isset($result->result->actions->utterance)?:null;
+    $this->_value = isset($result->result->actions->value)?$result->result->actions->value:null;
     $this->_concept = isset($result->result->actions->concept) ? $result->result->actions->concept : null;
     $this->_transcription = isset($result->result->transcription) ? $result->result->transcription : null;
   }

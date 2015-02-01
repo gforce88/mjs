@@ -6,12 +6,14 @@ require_once 'service/TropoService.php';
 class TimerController extends Zend_Controller_Action {
 	protected $logger;
 	public function init() {
+		echo "init TimerController";
 		$this->logger = LoggerFactory::getSysLogger ();
 		$this->httpUtil = new HttpUtil ();
 		$this->setting = Zend_Registry::get ( "TROPO_SETTING" );
 		$this->_helper->viewRenderer->setNeverRender ();
 	}
 	public function indexAction() {
+		print "get Here";
 		$sessionModel = new Application_Model_Session ();
 		$start = date ( 'Y-m-d H:i:s' );
 		// $start = date ( "Y-m-d H:i:s", strtotime ( "2015-01-25 11:00:00" ) );
@@ -43,6 +45,7 @@ class TimerController extends Zend_Controller_Action {
 	}
 	
 	public function fireAction(){
+		echo "fireAction";
 		$sessionModel = new Application_Model_Session ();
 		$start = date ( 'Y-m-d H:i:s' );
 		$end = date ( "Y-m-d H:i:s", strtotime ( " +10 mins" ) );

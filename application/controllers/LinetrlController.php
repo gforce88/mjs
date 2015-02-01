@@ -21,7 +21,7 @@ class LinetrlController extends Zend_Controller_Action {
 		$callModel = new Application_Model_Call ();
 		$callModel->updateTrlCallSession ( $params ["sessionid"], $session->getId () );
 		
-		if ($callModel->checkTrlCallTimes ( $params ) > 3) {
+		if ($callModel->checkTrlCallTimes ( $params ) >= 3) {
 			$this->logger->logInfo ( "LinetrlController", "indexAction", "translator didn't answer the call for 3 times" );
 			$this->sendNotification ($params ["sessionid"]);
 		} else {

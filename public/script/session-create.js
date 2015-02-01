@@ -1,5 +1,5 @@
 $().ready(function() {
-	$("#studentId").on('input', function(e) {
+	$("#studentId").on('blur', function(e) {
 		$.getJSON("/student/findstujson?inx=" + this.value, function(json) {
 			if (json.err==0) {
 				alert("student not exist");
@@ -7,7 +7,6 @@ $().ready(function() {
 				$("#lastName").val("");
 				$("#phone").val("");
 				$("#email").val("");
-
 			} else {
 				$("#firstName").val(json.firstName);
 				$("#lastName").val(json.lastName);

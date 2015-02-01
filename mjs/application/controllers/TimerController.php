@@ -35,7 +35,7 @@ class TimerController extends Zend_Controller_Action {
 			$paramArr ["trlid"] = $row ["d_inx"];
 			
 			//调用打电话应用并创建call记录
-			
+			$callModel = new Application_Model_Call ();
 			$existRow = $callModel->find( $row ["inx"] )->current ();
 			if($existRow){
 
@@ -43,7 +43,6 @@ class TimerController extends Zend_Controller_Action {
 				$callModel->createCall($paramArr);
 			}
 			$troposervice->callmnt( $paramArr );
-			$callModel = new Application_Model_Call ();
 			$this->logger->logInfo ( "TimerController", "indexAction", "it is the session call time".$start );
 		}
 	}

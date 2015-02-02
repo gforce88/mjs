@@ -44,7 +44,6 @@ class TimerController extends Zend_Controller_Action {
 			if ($existRow) {
 			} else {
 				$callModel->createCall ( $paramArr );
-				sleep(5);
 				$troposervice->callmnt ( $paramArr );
 			}
 			$this->logger->logInfo ( "TimerController", "indexAction", "it is the session call time" . $start );
@@ -72,7 +71,6 @@ class TimerController extends Zend_Controller_Action {
 			if ($existRow) {
 			} else {
 				$callModel->createCall ( $paramArr );
-				sleep(5);
 				$troposervice->callmnt ( $paramArr );
 			}
 			$this->logger->logInfo ( "TimerController", "indexAction", "it is the session call time" . $start );

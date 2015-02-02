@@ -23,7 +23,7 @@ class LinemntController extends Zend_Controller_Action {
 		$id = $callModel->updateMntCallSession ( $params ["sessionid"], $session->getId () );
 		$times = $callModel->checkMntCallTimes ( $params );
 		// 判断拨号次数是否达到3次
-		if ($times >= 3) {
+		if ($times > 3) {
 			$this->logger->logInfo ( "LinemntController", "indexAction", "instructor didn't answer the call for 3times" );
 			$this->sendNotification ( $params ["sessionid"] );
 		} else {

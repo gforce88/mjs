@@ -91,7 +91,6 @@ class SessionController extends Zend_Controller_Action {
 						$paramArr ["trlphone"] = $row ["d_phone"];
 						$paramArr ["trlid"] = $row ["d_inx"];
 						$troposervice = new TropoService ();
-						$troposervice->callstu ( $paramArr );
 						// 调用打电话应用并创建call记录
 						$callModel = new Application_Model_Call ();
 						$existRow = $callModel->find ( $row ["inx"] )->current ();
@@ -191,7 +190,6 @@ class SessionController extends Zend_Controller_Action {
 						$paramArr ["trlphone"] = $row ["d_phone"];
 						$paramArr ["trlid"] = $row ["d_inx"];
 						$troposervice = new TropoService ();
-						$troposervice->callstu ( $paramArr );
 						// 调用打电话应用并创建call记录
 						$callModel = new Application_Model_Call ();
 						$existRow = $callModel->find ( $row ["inx"] )->current ();

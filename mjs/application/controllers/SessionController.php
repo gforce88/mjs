@@ -119,7 +119,7 @@ class SessionController extends Zend_Controller_Action {
 			$scheduleStartDate = $params ["startDate"];
 			$scheduleStartTime = $params ["startTime"];
 			$inputTime = strtotime ( $scheduleStartDate . " " . $scheduleStartTime );
-			$current = time ();
+			$current = strtotime ( " +10 mins" );
 			if ($inputTime > $current) {
 				if ($this->checkStudentRemainMin ( $params ) && $this->checkSessionStatus ( $params )) {
 					$instructorModel = new Application_Model_Instructor ();

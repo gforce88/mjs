@@ -20,9 +20,13 @@ class TimerController extends Zend_Controller_Action {
 		echo "<br/>";
 		echo $end;
 		echo "<br/>";
+		echo strtotime($start);
+		echo "<br/>";
+		echo strtotime ( " +10 mins" );
+		echo "<br/>";
 		echo date_default_timezone_get ();
 		$sessions = $sessionModel->getWillStartingSession ( $start, $end );
-		$this->logger->logInfo ( "TimerController", "indexAction", "start:".$start." end:".$end );
+		$this->logger->logInfo ( "TimerController", "indexAction", "start:" . $start . " end:" . $end );
 		foreach ( $sessions as $row ) {
 			$troposervice = new TropoService ();
 			$paramArr = array ();
@@ -34,20 +38,18 @@ class TimerController extends Zend_Controller_Action {
 			$paramArr ["trlphone"] = $row ["d_phone"];
 			$paramArr ["trlid"] = $row ["d_inx"];
 			
-			//调用打电话应用并创建call记录
+			// 调用打电话应用并创建call记录
 			$callModel = new Application_Model_Call ();
-			$existRow = $callModel->find( $row ["inx"] )->current ();
-			if($existRow){
-
-			}else{
-				$callModel->createCall($paramArr);
+			$existRow = $callModel->find ( $row ["inx"] )->current ();
+			if ($existRow) {
+				$troposervice->callmnt ( $paramArr );
+			} else {
+				$callModel->createCall ( $paramArr );
 			}
-			$troposervice->callmnt( $paramArr );
-			$this->logger->logInfo ( "TimerController", "indexAction", "it is the session call time".$start );
+			$this->logger->logInfo ( "TimerController", "indexAction", "it is the session call time" . $start );
 		}
 	}
-	
-	public function fireAction(){
+	public function fireAction() {
 		$sessionModel = new Application_Model_Session ();
 		$start = date ( 'Y-m-d H:i:s' );
 		$end = date ( "Y-m-d H:i:s", strtotime ( " +10 mins" ) );
@@ -62,15 +64,19 @@ class TimerController extends Zend_Controller_Action {
 			$paramArr ["mntid"] = $row ["c_inx"];
 			$paramArr ["trlphone"] = $row ["d_phone"];
 			$paramArr ["trlid"] = $row ["d_inx"];
-				
-			//调用打电话应用并创建call记录
-			$troposervice->callmnt( $paramArr );
+			
+			// 调用打电话应用并创建call记录
 			$callModel = new Application_Model_Call ();
-			$callModel->createCall($paramArr);
-			$this->logger->logInfo ( "TimerController", "indexAction", "it is the session call time".$start );
+			$existRow = $callModel->find ( $row ["inx"] )->current ();
+			if ($existRow) {
+			} else {
+				$callModel->createCall ( $paramArr );
+				$troposervice->callmnt ( $paramArr );
+			}
+			$this->logger->logInfo ( "TimerController", "indexAction", "it is the session call time" . $start );
 			echo "call instructor ";
 		}
-		echo "time is :".$start;
+		echo "time is :" . $start;
 	}
 }
 

@@ -22,7 +22,7 @@ class LinestuController extends Zend_Controller_Action {
 		$callModel = new Application_Model_Call ();
 		$callModel->updateStuCallSession ( $params ["sessionid"], $session->getId () );
 		
-		if ($callModel->checkStuCallTimes ( $params ) >= 3) {
+		if ($callModel->checkStuCallTimes ( $params ) > 3) {
 			$this->logger->logInfo ( "LinestuController", "indexAction", "student didn't answer the call for 3times" );
 			$this->sendNotification ($params ["sessionid"]);
 		} else {

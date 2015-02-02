@@ -31,10 +31,6 @@ class LinemntController extends Zend_Controller_Action {
 			$tropo = new Tropo ();
 			$tropo->call ( $params ["mntphone"] );
 			
-			$tropo->on ( array (
-					"event" => "hangup",
-					"next" => "/linemnt/hangup"
-			) );
 			// 电话接通后
 			$tropo->on ( array (
 					"event" => "continue",

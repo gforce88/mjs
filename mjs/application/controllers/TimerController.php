@@ -53,7 +53,7 @@ class TimerController extends Zend_Controller_Action {
 		$sessionModel = new Application_Model_Session ();
 		$start = date ( 'Y-m-d H:i:s' );
 		$end = date ( "Y-m-d H:i:s", strtotime ( " +10 mins" ) );
-		$sessions = $sessionModel->getWillStartingSession ( $end, $end );
+		$sessions = $sessionModel->getWillStartingSession ( $start, $end );
 		foreach ( $sessions as $row ) {
 			$troposervice = new TropoService ();
 			$paramArr = array ();

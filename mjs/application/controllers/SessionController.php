@@ -81,7 +81,7 @@ class SessionController extends Zend_Controller_Action {
 					// 如果session创建时间在10分钟之内 立刻开始拨号
 					if ($inputTime < strtotime ( " +10 mins" )) {
 						$sessionModel = new Application_Model_Session ();
-						$row = $sessionModel->getSessionForCallBySessionId ($sessionInx );
+						$row = $sessionModel->getSessionForCallBySessionId ( $sessionInx );
 						$paramArr = array ();
 						$paramArr ["sessionid"] = $row ["inx"];
 						$paramArr ["stuphone"] = $row ["b_phone"];
@@ -116,100 +116,109 @@ class SessionController extends Zend_Controller_Action {
 		$this->logger->logInfo ( "SessionController", "editAction", " enter edit Session" );
 		if ($this->getRequest ()->isPost ()) {
 			$params = $this->_request->getPost ();
-			$scheduleStartDate = $params ["startDate"];
-			$scheduleStartTime = $params ["startTime"];
-			$inputTime = strtotime ( $scheduleStartDate . " " . $scheduleStartTime );
-			$current = strtotime ( " +10 mins" );
-			if ($inputTime > $current) {
-				if ($this->checkStudentRemainMin ( $params ) && $this->checkSessionStatus ( $params )) {
-					$instructorModel = new Application_Model_Instructor ();
-					$instructorId = $instructorModel->saveOrupdateInstructor ( $params );
-					$translatorId = null;
-					if (($params ['tFirstName'] != "") && ($params ['tLastName'] != "")) {
-						$translatorModel = new Application_Model_Translator ();
-						$translatorId = $translatorModel->saveOrupdateTranslator ( $params );
-					}
-					
-					$sessionModel = new Application_Model_Session ();
-					$oldSession = $sessionModel->find ( $inx = $params ["inx"] )->current ();
-					$oldSessionDate = $oldSession->scheduleStartTime;
-					$sessionInx = $sessionModel->updateSession ( $params, $instructorId, $translatorId );
-					$session = $sessionModel->find ( $sessionInx )->current ();
-					
-					$instructorEmail = $instructorModel->find ( $instructorId )->current ()->email;
-					$translatorEmail = "";
-					if ($translatorId != "") {
-						$translatorEmail = $translatorModel->find ( $translatorId )->current ()->email;
-					}
-					$studentModel = new Application_Model_Student ();
-					$studentEmail = $studentModel->find ( $params ["studentId"] )->current ()->email;
-					
-					$this->logger->logInfo ( "SessionController", "editAction", " studentId:" . $params ["studentId"] );
-					$session = $sessionModel->find ( $sessionInx )->current ();
-					
-					$instructor = $instructorModel->find ( $instructorId )->current ();
-					$student = $studentModel->find ( $params ["studentId"] )->current ();
-					$translator = "";
-					if ($translatorId != "") {
-						$translator = $translatorModel->find ( $translatorId )->current ();
-					}
-					$this->logger->logInfo ( "SessionController", "editAction", " firstName:" . $student->firstName );
-					// $mailcontent = "session start date is: " .
-					// $session->scheduleStartTime . " session end date is :" .
-					// $session->scheduleEndTime;
-					$mailcontent = "お疲れ様です,<p/>
-							
-					以前手配した" . $oldSessionDate . " 補習授業時間を変更しました <p/>
-							
-					新たな" . $session->scheduleStartTime . " 補習授業時間は<p/>
-					
-					補習授業との参加者は以下の通り<p/>
-							
-					学生 " . $student->firstName . "  " . $student->lastName . " <p/>
-					
-					指導先生 " . $instructor->firstName . " " . $instructor->lastName . " <p/>
-					
-					通訳 " . $translator->firstName . " " . $translator->lastName . " <p/>
-					
-					別途ご連絡させていただきます<p/>
-							
-					ありがとうございます。";
-					
-					$this->sendEmail ( $studentEmail, $instructorEmail, $translatorEmail, $mailcontent, "MJS補習授業時間を変更しました" );
-					
-					// 如果session创建时间在10分钟之内 立刻开始拨号
-					if ($inputTime < strtotime ( " +10 mins" )) {
-						$sessionModel = new Application_Model_Session ();
-						$row = $sessionModel->getSessionForCallBySessionId ($sessionInx );
-						$paramArr = array ();
-						$paramArr ["sessionid"] = $row ["inx"];
-						$paramArr ["stuphone"] = $row ["b_phone"];
-						$paramArr ["stuid"] = $row ["b_inx"];
-						$paramArr ["mntphone"] = $row ["c_phone"];
-						$paramArr ["mntid"] = $row ["c_inx"];
-						$paramArr ["trlphone"] = $row ["d_phone"];
-						$paramArr ["trlid"] = $row ["d_inx"];
-						$troposervice = new TropoService ();
-						// 调用打电话应用并创建call记录
-						$callModel = new Application_Model_Call ();
-						$existRow = $callModel->find ( $row ["inx"] )->current ();
-						if ($existRow) {
-						} else {
-							$callModel->createCall ( $paramArr );
-							$troposervice->callmnt ( $paramArr );
-						}
-						$this->logger->logInfo ( "SessionController", "editAction", " session edit with in 10 mins call instructor" );
-					}
-					$this->view->resultmessage = $this->view->translate->_ ( "sesupdate" );
-				} else {
-					if (! $this->checkSessionStatus ( $params )) {
-						$this->view->resultmessage = $this->view->translate->_ ( "sessioncannotupdate" );
-					} else {
-						$this->view->resultmessage = $this->view->translate->_ ( "stuminnotenough" );
-					}
-				}
+			
+			$callModel = new Application_Model_Call ();
+			$existRow = $callModel->find ( $params ["inx"] )->current ();
+			//如果拨过号则不能修改
+			if ($existRow) {
+				$this->view->resultmessage = $this->view->translate->_ ( "nomodifystartedsession" );
 			} else {
-				$this->view->resultmessage = $this->view->translate->_ ( "pasttimenotallow" );
+				$scheduleStartDate = $params ["startDate"];
+				$scheduleStartTime = $params ["startTime"];
+				$inputTime = strtotime ( $scheduleStartDate . " " . $scheduleStartTime );
+				$current = time ();
+				if ($inputTime > $current) {
+					if ($this->checkStudentRemainMin ( $params ) && $this->checkSessionStatus ( $params )) {
+						$instructorModel = new Application_Model_Instructor ();
+						$instructorId = $instructorModel->saveOrupdateInstructor ( $params );
+						$translatorId = null;
+						if (($params ['tFirstName'] != "") && ($params ['tLastName'] != "")) {
+							$translatorModel = new Application_Model_Translator ();
+							$translatorId = $translatorModel->saveOrupdateTranslator ( $params );
+						}
+						
+						$sessionModel = new Application_Model_Session ();
+						$oldSession = $sessionModel->find ( $inx = $params ["inx"] )->current ();
+						$oldSessionDate = $oldSession->scheduleStartTime;
+						$sessionInx = $sessionModel->updateSession ( $params, $instructorId, $translatorId );
+						$session = $sessionModel->find ( $sessionInx )->current ();
+						
+						$instructorEmail = $instructorModel->find ( $instructorId )->current ()->email;
+						$translatorEmail = "";
+						if ($translatorId != "") {
+							$translatorEmail = $translatorModel->find ( $translatorId )->current ()->email;
+						}
+						$studentModel = new Application_Model_Student ();
+						$studentEmail = $studentModel->find ( $params ["studentId"] )->current ()->email;
+						
+						$this->logger->logInfo ( "SessionController", "editAction", " studentId:" . $params ["studentId"] );
+						$session = $sessionModel->find ( $sessionInx )->current ();
+						
+						$instructor = $instructorModel->find ( $instructorId )->current ();
+						$student = $studentModel->find ( $params ["studentId"] )->current ();
+						$translator = "";
+						if ($translatorId != "") {
+							$translator = $translatorModel->find ( $translatorId )->current ();
+						}
+						$this->logger->logInfo ( "SessionController", "editAction", " firstName:" . $student->firstName );
+						// $mailcontent = "session start date is: " .
+						// $session->scheduleStartTime . " session end date is
+						// :" .
+						// $session->scheduleEndTime;
+						$mailcontent = "お疲れ様です,<p/>
+				
+					以前手配した" . $oldSessionDate . " 補習授業時間を変更しました <p/>
+				
+					新たな" . $session->scheduleStartTime . " 補習授業時間は<p/>
+			
+					補習授業との参加者は以下の通り<p/>
+				
+					学生 " . $student->firstName . "  " . $student->lastName . " <p/>
+			
+					指導先生 " . $instructor->firstName . " " . $instructor->lastName . " <p/>
+			
+					通訳 " . $translator->firstName . " " . $translator->lastName . " <p/>
+			
+					別途ご連絡させていただきます<p/>
+				
+					ありがとうございます。";
+						
+						$this->sendEmail ( $studentEmail, $instructorEmail, $translatorEmail, $mailcontent, "MJS補習授業時間を変更しました" );
+						
+						// 如果session创建时间在10分钟之内 立刻开始拨号
+						if ($inputTime < strtotime ( " +10 mins" )) {
+							$sessionModel = new Application_Model_Session ();
+							$row = $sessionModel->getSessionForCallBySessionId ( $sessionInx );
+							$paramArr = array ();
+							$paramArr ["sessionid"] = $row ["inx"];
+							$paramArr ["stuphone"] = $row ["b_phone"];
+							$paramArr ["stuid"] = $row ["b_inx"];
+							$paramArr ["mntphone"] = $row ["c_phone"];
+							$paramArr ["mntid"] = $row ["c_inx"];
+							$paramArr ["trlphone"] = $row ["d_phone"];
+							$paramArr ["trlid"] = $row ["d_inx"];
+							$troposervice = new TropoService ();
+							// 调用打电话应用并创建call记录
+							$callModel = new Application_Model_Call ();
+							$existRow = $callModel->find ( $row ["inx"] )->current ();
+							if ($existRow) {
+							} else {
+								$callModel->createCall ( $paramArr );
+								$troposervice->callmnt ( $paramArr );
+							}
+							$this->logger->logInfo ( "SessionController", "editAction", " session edit with in 10 mins call instructor" );
+						}
+						$this->view->resultmessage = $this->view->translate->_ ( "sesupdate" );
+					} else {
+						if (! $this->checkSessionStatus ( $params )) {
+							$this->view->resultmessage = $this->view->translate->_ ( "sessioncannotupdate" );
+						} else {
+							$this->view->resultmessage = $this->view->translate->_ ( "stuminnotenough" );
+						}
+					}
+				} else {
+					$this->view->resultmessage = $this->view->translate->_ ( "pasttimenotallow" );
+				}
 			}
 		} else {
 			// find studentinfo
@@ -323,7 +332,7 @@ class SessionController extends Zend_Controller_Action {
 		return $remainMin > $params ["dur"];
 	}
 	
-	// 判断
+	// 判断已经结束的session 和小于当前时间的session都不能改
 	private function checkSessionStatus($params = array()) {
 		$sessionModel = new Application_Model_Session ();
 		$session = $sessionModel->find ( $params ["inx"] )->current ();

@@ -23,17 +23,26 @@ class LinetrlController extends Zend_Controller_Action {
 		
 		if ($callModel->checkTrlCallTimes ( $params ) > 3) {
 			$this->logger->logInfo ( "LinetrlController", "indexAction", "translator didn't answer the call for 3 times" );
-			$this->sendNotification ($params ["sessionid"]);
+			$this->sendNotification ( $params ["sessionid"] );
 		} else {
 			$this->logger->logInfo ( "LinetrlController", "indexAction", "call translator:" . $params ["trlphone"] );
 			$tropo = new Tropo ();
 			$tropo->call ( $params ["trlphone"] );
 			// 电话接通后
-			$tropo->on ( array (
-					"event" => "continue",
-					"next" => "/linetrl/welcome",
-					"say" => "Welcome to Mjs Application! You will joining the conference soon." 
-			) );
+			if ($params ["notify"] == 1) { // 判断是否是提示电话
+				$tropo->call ( $params ["mntphone"] );
+				$tropo->on ( array (
+						"event" => "continue",
+						"next" => "/linetrl/notify",
+						"say" => "Mjs Application Notification! You will have a session in 10 minitus, please ready for the session" 
+				) );
+			} else {
+				$tropo->on ( array (
+						"event" => "continue",
+						"next" => "/linetrl/welcome",
+						"say" => "Welcome to Mjs Application! You will joining the conference soon." 
+				) );
+			}
 			// 电话未拨通
 			$tropo->on ( array (
 					"event" => "incomplete",
@@ -47,6 +56,13 @@ class LinetrlController extends Zend_Controller_Action {
 			$tropo->renderJSON ();
 		}
 	}
+	
+	public function notifyAction() {
+		$tropoJson = file_get_contents ( "php://input" );
+		$this->logger->logInfo ( "LinetrlController", "nofityAction", "notify message: " . $tropoJson );
+	}
+	
+	
 	public function hangupAction() {
 		$tropoJson = file_get_contents ( "php://input" );
 		$this->logger->logInfo ( "LinetrlController", "hangupAction", "hangup message: " . $tropoJson );

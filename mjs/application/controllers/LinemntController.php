@@ -31,17 +31,8 @@ class LinemntController extends Zend_Controller_Action {
 			$tropo = new Tropo ();
 			
 			// 电话接通后
-			// 提示电话直接拨三方
-			if ($params ["notify"] == 1) {
-				$phoneArray = $params ["trlphone"] == "" ? array (
-						$params ["mntphone"],
-						$params ["stuphone"] 
-				) : array (
-						$params ["mntphone"],
-						$params ["stuphone"],
-						$params ["trlphone"] 
-				);
-				$tropo->call ( $phoneArray );
+			if ($params ["notify"] == 1) {//判断是否是提示电话
+				$tropo->call ( $params ["mntphone"] );
 				$tropo->on ( array (
 						"event" => "continue",
 						"next" => "/linemnt/notify",

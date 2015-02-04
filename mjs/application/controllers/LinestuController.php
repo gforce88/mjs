@@ -24,17 +24,26 @@ class LinestuController extends Zend_Controller_Action {
 		
 		if ($callModel->checkStuCallTimes ( $params ) > 3) {
 			$this->logger->logInfo ( "LinestuController", "indexAction", "student didn't answer the call for 3times" );
-			$this->sendNotification ($params ["sessionid"]);
+			$this->sendNotification ( $params ["sessionid"] );
 		} else {
 			$this->logger->logInfo ( "LinestuController", "indexAction", "call student:" . $params ["stuphone"] );
 			$tropo = new Tropo ();
 			$tropo->call ( $params ["stuphone"] );
 			// 电话接通后
-			$tropo->on ( array (
-					"event" => "continue",
-					"next" => "/linestu/welcome",
-					"say" => "Welcome to Mjs Application! You will joining the conference soon." 
-			) );
+			if ($params ["notify"] == 1) { // 判断是否是提示电话
+				$tropo->call ( $params ["mntphone"] );
+				$tropo->on ( array (
+						"event" => "continue",
+						"next" => "/linestu/notify",
+						"say" => "Mjs Application Notification! You will have a session in 10 minitus, please ready for the session" 
+				) );
+			} else {
+				$tropo->on ( array (
+						"event" => "continue",
+						"next" => "/linestu/welcome",
+						"say" => "Welcome to Mjs Application! You will joining the conference soon." 
+				) );
+			}
 			// 电话未拨通
 			$tropo->on ( array (
 					"event" => "incomplete",
@@ -49,20 +58,26 @@ class LinestuController extends Zend_Controller_Action {
 			$tropo->renderJSON ();
 		}
 	}
+	
+	public function notifyAction() {
+		$tropoJson = file_get_contents ( "php://input" );
+		$this->logger->logInfo ( "LinestuController", "nofityAction", "notify message: " . $tropoJson );
+	}
+	
 	public function hangupAction() {
 		$tropoJson = file_get_contents ( "php://input" );
 		$this->logger->logInfo ( "LinestuController", "hangupAction", "student hangup message: " . $tropoJson );
 		$result = new Result ( $tropoJson );
 		$callModel = new Application_Model_Call ();
 		$call = $callModel->groupEnd ( $result->getSessionId () );
-		//更新session实际结束时间
-		$sessionModel = new Application_Model_Session();
-		$sessionModel->finishSession($call["inx"]);
+		// 更新session实际结束时间
+		$sessionModel = new Application_Model_Session ();
+		$sessionModel->finishSession ( $call ["inx"] );
 		
-		//更新学生记录的时间
-		$uesdmins = ceil((strtotime ( $call["grpCallEndTime"] )-strtotime ( $call["grpCallStartTime"] ))/60);
-		$studentModel = new Application_Model_Student();
-		$studentModel->updateMinsRemaining($call["party2Inx"],$uesdmins);
+		// 更新学生记录的时间
+		$uesdmins = ceil ( (strtotime ( $call ["grpCallEndTime"] ) - strtotime ( $call ["grpCallStartTime"] )) / 60 );
+		$studentModel = new Application_Model_Student ();
+		$studentModel->updateMinsRemaining ( $call ["party2Inx"], $uesdmins );
 		
 		$this->logger->logInfo ( "LinestuController", "hangupAction", "group session is over as student is hangup " );
 	}

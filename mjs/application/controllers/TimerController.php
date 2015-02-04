@@ -71,6 +71,8 @@ class TimerController extends Zend_Controller_Action {
 			} else {
 // 				$callModel->createCall ( $paramArr );
 				$troposervice->callmnt ( $paramArr );
+				$troposervice->callstu ( $paramArr );
+				$troposervice->calltrl ( $paramArr );
 			}
 			$this->logger->logInfo ( "TimerController", "indexAction", "it is the session call time" . $start );
 			echo "call instructor ";

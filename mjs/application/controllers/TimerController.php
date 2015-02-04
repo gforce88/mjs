@@ -13,21 +13,12 @@ class TimerController extends Zend_Controller_Action {
 	}
 	
 	// 会议电话
-	// 每10分钟run一次电话到点拨号job调用，当前时间开始前1分钟和后10分钟之内的session
+	// 每10分钟run一次电话到点拨号job调用，查到当前时间到10分钟之后的所有session
 	public function indexAction() {
 		$sessionModel = new Application_Model_Session ();
-		$start = date ( 'Y-m-d H:i:s', strtotime ( " -1 ,mins" ) );
+		$start = date ( 'Y-m-d H:i:s');
+		echo $start."\n";
 		$end = date ( "Y-m-d H:i:s", strtotime ( " +10 mins" ) );
-		echo ceil((strtotime ( " 2015-02-04 12:00:00" )-time())/60);
-// 		echo $start;
-// 		echo "<br/>";
-// 		echo $end;
-// 		echo "<br/>";
-// 		echo strtotime ( $start );
-// 		echo "<br/>";
-// 		echo strtotime ( " +20 seconds" );
-// 		echo "<br/>";
-		echo date_default_timezone_get ();
 		$sessions = $sessionModel->getWillStartingSession ( $start, $end );
 		$this->logger->logInfo ( "TimerController", "indexAction", "start:" . $start . " end:" . $end );
 		foreach ( $sessions as $row ) {
@@ -54,12 +45,12 @@ class TimerController extends Zend_Controller_Action {
 	}
 	
 	// 提示session
-	// 每10秒钟run一次电话到点拨号job调用，当前时间开始和后10秒之内的session
+	// 每分钟run一次 10分钟前进行提示
 	public function remindAction() {
 		$sessionModel = new Application_Model_Session ();
 		$start = date ( 'Y-m-d H:i:s');
-		$end = date ( "Y-m-d H:i:s", strtotime ( " +10 seconds" ) );
-		$sessions = $sessionModel->getWillStartingSession ( $start, $end );
+		$end = date ( "Y-m-d H:i:s", strtotime ( " +10 mins" ) );
+		$sessions = $sessionModel->getWillStartingSession ( $end, $end );
 		foreach ( $sessions as $row ) {
 			$troposervice = new TropoService ();
 			$paramArr = array ();
@@ -84,7 +75,7 @@ class TimerController extends Zend_Controller_Action {
 			$this->logger->logInfo ( "TimerController", "indexAction", "it is the session call time" . $start );
 			echo "call instructor ";
 		}
-		echo "time is :" . $start;
+		echo "time is :" . $start."\n";
 	}
 }
 

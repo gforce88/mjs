@@ -55,7 +55,7 @@ class TimerController extends Zend_Controller_Action {
 	
 	// 提示session
 	// 每10秒钟run一次电话到点拨号job调用，当前时间开始和后10秒之内的session
-	public function reMindAction() {
+	public function remindAction() {
 		$sessionModel = new Application_Model_Session ();
 		$start = date ( 'Y-m-d H:i:s');
 		$end = date ( "Y-m-d H:i:s", strtotime ( " +10 seconds" ) );

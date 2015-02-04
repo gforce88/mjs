@@ -29,14 +29,33 @@ class LinemntController extends Zend_Controller_Action {
 		} else {
 			$this->logger->logInfo ( "LinemntController", "indexAction", "call instructor:" . $params ["mntphone"] );
 			$tropo = new Tropo ();
-			$tropo->call ( $params ["mntphone"] );
 			
 			// 电话接通后
-			$tropo->on ( array (
-					"event" => "continue",
-					"next" => "/linemnt/welcome",
-					"say" => "Welcome to Mjs Application! Please hold on for joining the conference." 
-			) );
+			// 提示电话直接拨三方
+			if ($params ["notify"] == 1) {
+				$phoneArray = $params ["trlphone"] == "" ? array (
+						$params ["mntphone"],
+						$params ["stuphone"] 
+				) : array (
+						$params ["mntphone"],
+						$params ["stuphone"],
+						$params ["trlphone"] 
+				);
+				$tropo->call ( $phoneArray );
+				$tropo->on ( array (
+						"event" => "continue",
+						"next" => "/linemnt/notify",
+						"say" => "Mjs Application Notification! You will have a session in 10 minitus, please ready for the session" 
+				) );
+			} else {
+				// 会议电话，先拨Instructor
+				$tropo->call ( $params ["mntphone"] );
+				$tropo->on ( array (
+						"event" => "continue",
+						"next" => "/linemnt/welcome",
+						"say" => "Welcome to Mjs Application! Please hold on for joining the conference." 
+				) );
+			}
 			// 电话未拨通
 			$tropo->on ( array (
 					"event" => "incomplete",
@@ -44,6 +63,10 @@ class LinemntController extends Zend_Controller_Action {
 			) );
 			$tropo->renderJSON ();
 		}
+	}
+	public function notifyAction() {
+		$tropoJson = file_get_contents ( "php://input" );
+		$this->logger->logInfo ( "LinemntController", "nofityAction", "notify message: " . $tropoJson );
 	}
 	public function hangupAction() {
 		$tropoJson = file_get_contents ( "php://input" );
@@ -152,12 +175,11 @@ class LinemntController extends Zend_Controller_Action {
 		
 		$translatorModel = new Application_Model_Translator ();
 		$translatorEmail = "";
-		if($call ["party3Inx"]!=null){
+		if ($call ["party3Inx"] != null) {
 			$translatorEmail = $translatorModel->find ( $call ["party3Inx"] )->current ()->email;
 		}
 		$mailcontent = "session canceled As Instructor didn't answer the call";
-		$this->sendEmail ( $studentEmail, $instructorEmail, $translatorEmail, $mailcontent,"session canceled As Instructor didn't answer the call" );
-		
+		$this->sendEmail ( $studentEmail, $instructorEmail, $translatorEmail, $mailcontent, "session canceled As Instructor didn't answer the call" );
 	}
 	private function sendEmail($studentEmail, $instructorEmail, $translatorEmail, $mailcontent, $subject) {
 		$loginfo = $studentEmail . "-" . $instructorEmail . "-" . $translatorEmail;

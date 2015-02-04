@@ -13,7 +13,7 @@ class TimerController extends Zend_Controller_Action {
 	}
 	
 	// 会议电话
-	// 每10分钟run一次电话到点拨号job调用，查到当前时间到10分钟之后的所有session
+	// 每分钟run一次电话到点拨号job调用，查到当前时间 前后5秒之内的所有session
 	public function indexAction() {
 		$sessionModel = new Application_Model_Session ();
 		$start = date ( 'Y-m-d H:i:s', strtotime ( " -5 seconds" ));
@@ -46,7 +46,7 @@ class TimerController extends Zend_Controller_Action {
 	}
 	
 	// 提示session
-	// 每分钟run一次 10分钟前进行提示
+	// 每分钟run一次 查找10分钟之后的session
 	public function remindAction() {
 		$sessionModel = new Application_Model_Session ();
 		$start = date ( 'Y-m-d H:i:s' , strtotime ( " +9 mins +55 seconds" ) );

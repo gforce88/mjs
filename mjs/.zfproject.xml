@@ -53,6 +53,7 @@
         </controllerFile>
         <controllerFile controllerName="Timer">
           <actionMethod actionName="index"/>
+          <actionMethod actionName="remind"/>
         </controllerFile>
       </controllersDirectory>
       <formsDirectory enabled="false"/>

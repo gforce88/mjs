@@ -36,7 +36,7 @@ class LinemntController extends Zend_Controller_Action {
 				$tropo->on ( array (
 						"event" => "continue",
 						"next" => "/linemnt/notify",
-						"say" => "Mjs Application Notification! You will have a session in 10 minitus, please ready for the session" 
+						"say" => "This call is to reminder you that you have a session call today soon." 
 				) );
 			} else {
 				// 会议电话，先拨Instructor

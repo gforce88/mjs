@@ -35,7 +35,7 @@ class LinestuController extends Zend_Controller_Action {
 				$tropo->on ( array (
 						"event" => "continue",
 						"next" => "/linestu/notify",
-						"say" => "Mjs Application Notification! You will have a session in 10 minitus, please ready for the session" 
+						"say" => "This call is to reminder you that you have a session call today soon." 
 				) );
 			} else {
 				$tropo->on ( array (

@@ -1,33 +1,57 @@
 crontab -l for display
 crontab -e for edit
 
-* * * * *  curl http://localhost/timer/remind > cronremind.log
-* * * * * sleep 10&&curl http://localhost/timer/remind >> cronremind.log
-* * * * * sleep 20&&curl http://localhost/timer/remind >> cronremind.log
-* * * * * sleep 30&&curl http://localhost/timer/remind >> cronremind.log
-* * * * * sleep 40&&curl http://localhost/timer/remind >> cronremind.log
-* * * * * sleep 50&&curl http://localhost/timer/remind >> cronremind.log
-0,10,20,30,40,50 * * * * * curl http://localhost/timer > croncall.log
-
-1,2,3,4,5,6,7,8,9,11,12,13,14,15,16,17,18,19,21,22,23,24,25,26,27,28,29,31,32,33,34,35,36,37,38,39,41,42,43,44,45,46,47,48,49,51,52,53,54,55,56,57,58,59  * * * *  curl http://localhost/timer/remind >> cronremind.log
-0,10,20,30,40,50  * * * * curl http://localhost/timer >> croncall.log
+* * * * * curl http://localhost/timer >> croncall.log
+* * * * * curl http://localhost/timer/remind >> cronremind.log
 
 
+----更新学生剩余时间---
 
-----更新学生存储过程
-
-
-------通过mysql 定时任务,每月更新学生的minsRemaining
+step 1.开启MYSQL定时任务设置
 SET GLOBAL event_scheduler = ON;
 show variables like 'event_scheduler';
 
-
-
+step2 创建存储过程
 use mjs;
-createevent e_student_minsRemaining_update
-onschedule every 1 month
-oncompletion preserve
-do
-call prod_minsRemaining_update();
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: comments before and after the routine body will not be stored by the server
+-- --------------------------------------------------------------------------------
+DELIMITER $$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `student_tmm_proc`()
+BEGIN
+	declare v_tmm varchar(50);
+	declare v_inx varchar(50);
+	DECLARE not_found INT DEFAULT 0;
+	
+	declare studentCursor cursor 
+		for 
+			select inx
+			from students t
+			where period_diff(date_format(now(),'%Y%m'),date_format(t.membershipStartDate,'%Y%m')) <=t.membershipDur;
+	DECLARE CONTINUE HANDLER FOR NOT FOUND SET not_found = 1;
+	select d_value from configue_default where d_key="tmm" into v_tmm;
+	open studentCursor;
+	fetch studentCursor into v_inx;  
+	while not_found<>1 do
+		update students set totalMonthlyMins = v_tmm where inx = v_inx;
+		fetch studentCursor into v_inx;  
+	end while;
+	close studentCursor;	
 
+END
+
+step3.创建定时任务
+
+每个月的一号凌晨1 点执行  
+
+CREATE  EVENT update_student_tmm     
+
+ON SCHEDULE EVERY 1 MONTH STARTS DATE_ADD(DATE_ADD(DATE_SUB(CURDATE(),INTERVAL DAY(CURDATE())-1 DAY), INTERVAL 1 MONTH),INTERVAL 1 HOUR)  
+
+ON COMPLETION PRESERVE   
+
+DO CALL student_tmm_proc(); 
+
+---删除计划任务  use mjs;DROP EVENT IF EXISTS student_tmm

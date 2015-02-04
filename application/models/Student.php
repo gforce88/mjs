@@ -71,5 +71,14 @@ class Application_Model_Student extends Zend_Db_Table_Abstract {
 			return null;
 		}
 	}
+	
+	//更新minsRemaining
+	public function updateMinsRemaining($inx,$usedmins){
+		$row = $this->find($inx)->current();
+		$row->minsRemaining=$row->minsRemaining-$usedmins;
+		$row->save();
+		return $row->inx;
+	}
+	
 }
 

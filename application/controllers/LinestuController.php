@@ -54,7 +54,16 @@ class LinestuController extends Zend_Controller_Action {
 		$this->logger->logInfo ( "LinestuController", "hangupAction", "student hangup message: " . $tropoJson );
 		$result = new Result ( $tropoJson );
 		$callModel = new Application_Model_Call ();
-		$callModel->groupEnd ( $result->getSessionId () );
+		$call = $callModel->groupEnd ( $result->getSessionId () );
+		//更新session实际结束时间
+		$sessionModel = new Application_Model_Session();
+		$sessionModel->finishSession($call["inx"]);
+		
+		//更新学生记录的时间
+		$uesdmins = ceil((strtotime ( $call["grpCallEndTime"] )-strtotime ( $call["grpCallStartTime"] ))/60);
+		$studentModel = new Application_Model_Student();
+		$studentModel->updateMinsRemaining($call["party2Inx"],$uesdmins);
+		
 		$this->logger->logInfo ( "LinestuController", "hangupAction", "group session is over as student is hangup " );
 	}
 	public function welcomeAction() {

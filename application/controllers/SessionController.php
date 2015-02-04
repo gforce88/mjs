@@ -90,14 +90,16 @@ class SessionController extends Zend_Controller_Action {
 						$paramArr ["mntid"] = $row ["c_inx"];
 						$paramArr ["trlphone"] = $row ["d_phone"];
 						$paramArr ["trlid"] = $row ["d_inx"];
+						$paramArr ["notify"] = "1";
 						$troposervice = new TropoService ();
 						// 调用打电话应用并创建call记录
 						$callModel = new Application_Model_Call ();
 						$existRow = $callModel->find ( $row ["inx"] )->current ();
 						if ($existRow) {
 						} else {
-							$callModel->createCall ( $paramArr );
 							$troposervice->callmnt ( $paramArr );
+							$troposervice->callstu ( $paramArr );
+							$troposervice->calltrl ( $paramArr );
 						}
 						$this->logger->logInfo ( "SessionController", "createAction", " session created with in 10 mins call instructor" );
 					}
@@ -197,14 +199,16 @@ class SessionController extends Zend_Controller_Action {
 							$paramArr ["mntid"] = $row ["c_inx"];
 							$paramArr ["trlphone"] = $row ["d_phone"];
 							$paramArr ["trlid"] = $row ["d_inx"];
+							$paramArr ["notify"] = "1";
 							$troposervice = new TropoService ();
 							// 调用打电话应用并创建call记录
 							$callModel = new Application_Model_Call ();
 							$existRow = $callModel->find ( $row ["inx"] )->current ();
 							if ($existRow) {
 							} else {
-								$callModel->createCall ( $paramArr );
 								$troposervice->callmnt ( $paramArr );
+								$troposervice->callstu ( $paramArr );
+								$troposervice->calltrl ( $paramArr );
 							}
 							$this->logger->logInfo ( "SessionController", "editAction", " session edit with in 10 mins call instructor" );
 						}

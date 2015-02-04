@@ -16,10 +16,9 @@ class TimerController extends Zend_Controller_Action {
 	// 每10分钟run一次电话到点拨号job调用，查到当前时间到10分钟之后的所有session
 	public function indexAction() {
 		$sessionModel = new Application_Model_Session ();
-		$start = date ( 'Y-m-d H:i:s', strtotime ( " -10 seconds" ));
-		echo $start."\n";
-		$end = date ( "Y-m-d H:i:s", strtotime ( " +10 mins" ) );
-		$sessions = $sessionModel->getWillStartingSession ( $start, $end );
+		$start = date ( 'Y-m-d H:i:s', strtotime ( " -5 seconds" ));
+		$end = date ( "Y-m-d H:i:s", strtotime ( " +5 seconds" ) );
+		$sessions = $sessionModel->getWillStartingSession ( $start, $start );
 		$this->logger->logInfo ( "TimerController", "indexAction", "start:" . $start . " end:" . $end );
 		foreach ( $sessions as $row ) {
 			$troposervice = new TropoService ();
@@ -37,20 +36,22 @@ class TimerController extends Zend_Controller_Action {
 			$existRow = $callModel->find ( $row ["inx"] )->current ();
 			if ($existRow) {
 			} else {
+				echo "start session at ";
 				$callModel->createCall ( $paramArr );
 				$troposervice->callmnt ( $paramArr );
 			}
 			$this->logger->logInfo ( "TimerController", "indexAction", "it is the session call time" . $start );
 		}
+		echo "index crontime :".$start."---".$end."\n";
 	}
 	
 	// 提示session
 	// 每分钟run一次 10分钟前进行提示
 	public function remindAction() {
 		$sessionModel = new Application_Model_Session ();
-		$start = date ( 'Y-m-d H:i:s' , strtotime ( " -10 seconds" ) );
-		$end = date ( "Y-m-d H:i:s", strtotime ( " +9 mins +59 seconds" ) );
-		$sessions = $sessionModel->getWillStartingSession ( $end, $end );
+		$start = date ( 'Y-m-d H:i:s' , strtotime ( " +9 mins +55 seconds" ) );
+		$end = date ( "Y-m-d H:i:s", strtotime ( " +10 mins +5 seconds" ) );
+		$sessions = $sessionModel->getWillStartingSession ( $start, $end );
 		foreach ( $sessions as $row ) {
 			$troposervice = new TropoService ();
 			$paramArr = array ();
@@ -69,7 +70,7 @@ class TimerController extends Zend_Controller_Action {
 			$existRow = $callModel->find ( $row ["inx"] )->current ();
 			if ($existRow) {
 			} else {
-// 				$callModel->createCall ( $paramArr );
+				echo "remind started : ";
 				$troposervice->callmnt ( $paramArr );
 				$troposervice->callstu ( $paramArr );
 				$troposervice->calltrl ( $paramArr );
@@ -77,7 +78,7 @@ class TimerController extends Zend_Controller_Action {
 			$this->logger->logInfo ( "TimerController", "indexAction", "it is the session call time" . $start );
 			echo "call instructor ";
 		}
-		echo "time is :" . $end."\n";
+		echo "remind crontime is :" . $start." and ". $end."\n";
 	}
 }
 

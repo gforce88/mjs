@@ -187,7 +187,7 @@ class SessionController extends Zend_Controller_Action {
 						
 						$this->sendEmail ( $studentEmail, $instructorEmail, $translatorEmail, $mailcontent, "MJS補習授業時間を変更しました" );
 						
-						// 如果session创建时间在10分钟之内 立刻开始拨号
+						// 如果session创建时间在10分钟之内 立刻开始提示
 						if ($inputTime < strtotime ( " +10 mins" )) {
 							$sessionModel = new Application_Model_Session ();
 							$row = $sessionModel->getSessionForCallBySessionId ( $sessionInx );

@@ -49,8 +49,8 @@ class TimerController extends Zend_Controller_Action {
 	public function remindAction() {
 		$sessionModel = new Application_Model_Session ();
 		$start = date ( 'Y-m-d H:i:s' , strtotime ( " -10 seconds" ) );
-		$end = date ( "Y-m-d H:i:s", strtotime ( " +10 mins" ) );
-		$sessions = $sessionModel->getWillStartingSession ( $start, $end );
+		$end = date ( "Y-m-d H:i:s", strtotime ( " +9 mins +59 seconds" ) );
+		$sessions = $sessionModel->getWillStartingSession ( $end, $end );
 		foreach ( $sessions as $row ) {
 			$troposervice = new TropoService ();
 			$paramArr = array ();
@@ -75,7 +75,7 @@ class TimerController extends Zend_Controller_Action {
 			$this->logger->logInfo ( "TimerController", "indexAction", "it is the session call time" . $start );
 			echo "call instructor ";
 		}
-		echo "time is :" . $start."\n";
+		echo "time is :" . $end."\n";
 	}
 }
 

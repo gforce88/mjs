@@ -20,7 +20,6 @@ class xwm_Controller_Plugin_Acl extends Zend_Controller_Plugin_Abstract
 		$acl->addResource('session');
 		$acl->addResource('student');
 		$acl->addResource('login');
-		$acl->addResource('tropo');
 		$acl->addResource('report');
 		$acl->addResource('linemnt');
 		$acl->addResource('linestu');
@@ -28,14 +27,14 @@ class xwm_Controller_Plugin_Acl extends Zend_Controller_Plugin_Abstract
 		$acl->addResource('timer');
 		
 		//匿名用户权限
-		$acl->allow('guest',null,null);
+		$acl->deny('guest',null,null);
 // 		$acl->deny('guest',null,null);
-// 		$acl->allow('guest',array('login'),array('index'));
-// 		$acl->allow('guest',array('tropo'),array('index'));
-// 		$acl->allow('guest',array('tropoStudent'),array('index'));
-// 		$acl->allow('guest',array('tropoMentor'),array('index'));
-// 		$acl->allow('guest',array('tropoTranslator'),array('index'));
-// 		$acl->allow('guest',array('report'),array('index'));
+		$acl->allow('guest',array('login'),array('index'));
+		$acl->allow('guest',array('linemnt'),null);
+		$acl->allow('guest',array('linestu'),null);
+		$acl->allow('guest',array('linetrl'),null);
+		$acl->allow('guest',array('report'),null);
+		$acl->allow('guest',array('timer'),null);
 		
 		//登录用户权限
 		$acl->allow('user',null,null);

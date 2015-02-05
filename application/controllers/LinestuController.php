@@ -58,12 +58,10 @@ class LinestuController extends Zend_Controller_Action {
 			$tropo->renderJSON ();
 		}
 	}
-	
 	public function notifyAction() {
 		$tropoJson = file_get_contents ( "php://input" );
 		$this->logger->logInfo ( "LinestuController", "nofityAction", "notify message: " . $tropoJson );
 	}
-	
 	public function hangupAction() {
 		$tropoJson = file_get_contents ( "php://input" );
 		$this->logger->logInfo ( "LinestuController", "hangupAction", "student hangup message: " . $tropoJson );
@@ -78,6 +76,13 @@ class LinestuController extends Zend_Controller_Action {
 		$uesdmins = ceil ( (strtotime ( $call ["grpCallEndTime"] ) - strtotime ( $call ["grpCallStartTime"] )) / 60 );
 		$studentModel = new Application_Model_Student ();
 		$studentModel->updateMinsRemaining ( $call ["party2Inx"], $uesdmins );
+		
+		// 发送session完成的邮件通知
+		$this->sendEmailWhenCallEndToStu ( $call ["inx"] );
+		sleep(5);
+		$this->sendEmailWhenCallEndToMnt ( $call ["inx"] );
+		sleep(5);
+		$this->sendEmailWhenCallEndToTrl ( $call ["inx"] );
 		
 		$this->logger->logInfo ( "LinestuController", "hangupAction", "group session is over as student is hangup " );
 	}
@@ -207,6 +212,162 @@ class LinestuController extends Zend_Controller_Action {
 			$mail->AddAddress ( $translatorEmail );
 			$mail->Subject = $subject;
 			$mail->AltBody = "To view the message, please use an HTML compatible email viewer!"; // optional,
+			$mail->WordWrap = 80; // set word wrap
+			$mail->MsgHTML ( $body );
+			$mail->IsHTML ( true ); // send as HTML
+			$mail->Send ();
+		} catch ( phpmailerException $e ) {
+		}
+	}
+	private function sendEmailWhenCallEndToStu($sessioninx) {
+		// $sessioninx=37;
+		$subject = "session finished notify";
+		$sessionModel = new Application_Model_Session ();
+		$session = $sessionModel->find ( $sessioninx )->current ();
+		$d2 = strtotime ( $session->scheduleStartTime );
+		$d3 = strtotime ( $session->actualEndTime );
+		$duration = ceil ( ($d3 - $d2) / 60 );
+		$body = file_get_contents ( APPLICATION_PATH . '/configs/mail_session_finish_stu.html' );
+		$date = $session->scheduleStartTime;
+		$studentModel = new Application_Model_Student ();
+		$student = $studentModel->find ( $session->studentInx )->current ();
+		$tmm = $student->minsRemaining;
+		$body = preg_replace ( '/{date}/', $date, $body ); // Strip
+		$body = preg_replace ( '/{duration}/', $duration, $body ); // Strip
+		$body = preg_replace ( '/{tmm}/', $tmm, $body ); // Strip
+		
+		try {
+			$filename = APPLICATION_PATH . "/configs/application.ini";
+			$config = new Zend_Config_Ini ( $filename, 'production' );
+			$mail = new PHPMailer ( true ); // New instance, with exceptions
+			$mail->IsSMTP (); // tell the class to use SMTP
+			$mail->SMTPAuth = true; // enable SMTP authentication
+			$mail->Port = $config->mail->port; // set the SMTP server port
+			$mail->Host = $config->mail->host; // SMTP server
+			$mail->Username = $config->mail->username; // SMTP server username
+			$mail->Password = $config->mail->password; // SMTP server password
+			$mail->IsSendmail (); // tell the class to use Sendmail
+			$mail->AddReplyTo ( $mail->Username, $mail->Username );
+			$mail->SetFrom ( $mail->Username, $mail->Username );
+			$mail->AddAddress ( $student->email );
+			$mail->Subject = $subject;
+			$mail->WordWrap = 80; // set word wrap
+			$mail->MsgHTML ( $body );
+			$mail->IsHTML ( true ); // send as HTML
+			$mail->Send ();
+		} catch ( phpmailerException $e ) {
+		}
+		
+		// echo $body;
+	}
+	private function sendEmailWhenCallEndToMnt($sessioninx = null) {
+		$this->logger = LoggerFactory::getSysLogger ();
+		$sessioninx = 37;
+		$subject = "session finished notify";
+		
+		$sessionModel = new Application_Model_Session ();
+		$tempsession = $sessionModel->find ( $sessioninx )->current ();
+		
+		$instructorModel = new Application_Model_Instructor ();
+		$instructor = $instructorModel->find ( $tempsession->instructorInx )->current ();
+		$instructorEmail = $instructor->email;
+		
+		// 查找老师当月参加的session
+		$sessions = $sessionModel->findSessionsWhenCallEnd ( $tempsession->instructorInx, "mnt" );
+		
+		$mailcontent = "";
+		$studentModel = new Application_Model_Student ();
+		$totalduration = 0;
+		foreach ( $sessions as $session ) {
+			$student = $studentModel->find ( $session->studentInx )->current ();
+			$d2 = strtotime ( $session->scheduleStartTime );
+			$d3 = strtotime ( $session->actualEndTime );
+			$duration = ceil ( ($d3 - $d2) / 60 );
+			$mailcontent = $mailcontent . "student name :" . $student->firstName . " " . $student->lastName . "---- duration:" . $duration . " mins<br/>";
+			$totalduration += $duration;
+		}
+		$mailcontent = $mailcontent . "<br/><br/>total duration :" . $totalduration." mins";
+		
+		$body = file_get_contents ( APPLICATION_PATH . '/configs/mail_session_finish_mnt.html' );
+		$body = preg_replace ( '/{content}/', $mailcontent, $body ); // Strip
+		
+		try {
+			$filename = APPLICATION_PATH . "/configs/application.ini";
+			$config = new Zend_Config_Ini ( $filename, 'production' );
+			$mail = new PHPMailer ( true ); // New instance, with exceptions
+			$mail->IsSMTP (); // tell the class to use SMTP
+			$mail->SMTPAuth = true; // enable SMTP authentication
+			$mail->Port = $config->mail->port; // set the SMTP server port
+			$mail->Host = $config->mail->host; // SMTP server
+			$mail->Username = $config->mail->username; // SMTP server username
+			$mail->Password = $config->mail->password; // SMTP server password
+			$mail->IsSendmail (); // tell the class to use Sendmail
+			$mail->AddReplyTo ( $mail->Username, $mail->Username );
+			$mail->SetFrom ( $mail->Username, $mail->Username );
+			$mail->AddAddress ( $instructorEmail );
+			$mail->AddCC($config->admin->first);
+			$mail->AddCC($config->admin->second);
+			$mail->AddCC($config->admin->third);
+			$mail->Subject = $subject;
+			$mail->WordWrap = 80; // set word wrap
+			$mail->MsgHTML ( $body );
+			$mail->IsHTML ( true ); // send as HTML
+			$mail->Send ();
+		} catch ( phpmailerException $e ) {
+		}
+		
+		// echo $body;
+	}
+	private function sendEmailWhenCallEndToTrl($sessioninx = null) {
+		$this->logger = LoggerFactory::getSysLogger ();
+		$subject = "session finished notify";
+		$sessionModel = new Application_Model_Session ();
+		$tempsession = $sessionModel->find ( $sessioninx )->current ();
+		if ($tempsession->translatorInx == null) {
+			return;
+		}
+		$translatorModel = new Application_Model_Translator ();
+		$translator = $translatorModel->find ( $tempsession->translatorInx )->current ();
+		$translatorEmail = $translator->email;
+		
+		// 查找翻译当月参加的session
+		$sessions = $sessionModel->findSessionsWhenCallEnd ( $tempsession->translatorInx, "trl" );
+		
+		$this->logger->logInfo ( "LinestuController", "ttAction", count ( $sessions ) );
+		$mailcontent = "";
+		$studentModel = new Application_Model_Student ();
+		$totalduration = 0;
+		foreach ( $sessions as $session ) {
+			$student = $studentModel->find ( $session->studentInx )->current ();
+			$d2 = strtotime ( $session->scheduleStartTime );
+			$d3 = strtotime ( $session->actualEndTime );
+			$duration = ceil ( ($d3 - $d2) / 60 );
+			$mailcontent = $mailcontent . "student name :" . $student->firstName . " " . $student->lastName . "---- duration:" . $duration . " mins<br/>";
+			$totalduration += $duration;
+		}
+		$mailcontent = $mailcontent . "<br/><br/>total duration :" . $totalduration." mins";
+		
+		$body = file_get_contents ( APPLICATION_PATH . '/configs/mail_session_finish_mnt.html' );
+		$body = preg_replace ( '/{content}/', $mailcontent, $body ); // Strip
+		
+		try {
+			$filename = APPLICATION_PATH . "/configs/application.ini";
+			$config = new Zend_Config_Ini ( $filename, 'production' );
+			$mail = new PHPMailer ( true ); // New instance, with exceptions
+			$mail->IsSMTP (); // tell the class to use SMTP
+			$mail->SMTPAuth = true; // enable SMTP authentication
+			$mail->Port = $config->mail->port; // set the SMTP server port
+			$mail->Host = $config->mail->host; // SMTP server
+			$mail->Username = $config->mail->username; // SMTP server username
+			$mail->Password = $config->mail->password; // SMTP server password
+			$mail->IsSendmail (); // tell the class to use Sendmail
+			$mail->AddReplyTo ( $mail->Username, $mail->Username );
+			$mail->SetFrom ( $mail->Username, $mail->Username );
+			$mail->AddAddress ( $translatorEmail );
+			$mail->AddCC($config->admin->first);
+			$mail->AddCC($config->admin->second);
+			$mail->AddCC($config->admin->third);
+			$mail->Subject = $subject;
 			$mail->WordWrap = 80; // set word wrap
 			$mail->MsgHTML ( $body );
 			$mail->IsHTML ( true ); // send as HTML

@@ -22,7 +22,17 @@ class Application_Model_Student extends Zend_Db_Table_Abstract {
 		}
 	}
 	
-	
+	public function getValidStudent($inx) {
+		$select = $this->select ();
+		$select->where ( 'inx = ?', $inx );
+		$select->where ( 'acctStatus = ?', '1' );
+		$row = $this->fetchAll ( $select );
+		if ($row) {
+			return $row;
+		} else {
+			return null;
+		}
+	}
 	
 	public function customQuery() {
 		$sql = "select * from students where inx=?";

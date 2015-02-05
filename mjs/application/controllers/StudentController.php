@@ -51,7 +51,7 @@ class StudentController extends Zend_Controller_Action {
 	public function findstujsonAction() {
 		$inx = $this->_getParam ( "inx" );
 		$student = new Application_Model_Student ();
-		$studentlist = $student->find ( $inx );
+		$studentlist = $student->getValidStudent ( $inx );
 		
 		if (count($studentlist)>0) {
 			$this->view->studentlist = $studentlist [0];

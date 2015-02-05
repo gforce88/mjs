@@ -121,7 +121,7 @@ class SessionController extends Zend_Controller_Action {
 			
 			$callModel = new Application_Model_Call ();
 			$existRow = $callModel->find ( $params ["inx"] )->current ();
-			//如果拨过号则不能修改
+			// 如果拨过号则不能修改
 			if ($existRow) {
 				$this->view->resultmessage = $this->view->translate->_ ( "nomodifystartedsession" );
 			} else {
@@ -249,35 +249,54 @@ class SessionController extends Zend_Controller_Action {
 			$this->view->session = $sessionlist [0];
 		}
 	}
+	public function checkSessionCanDelete($inx) {
+		$sessionmodel = new Application_Model_Session ();
+		$session = $sessionmodel->find ( $inx )->current ();
+		$tag = strtotime ( $session->scheduleStartTime ) > time ();
+		$this->logger->logInfo ( "SessionController", "checkSessionCanDelete", " tag:" .$inx. $session->scheduleStartTime );
+		return $tag;
+	}
 	
 	// 删除session
 	public function deleteAction() {
 		$sessioninx = $this->getParam ( "inx" );
-		$sessionmodel = new Application_Model_Session ();
-		$session = $sessionmodel->find ( $sessioninx )->current ();
-		$studentinx = $session->studentInx;
-		$instructorinx = $session->instructorInx;
-		$translatorinx = $session->translatorInx;
-		$studentModel = new Application_Model_Student ();
-		$studentEmail = $studentModel->find ( $studentinx )->current ()->email;
-		$instructorModel = new Application_Model_Instructor ();
-		$instructorEmail = $instructorModel->find ( $instructorinx )->current ()->email;
-		$translatorEmail = "";
-		if ($translatorinx != null) {
-			$translatorModel = new Application_Model_Translator ();
-			$translatorEmail = $translatorModel->find ( $translatorinx )->current ()->email;
-		}
-		
-		$mailcontent = "お疲れ様です,<p/>
+		$this->_helper->viewRenderer->setNeverRender ();
+		$data = array ();
+		if (!$this->checkSessionCanDelete ( $sessioninx )) {
+			$data = array (
+					"err" => 0 
+			);
+		} else {
+			$sessionmodel = new Application_Model_Session ();
+			$session = $sessionmodel->find ( $sessioninx )->current ();
+			$studentinx = $session->studentInx;
+			$instructorinx = $session->instructorInx;
+			$translatorinx = $session->translatorInx;
+			$studentModel = new Application_Model_Student ();
+			$studentEmail = $studentModel->find ( $studentinx )->current ()->email;
+			$instructorModel = new Application_Model_Instructor ();
+			$instructorEmail = $instructorModel->find ( $instructorinx )->current ()->email;
+			$translatorEmail = "";
+			if ($translatorinx != null) {
+				$translatorModel = new Application_Model_Translator ();
+				$translatorEmail = $translatorModel->find ( $translatorinx )->current ()->email;
+			}
+			
+			$mailcontent = "お疲れ様です,<p/>
 		
 				以前手配した" . $session->scheduleStartTime . " 補習授業を取消しました<p/>
 		
 				ありがとうございます。";
-		
-		$this->sendEmail ( $studentEmail, $instructorEmail, $translatorEmail, $mailcontent, "補習授業時間を取消しました" );
-		
-		$sessionmodel->deleteSession ( $sessioninx );
-		$this->redirect ( "/session" );
+			
+			$this->sendEmail ( $studentEmail, $instructorEmail, $translatorEmail, $mailcontent, "補習授業時間を取消しました" );
+			
+			$sessionmodel->deleteSession ( $sessioninx );
+			// $this->redirect ( "/session" );
+			$data = array (
+					"success" => 0 
+			);
+		}
+		$this->_helper->json ( $data, true, false, true );
 	}
 	private function sendEmail($studentEmail, $instructorEmail, $translatorEmail, $mailcontent, $subject) {
 		$loginfo = $studentEmail . "-" . $instructorEmail . "-" . $translatorEmail;

@@ -12,7 +12,7 @@ class Application_Model_Session extends Zend_Db_Table_Abstract {
 		left join mjs.students b on a.studentInx = b.inx
 		left join mjs.instructors c on a.instructorInx = c.inx
 		left join mjs.translators d on a.translatorInx = d.inx
-		order by a.inx";
+		order by a.scheduleStartTime desc";
 		return $this->getAdapter ()->query ( $sql, array () );
 	}
 	

@@ -49,6 +49,7 @@
 					<script src="/components/plugins/browser/ie/ie.prototype.polyfill.js?v=v2.3.0"></script>
 					<script src="/components/library/jquery-ui/js/jquery-ui.min.js?v=v2.3.0"></script>
 					<script src="/components/plugins/jquery-ui-touch-punch/jquery.ui.touch-punch.min.js?v=v2.3.0"></script>
+					<script src="/components/plugins/jquery-ui-touch-punch/jquery.ui.touch-punch.min.js?v=v2.3.0"></script>
 					<script>if (/*@cc_on!@*/false && document.documentMode === 10) { document.documentElement.className+=' ie ie10'; }</script>
 
 </head>
@@ -216,7 +217,7 @@
 								</td>
 								<td>
 									<div class="btn-group btn-group-sm">
-										<a href="/session/delete?inx=<?php echo $newrow["inx"]?>" class="btn btn-primary"> <i class="fa fa-pencil"></i>
+										<a href="javascript:deletesession(<?php echo $newrow["inx"]?>);" class="btn btn-primary"> <i class="fa fa-pencil"></i>
 										</a>
 									</div>
 								</td>
@@ -284,5 +285,6 @@
 <script src="/components/plugins/jquery.event.swipe/js/jquery.event.swipe.js?v=v2.3.0"></script>
 <script src="/components/core/js/megamenu.js?v=v2.3.0"></script>
 <script src="/components/core/js/core.init.js?v=v2.3.0"></script>
+<script src="/script/session-create.js"></script>
 </body>
 </html>

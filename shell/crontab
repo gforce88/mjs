@@ -1,8 +1,12 @@
 crontab -l for display
 crontab -e for edit
 
+每分钟执行
 * * * * * curl http://localhost/timer >> croncall.log
+每分钟执行
 * * * * * curl http://localhost/timer/remind >> cronremind.log
+每周一 00：00：01执行
+1 * * * 1 curl http://localhost/report >> cronremind.log
 
 
 ----更新学生剩余时间---

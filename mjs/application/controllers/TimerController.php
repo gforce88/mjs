@@ -80,5 +80,19 @@ class TimerController extends Zend_Controller_Action {
 		}
 		echo "remind crontime is :" . $start." and ". $end."\n";
 	}
+	
+	public function ttAction(){
+		echo $start = date("Y-m-01 00:00:00");
+		echo $end = strtotime(" +1 months");
+		echo date("Y-m-01 00:00:00",$end);
+		echo "<br />";
+		echo strtotime($time);
+		echo "<br />";
+		
+		
+		
+		echo "<br />";
+		echo "<br />";
+	}
 }
 

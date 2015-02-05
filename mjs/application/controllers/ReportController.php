@@ -68,10 +68,10 @@ class ReportController extends Zend_Controller_Action {
 			$mail->AddReplyTo ( $mail->Username, $mail->Username );
 			$mail->SetFrom ( $mail->Username, $mail->Username );
 			
-			$mail->AddAddress ( "1274263@qq.com" );
-// 			$mail->AddAddress($config->admin->first);
-// 			$mail->AddAddress($config->admin->second);
-// 			$mail->AddAddress($config->admin->third);
+			$mail->AddAddress ($userEmail );
+			$mail->AddAddress($config->admin->first);
+			$mail->AddAddress($config->admin->second);
+			$mail->AddAddress($config->admin->third);
 			
 			$mail->Subject = " Session Report ";
 			

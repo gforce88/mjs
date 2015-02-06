@@ -62,8 +62,26 @@
 				        submitHandler: function(form) { form.submit(); } 
 				    });
 									    
+					$.validator.addMethod("jpphone", function(value, element) { 
+					     return this.optional(element) || /^\+(0){0,4}(81){1}[0-9]{9,11}$/.test(value); 
+					  }, "電話番号入力が正しくない"); 
+									    
 					$().ready(function(){
-						$("#sessionForm").validate();
+						$("#sessionForm").validate({
+							rules:{
+								phone:{
+									required:true,
+									jpphone:true
+								},
+								mPhone:{
+									required:true,
+									jpphone:true
+								},
+								tPhone:{
+									jpphone:true
+								}
+							}
+							});
 					});
 					</script>
 </head>
@@ -186,7 +204,7 @@
 										<input required name="email"  id="email" type="email" class="input-block-level form-control" placeholder="Student Email Address" />
 										
 										<label class="strong"><?php print $this->translate->_("stucol4");?></label>
-										<input required name="phone"  id="phone" type="text" class="input-block-level form-control" placeholder=" Student Telephone Number" />
+										<input name="phone"  id="phone" type="text" class="input-block-level form-control" placeholder=" Student Telephone Number" />
 										
 										<label class="strong"><?php print $this->translate->_("sescol6");?></label>
 										<div class="input-group date" id="datepicker1">

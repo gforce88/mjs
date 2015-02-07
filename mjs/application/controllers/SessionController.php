@@ -128,6 +128,8 @@ class SessionController extends Zend_Controller_Action {
 				$scheduleStartDate = $params ["startDate"];
 				$scheduleStartTime = $params ["startTime"];
 				$inputTime = strtotime ( $scheduleStartDate . " " . $scheduleStartTime );
+				$instructorOldEmail = $params ["mEmail"];
+				$translatorOldEmail = $params ["tEmail"];
 				$current = time ();
 				if ($inputTime > $current) {
 					if ($this->checkStudentRemainMin ( $params ) && $this->checkSessionStatus ( $params )) {
@@ -187,6 +189,15 @@ class SessionController extends Zend_Controller_Action {
 						
 						$this->sendEmail ( $studentEmail, $instructorEmail, $translatorEmail, $mailcontent, "MJS補習授業時間を変更しました" );
 						
+						if ($instructorOldEmail != $instructorEmail || $translatorOldEmail != $translatorEmail) {
+							$mailcontent = "お疲れ様です,<p/>
+		
+							以前手配した" . $session->scheduleStartTime . " 補習授業を取消しました<p/>
+					
+							ありがとうございます。";
+							
+							$this->sendEmail ( $studentEmail, $instructorOldEmail, $translatorOldEmail, $mailcontent, "補習授業時間を取消しました" );
+						}
 						// 如果session创建时间在10分钟之内 立刻开始提示
 						if ($inputTime < strtotime ( " +10 mins" )) {
 							$sessionModel = new Application_Model_Session ();
@@ -253,7 +264,7 @@ class SessionController extends Zend_Controller_Action {
 		$sessionmodel = new Application_Model_Session ();
 		$session = $sessionmodel->find ( $inx )->current ();
 		$tag = strtotime ( $session->scheduleStartTime ) > time ();
-		$this->logger->logInfo ( "SessionController", "checkSessionCanDelete", " tag:" .$inx. $session->scheduleStartTime );
+		$this->logger->logInfo ( "SessionController", "checkSessionCanDelete", " tag:" . $inx . $session->scheduleStartTime );
 		return $tag;
 	}
 	
@@ -262,7 +273,7 @@ class SessionController extends Zend_Controller_Action {
 		$sessioninx = $this->getParam ( "inx" );
 		$this->_helper->viewRenderer->setNeverRender ();
 		$data = array ();
-		if (!$this->checkSessionCanDelete ( $sessioninx )) {
+		if (! $this->checkSessionCanDelete ( $sessioninx )) {
 			$data = array (
 					"err" => 0 
 			);
@@ -324,7 +335,7 @@ class SessionController extends Zend_Controller_Action {
 			
 			$mail->AddAddress ( $studentEmail );
 			$mail->AddAddress ( $instructorEmail );
-			if($translatorEmail!=null){
+			if ($translatorEmail != null) {
 				$mail->AddAddress ( $translatorEmail );
 			}
 			

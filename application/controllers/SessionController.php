@@ -90,7 +90,7 @@ class SessionController extends Zend_Controller_Action {
 						$paramArr ["mntid"] = $row ["c_inx"];
 						$paramArr ["trlphone"] = $row ["d_phone"];
 						$paramArr ["trlid"] = $row ["d_inx"];
-						$paramArr ["notify"] = "1";
+						$paramArr ["notifytag"] = "1";
 						$troposervice = new TropoService ();
 						// 调用打电话应用并创建call记录
 						$callModel = new Application_Model_Call ();

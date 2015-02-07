@@ -30,7 +30,7 @@ class LinestuController extends Zend_Controller_Action {
 			$tropo = new Tropo ();
 			$tropo->call ( $params ["stuphone"] );
 			// 电话接通后
-			if ($params ["notify"] == 1) { // 判断是否是提示电话
+			if ($params ["notifytag"] == 1) { // 判断是否是提示电话
 				$tropo->call ( $params ["mntphone"] );
 				$tropo->on ( array (
 						"event" => "continue",

@@ -135,6 +135,7 @@ class SessionController extends Zend_Controller_Action {
 					if ($this->checkStudentRemainMin ( $params ) && $this->checkSessionStatus ( $params )) {
 						$instructorModel = new Application_Model_Instructor ();
 						$instructorOldEmail = $instructorModel->findInstructorEmail($params);
+						$this->logger->logInfo ( "SessionController", "editAction", " instructorOldEmail-----:" . $instructorOldEmail );
 						$instructorId = $instructorModel->saveOrupdateInstructor ( $params );
 						$translatorId = null;
 						if (($params ['tFirstName'] != "") && ($params ['tLastName'] != "")) {
@@ -150,6 +151,7 @@ class SessionController extends Zend_Controller_Action {
 						$session = $sessionModel->find ( $sessionInx )->current ();
 						
 						$instructorEmail = $instructorModel->find ( $instructorId )->current ()->email;
+						$this->logger->logInfo ( "SessionController", "editAction", " instructorNewEmail-----:" . $instructorEmail );
 						$translatorEmail = "";
 						if ($translatorId != "") {
 							$translatorEmail = $translatorModel->find ( $translatorId )->current ()->email;

@@ -2,7 +2,7 @@ $().ready(function() {
 	$("#studentId").on('blur', function(e) {
 		$.getJSON("/student/findstujson?inx=" + this.value, function(json) {
 			if (json.err==0) {
-				alert("student account is not exist suspend!");
+				alert("student account is not exist or suspend!");
 				$("#firstName").val("");
 				$("#lastName").val("");
 				$("#phone").val("");

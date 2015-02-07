@@ -324,7 +324,9 @@ class SessionController extends Zend_Controller_Action {
 			
 			$mail->AddAddress ( $studentEmail );
 			$mail->AddAddress ( $instructorEmail );
-			$mail->AddAddress ( $translatorEmail );
+			if($translatorEmail!=null){
+				$mail->AddAddress ( $translatorEmail );
+			}
 			
 			$mail->Subject = $subject;
 			

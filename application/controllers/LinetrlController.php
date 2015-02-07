@@ -56,13 +56,10 @@ class LinetrlController extends Zend_Controller_Action {
 			$tropo->renderJSON ();
 		}
 	}
-	
 	public function notifyAction() {
 		$tropoJson = file_get_contents ( "php://input" );
 		$this->logger->logInfo ( "LinetrlController", "nofityAction", "notify message: " . $tropoJson );
 	}
-	
-	
 	public function hangupAction() {
 		$tropoJson = file_get_contents ( "php://input" );
 		$this->logger->logInfo ( "LinetrlController", "hangupAction", "hangup message: " . $tropoJson );
@@ -175,7 +172,9 @@ class LinetrlController extends Zend_Controller_Action {
 			$mail->SetFrom ( $mail->Username, $mail->Username );
 			$mail->AddAddress ( $studentEmail );
 			$mail->AddAddress ( $instructorEmail );
-			$mail->AddAddress ( $translatorEmail );
+			if ($translatorEmail != null) {
+				$mail->AddAddress ( $translatorEmail );
+			}
 			$mail->Subject = $subject;
 			$mail->AltBody = "To view the message, please use an HTML compatible email viewer!"; // optional,
 			$mail->WordWrap = 80; // set word wrap

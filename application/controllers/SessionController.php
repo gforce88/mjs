@@ -192,6 +192,7 @@ class SessionController extends Zend_Controller_Action {
 						$this->logger->logInfo ( "SessionController", "editAction", " instructorEmail:" . $instructorEmail );
 						$this->logger->logInfo ( "SessionController", "editAction", " translatorOldEmail:" . $translatorOldEmail );
 						$this->logger->logInfo ( "SessionController", "editAction", " translatorEmail:" . $translatorEmail );
+						$this->logger->logInfo ( "SessionController", "editAction", " translatorEmail:" . ($translatorOldEmail != $translatorEmail) );
 						if ($instructorOldEmail != $instructorEmail || $translatorOldEmail != $translatorEmail) {
 							$mailcontent = "お疲れ様です,<p/>
 		

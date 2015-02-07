@@ -128,16 +128,18 @@ class SessionController extends Zend_Controller_Action {
 				$scheduleStartDate = $params ["startDate"];
 				$scheduleStartTime = $params ["startTime"];
 				$inputTime = strtotime ( $scheduleStartDate . " " . $scheduleStartTime );
-				$instructorOldEmail = $params ["mEmail"];
-				$translatorOldEmail = $params ["tEmail"];
+				$instructorOldEmail = "";
+				$translatorOldEmail = "";
 				$current = time ();
 				if ($inputTime > $current) {
 					if ($this->checkStudentRemainMin ( $params ) && $this->checkSessionStatus ( $params )) {
 						$instructorModel = new Application_Model_Instructor ();
+						$instructorOldEmail = $instructorModel->findInstructorEmail($params);
 						$instructorId = $instructorModel->saveOrupdateInstructor ( $params );
 						$translatorId = null;
 						if (($params ['tFirstName'] != "") && ($params ['tLastName'] != "")) {
 							$translatorModel = new Application_Model_Translator ();
+							$translatorOldEmail = $translatorModel->findTranslatorEmail($params);
 							$translatorId = $translatorModel->saveOrupdateTranslator ( $params );
 						}
 						

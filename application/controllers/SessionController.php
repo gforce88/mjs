@@ -133,29 +133,46 @@ class SessionController extends Zend_Controller_Action {
 				$current = time ();
 				if ($inputTime > $current) {
 					if ($this->checkStudentRemainMin ( $params ) && $this->checkSessionStatus ( $params )) {
+						//获取原来的session
+						$sessionModel = new Application_Model_Session ();
+						$oldSession = $sessionModel->find ( $inx = $params ["inx"] )->current ();
+						
+						//获取原来的老师email
 						$instructorModel = new Application_Model_Instructor ();
-						$instructorOldEmail = $instructorModel->findInstructorEmail($params);
-						$this->logger->logInfo ( "SessionController", "editAction", " instructorOldEmail-----:" . $instructorOldEmail );
+						$instructorOld = $instructorModel->find($oldSession->instructorInx)->current();
+						$instructorOldEmail = $instructorOld->email;
+						
+						//获取原来的翻译email
+						$translatorModel = new Application_Model_Translator ();
+						$translatorOldEmail = null;
+						if($oldSession->translatorInx!=null){
+							$translatorOld = $translatorModel->find($oldSession->translatorInx)->current();
+							$translatorOldEmail = $translatorOld->email;
+						}
+						
+						//根据名字更新或增加老师
 						$instructorId = $instructorModel->saveOrupdateInstructor ( $params );
+						
+						
+						//根据名字更新或增加翻译
 						$translatorId = null;
 						if (($params ['tFirstName'] != "") && ($params ['tLastName'] != "")) {
-							$translatorModel = new Application_Model_Translator ();
-							$translatorOldEmail = $translatorModel->findTranslatorEmail($params);
 							$translatorId = $translatorModel->saveOrupdateTranslator ( $params );
 						}
 						
-						$sessionModel = new Application_Model_Session ();
-						$oldSession = $sessionModel->find ( $inx = $params ["inx"] )->current ();
 						$oldSessionDate = $oldSession->scheduleStartTime;
 						$sessionInx = $sessionModel->updateSession ( $params, $instructorId, $translatorId );
 						$session = $sessionModel->find ( $sessionInx )->current ();
 						
+						//获取新的老师邮箱
 						$instructorEmail = $instructorModel->find ( $instructorId )->current ()->email;
-						$this->logger->logInfo ( "SessionController", "editAction", " instructorNewEmail-----:" . $instructorEmail );
+						
+						//获取新的翻译邮箱
 						$translatorEmail = "";
 						if ($translatorId != "") {
 							$translatorEmail = $translatorModel->find ( $translatorId )->current ()->email;
 						}
+						//获取学生邮箱
 						$studentModel = new Application_Model_Student ();
 						$studentEmail = $studentModel->find ( $params ["studentId"] )->current ()->email;
 						
@@ -197,13 +214,16 @@ class SessionController extends Zend_Controller_Action {
 						$this->logger->logInfo ( "SessionController", "editAction", " translatorOldEmail:" . $translatorOldEmail );
 						$this->logger->logInfo ( "SessionController", "editAction", " translatorEmail:" . $translatorEmail );
 						$this->logger->logInfo ( "SessionController", "editAction", " translatorEmail:" . ($translatorOldEmail != $translatorEmail) );
+						
 						if ($instructorOldEmail != $instructorEmail) {
 							$mailcontent = "お疲れ様です,<p/>
 		
 							以前手配した" . $session->scheduleStartTime . " 補習授業を取消しました<p/>
 					
 							ありがとうございます。";
+							
 							$studentEmail=null;
+							$translatorOldEmail=null;
 							$this->sendEmail ( $studentEmail, $instructorOldEmail, $translatorOldEmail, $mailcontent, "補習授業時間を取消しました" );
 						}
 						if($translatorOldEmail!=null){
@@ -213,7 +233,8 @@ class SessionController extends Zend_Controller_Action {
 								以前手配した" . $session->scheduleStartTime . " 補習授業を取消しました<p/>
 				
 								ありがとうございます。";
-									
+								$studentEmail=null;
+								$instructorOldEmail=null;
 								$this->sendEmail ( $studentEmail, $instructorOldEmail, $translatorOldEmail, $mailcontent, "補習授業時間を取消しました" );
 							}
 						}

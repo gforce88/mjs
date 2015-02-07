@@ -72,7 +72,7 @@ class Application_Model_Student extends Zend_Db_Table_Abstract {
 			$row->phone = $studentData["phone"];
 			$row->membershipStartDate = date('Y-m-d H:i:s',strtotime($studentData["startdate"]));
 			$row->membershipDur = $studentData["membershipDur"];
-			$row->totalMonthlyMins = $studentData["totalMonthlyMins"];
+			$row->minsRemaining = $studentData["totalMonthlyMins"];
 			$row->acctStatus = 1;
 			$row->acctStatus = $studentData ['acctStatus'];
 			$row->save ();

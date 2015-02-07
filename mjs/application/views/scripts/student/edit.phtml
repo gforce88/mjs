@@ -197,6 +197,11 @@
 										<input value="<?php echo ($this->studentlist==null?"":$this->studentlist->phone);?>"  required id="phone" name="phone" type="text" class="input-block-level form-control" placeholder="Student Telephone Number"/>
 										<label class="strong"><?php print $this->translate->_("stucol13");?></label>
 										<input value="<?php echo ($this->studentlist==null?"":$this->studentlist->phone);?>"  equalTo="#phone" required name="confirmphone" type="text" class="input-block-level form-control" placeholder="Confirm Student Telephone Number"/>
+										
+										<?php 
+											$tt = $this->studentlist->acctStatus;
+											if($tt==1){
+										?>
 										<div class=""> 
 											<label class=""> 
 												<input type="radio" name="acctStatus"  value="0">
@@ -207,6 +212,22 @@
 												<input type="radio" name="acctStatus" checked="checked" value="1">
 												<?php print $this->translate->_("ea");?></label> 
 										</div>
+										<?php 
+										}else{
+										?>
+										<div class=""> 
+											<label class=""> 
+												<input type="radio" name="acctStatus" checked="checked"  value="0">
+												<?php print $this->translate->_("sa");?></label> 
+										</div>
+										<div class=""> 
+											<label class=""> 
+												<input type="radio" name="acctStatus"  value="1">
+												<?php print $this->translate->_("ea");?></label> 
+										</div>
+										<?php 
+											}
+										?>
 										<button class="btn btn-block btn-inverse" type="submit"><?php print $this->translate->_("editstu");?></button>
 									</div>
 								</div>

@@ -203,7 +203,7 @@ class SessionController extends Zend_Controller_Action {
 							以前手配した" . $session->scheduleStartTime . " 補習授業を取消しました<p/>
 					
 							ありがとうございます。";
-							
+							$studentEmail=null;
 							$this->sendEmail ( $studentEmail, $instructorOldEmail, $translatorOldEmail, $mailcontent, "補習授業時間を取消しました" );
 						}
 						if($translatorOldEmail!=null){
@@ -351,9 +351,12 @@ class SessionController extends Zend_Controller_Action {
 			
 			$mail->AddReplyTo ( $mail->Username, $mail->Username );
 			$mail->SetFrom ( $mail->Username, $mail->Username );
-			
-			$mail->AddAddress ( $studentEmail );
-			$mail->AddAddress ( $instructorEmail );
+			if ($studentEmail != null) {
+				$mail->AddAddress ( $studentEmail );
+			}
+			if ($instructorEmail != null) {
+				$mail->AddAddress ( $instructorEmail );
+			}
 			if ($translatorEmail != null) {
 				$mail->AddAddress ( $translatorEmail );
 			}

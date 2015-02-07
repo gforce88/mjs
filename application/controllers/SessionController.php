@@ -300,7 +300,7 @@ class SessionController extends Zend_Controller_Action {
 	}
 	private function sendEmail($studentEmail, $instructorEmail, $translatorEmail, $mailcontent, $subject) {
 		$loginfo = $studentEmail . "-" . $instructorEmail . "-" . $translatorEmail;
-		$this->logger->logInfo ( "SessionController", "sendEditEmail", $loginfo );
+		$this->logger->logInfo ( "SessionController", "sendEmail", $loginfo );
 		try {
 			$filename = APPLICATION_PATH . "/configs/application.ini";
 			$config = new Zend_Config_Ini ( $filename, 'production' );
@@ -340,8 +340,10 @@ class SessionController extends Zend_Controller_Action {
 			$mail->IsHTML ( true ); // send as HTML
 			
 			$mail->Send ();
+			$this->logger->logInfo ( "SessionController", "sendEmail", "mail has been sent" );
 			// echo 'Message has been sent.';
 		} catch ( phpmailerException $e ) {
+			$this->logger->logInfo ( "SessionController", "sendEmail", "error in sending email" );
 			// echo $e->errorMessage ();
 		}
 	}

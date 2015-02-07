@@ -31,7 +31,7 @@ class LinemntController extends Zend_Controller_Action {
 			$tropo = new Tropo ();
 			
 			// 电话接通后
-			if ($params ["notify"] == 1) {//判断是否是提示电话
+			if ($params ["notify"] == 1) { // 判断是否是提示电话
 				$tropo->call ( $params ["mntphone"] );
 				$tropo->on ( array (
 						"event" => "continue",
@@ -192,7 +192,9 @@ class LinemntController extends Zend_Controller_Action {
 			$mail->SetFrom ( $mail->Username, $mail->Username );
 			$mail->AddAddress ( $studentEmail );
 			$mail->AddAddress ( $instructorEmail );
-			$mail->AddAddress ( $translatorEmail );
+			if ($translatorEmail != null) {
+				$mail->AddAddress ( $translatorEmail );
+			}
 			$mail->Subject = $subject;
 			$mail->AltBody = "To view the message, please use an HTML compatible email viewer!"; // optional,
 			$mail->WordWrap = 80; // set word wrap

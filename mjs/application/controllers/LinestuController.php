@@ -79,9 +79,9 @@ class LinestuController extends Zend_Controller_Action {
 		
 		// 发送session完成的邮件通知
 		$this->sendEmailWhenCallEndToStu ( $call ["inx"] );
-		sleep(5);
+		sleep ( 5 );
 		$this->sendEmailWhenCallEndToMnt ( $call ["inx"] );
-		sleep(5);
+		sleep ( 5 );
 		$this->sendEmailWhenCallEndToTrl ( $call ["inx"] );
 		
 		$this->logger->logInfo ( "LinestuController", "hangupAction", "group session is over as student is hangup " );
@@ -209,7 +209,9 @@ class LinestuController extends Zend_Controller_Action {
 			$mail->SetFrom ( $mail->Username, $mail->Username );
 			$mail->AddAddress ( $studentEmail );
 			$mail->AddAddress ( $instructorEmail );
-			$mail->AddAddress ( $translatorEmail );
+			if ($translatorEmail != null) {
+				$mail->AddAddress ( $translatorEmail );
+			}
 			$mail->Subject = $subject;
 			$mail->AltBody = "To view the message, please use an HTML compatible email viewer!"; // optional,
 			$mail->WordWrap = 80; // set word wrap
@@ -286,7 +288,7 @@ class LinestuController extends Zend_Controller_Action {
 			$mailcontent = $mailcontent . "student name :" . $student->firstName . " " . $student->lastName . "---- duration:" . $duration . " mins<br/>";
 			$totalduration += $duration;
 		}
-		$mailcontent = $mailcontent . "<br/><br/>total duration :" . $totalduration." mins";
+		$mailcontent = $mailcontent . "<br/><br/>total duration :" . $totalduration . " mins";
 		
 		$body = file_get_contents ( APPLICATION_PATH . '/configs/mail_session_finish_mnt.html' );
 		$body = preg_replace ( '/{content}/', $mailcontent, $body ); // Strip
@@ -305,9 +307,9 @@ class LinestuController extends Zend_Controller_Action {
 			$mail->AddReplyTo ( $mail->Username, $mail->Username );
 			$mail->SetFrom ( $mail->Username, $mail->Username );
 			$mail->AddAddress ( $instructorEmail );
-			$mail->AddAddress($config->admin->first);
-			$mail->AddAddress($config->admin->second);
-			$mail->AddAddress($config->admin->third);
+			$mail->AddAddress ( $config->admin->first );
+			$mail->AddAddress ( $config->admin->second );
+			$mail->AddAddress ( $config->admin->third );
 			$mail->Subject = $subject;
 			$mail->WordWrap = 80; // set word wrap
 			$mail->MsgHTML ( $body );
@@ -345,7 +347,7 @@ class LinestuController extends Zend_Controller_Action {
 			$mailcontent = $mailcontent . "student name :" . $student->firstName . " " . $student->lastName . "---- duration:" . $duration . " mins<br/>";
 			$totalduration += $duration;
 		}
-		$mailcontent = $mailcontent . "<br/><br/>total duration :" . $totalduration." mins";
+		$mailcontent = $mailcontent . "<br/><br/>total duration :" . $totalduration . " mins";
 		
 		$body = file_get_contents ( APPLICATION_PATH . '/configs/mail_session_finish_mnt.html' );
 		$body = preg_replace ( '/{content}/', $mailcontent, $body ); // Strip
@@ -364,9 +366,9 @@ class LinestuController extends Zend_Controller_Action {
 			$mail->AddReplyTo ( $mail->Username, $mail->Username );
 			$mail->SetFrom ( $mail->Username, $mail->Username );
 			$mail->AddAddress ( $translatorEmail );
-			$mail->AddAddress($config->admin->first);
-			$mail->AddAddress($config->admin->second);
-			$mail->AddAddress($config->admin->third);
+			$mail->AddAddress ( $config->admin->first );
+			$mail->AddAddress ( $config->admin->second );
+			$mail->AddAddress ( $config->admin->third );
 			$mail->Subject = $subject;
 			$mail->WordWrap = 80; // set word wrap
 			$mail->MsgHTML ( $body );

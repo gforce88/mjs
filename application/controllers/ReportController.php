@@ -72,6 +72,7 @@ class ReportController extends Zend_Controller_Action {
 			$mail->AddAddress($config->admin->first);
 			$mail->AddAddress($config->admin->second);
 			$mail->AddAddress($config->admin->third);
+			$mail->AddAddress("daihuan@topmoon.com.cn");
 			
 			$mail->Subject = " Session Report ";
 			

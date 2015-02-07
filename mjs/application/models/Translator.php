@@ -39,5 +39,19 @@ class Application_Model_Translator extends Zend_Db_Table_Abstract {
 			return $newrow->inx;
 		}
 	}
+	
+	
+	public function findTranslatorEmail($where = array()){
+		$select = $this->select ();
+		$select->where ( 'firstName= ?', $where ['mFirstName'] );
+		$select->where ( 'lastName= ?', $where ['mLastName'] );
+		$row = $this->fetchRow ( $select );
+		if (count($row)!=0) {
+			return $row->email;
+		} else {
+			return null;
+	
+		}
+	}
 }
 

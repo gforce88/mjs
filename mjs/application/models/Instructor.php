@@ -40,5 +40,18 @@ class Application_Model_Instructor extends Zend_Db_Table_Abstract {
 			
 		}
 	}
+	
+	public function findInstructorEmail($where = array()){
+		$select = $this->select ();
+		$select->where ( 'firstName= ?', $where ['mFirstName'] );
+		$select->where ( 'lastName= ?', $where ['mLastName'] );
+		$row = $this->fetchRow ( $select );
+		if (count($row)!=0) {
+			return $row->email;
+		} else {
+			return null;
+				
+		}
+	}
 }
 

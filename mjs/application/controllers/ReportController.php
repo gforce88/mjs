@@ -41,7 +41,7 @@ class ReportController extends Zend_Controller_Action {
 		foreach ( $sessionList as $row ) {
 			$d1 = strtotime ( $row ["a_actualEndTime"] );
 			$d2 = strtotime ( $row ["a_scheduleStartTime"] );
-			$sessionduration = ($d1 - $d2) / 60;
+			$sessionduration = ceil(($d1 - $d2) / 60);
 			$mailcontent = $mailcontent . "<tr><td>" . $row ["b_inx"] . "</td><td>" . $row ["b_firstName"] . $row ["b_lastName"] . "</td><td>" . $row ["b_phone"] . "</td><td>" . $row ["c_firstName"] . $row ["c_lastName"] . "</td><td>" . $row ["c_phone"] . "</td><td>" . $row ["d_firstName"] . $row ["d_lastName"] . "</td><td>" . $row ["d_phone"] . "</td><td>" . $row ["inx"] . "</td><td>" . $row ["a_scheduleStartTime"] . "</td><td>" . $sessionduration . "</td></tr>";
 		}
 		$mailcontent = $mailcontent . "</table></body></html>";

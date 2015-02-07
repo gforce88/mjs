@@ -188,7 +188,10 @@ class SessionController extends Zend_Controller_Action {
 					ありがとうございます。";
 						
 						$this->sendEmail ( $studentEmail, $instructorEmail, $translatorEmail, $mailcontent, "MJS補習授業時間を変更しました" );
-						
+						$this->logger->logInfo ( "SessionController", "editAction", " instructorOldEmail:" . $instructorOldEmail );
+						$this->logger->logInfo ( "SessionController", "editAction", " instructorEmail:" . $instructorEmail );
+						$this->logger->logInfo ( "SessionController", "editAction", " translatorOldEmail:" . $translatorOldEmail );
+						$this->logger->logInfo ( "SessionController", "editAction", " translatorEmail:" . $translatorEmail );
 						if ($instructorOldEmail != $instructorEmail || $translatorOldEmail != $translatorEmail) {
 							$mailcontent = "お疲れ様です,<p/>
 		

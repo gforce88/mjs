@@ -193,7 +193,7 @@ class SessionController extends Zend_Controller_Action {
 						$this->logger->logInfo ( "SessionController", "editAction", " translatorOldEmail:" . $translatorOldEmail );
 						$this->logger->logInfo ( "SessionController", "editAction", " translatorEmail:" . $translatorEmail );
 						$this->logger->logInfo ( "SessionController", "editAction", " translatorEmail:" . ($translatorOldEmail != $translatorEmail) );
-						if ($instructorOldEmail != $instructorEmail || $translatorOldEmail != $translatorEmail) {
+						if ($instructorOldEmail != $instructorEmail) {
 							$mailcontent = "お疲れ様です,<p/>
 		
 							以前手配した" . $session->scheduleStartTime . " 補習授業を取消しました<p/>
@@ -201,6 +201,17 @@ class SessionController extends Zend_Controller_Action {
 							ありがとうございます。";
 							
 							$this->sendEmail ( $studentEmail, $instructorOldEmail, $translatorOldEmail, $mailcontent, "補習授業時間を取消しました" );
+						}
+						if($translatorOldEmail!=null){
+							if($translatorOldEmail != $translatorEmail){
+								$mailcontent = "お疲れ様です,<p/>
+								
+								以前手配した" . $session->scheduleStartTime . " 補習授業を取消しました<p/>
+				
+								ありがとうございます。";
+									
+								$this->sendEmail ( $studentEmail, $instructorOldEmail, $translatorOldEmail, $mailcontent, "補習授業時間を取消しました" );
+							}
 						}
 						// 如果session创建时间在10分钟之内 立刻开始提示
 						if ($inputTime < strtotime ( " +10 mins" )) {

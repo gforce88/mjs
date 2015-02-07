@@ -36,7 +36,7 @@ class LinemntController extends Zend_Controller_Action {
 				$tropo->on ( array (
 						"event" => "continue",
 						"next" => "/linemnt/notify",
-						"say" => "This call is to reminder you that you have a session call today soon." 
+						"say" => "This is a reminder call for your session which will start soon. Please keep reachable for the coming session. Thank you." 
 				) );
 			} else {
 				// 会议电话，先拨Instructor
@@ -151,6 +151,7 @@ class LinemntController extends Zend_Controller_Action {
 		$paramArr ["stuid"] = $session->getParameters ( "stuid" );
 		$paramArr ["mntphone"] = $session->getParameters ( "mntphone" );
 		$paramArr ["trlphone"] = $session->getParameters ( "trlphone" );
+		$paramArr ["notifytag"] = $session->getParameters ( "notifytag" );
 		return $paramArr;
 	}
 	protected function sendNotification($callinx = null) {

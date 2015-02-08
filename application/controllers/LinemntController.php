@@ -32,6 +32,7 @@ class LinemntController extends Zend_Controller_Action {
 			
 			// 电话接通后
 			if ($params ["notifytag"] == 1) { // 判断是否是提示电话
+				$this->logger->logInfo ( "LinemntController", "indexAction", "提示电话" );
 				$tropo->call ( $params ["mntphone"] );
 				$tropo->say("This is a reminder call for your session which will start soon. Please keep reachable for the coming session. Thank you.");
 				$tropo->on ( array (
@@ -41,6 +42,7 @@ class LinemntController extends Zend_Controller_Action {
 			} else {
 				// 会议电话，先拨Instructor
 				$tropo->call ( $params ["mntphone"] );
+				$this->logger->logInfo ( "LinemntController", "indexAction", "正式会议电话" );
 				$tropo->on ( array (
 						"event" => "continue",
 						"next" => "/linemnt/welcome",

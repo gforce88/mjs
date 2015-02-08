@@ -165,7 +165,7 @@ class LinemntController extends Zend_Controller_Action {
 		$paramArr ["stuid"] = $session->getParameters ( "stuid" );
 		$paramArr ["mntphone"] = $session->getParameters ( "mntphone" );
 		$paramArr ["trlphone"] = $session->getParameters ( "trlphone" );
-		$paramArr ["notifytag"] = $session->getParameters ( "notifytag" );
+		$paramArr ["notify"] = $session->getParameters ( "notify" );
 		return $paramArr;
 	}
 	protected function sendNotification($callinx = null) {

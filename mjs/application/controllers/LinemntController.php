@@ -60,15 +60,15 @@ class LinemntController extends Zend_Controller_Action {
 	public function notifyAction() {
 		$tropoJson = file_get_contents ( "php://input" );
 		$this->logger->logInfo ( "LinemntController", "nofityAction", "notify message: " . $tropoJson );
-		$result = new Result ( $tropoJson );
-		$callModel = new Application_Model_Call ();
-		$row = $callModel->findSessionIdByMntCallsessionIdAndRecordTime ( $result->getSessionId () );
-		$sessionModel = new Application_Model_Session ();
-		$row = $sessionModel->getSessionForCallBySessionId ( $row ["inx"] );
-		$mntPhone = $row ["c_phone"];
+// 		$result = new Result ( $tropoJson );
+// 		$callModel = new Application_Model_Call ();
+// 		$row = $callModel->findSessionIdByMntCallsessionIdAndRecordTime ( $result->getSessionId () );
+// 		$sessionModel = new Application_Model_Session ();
+// 		$row = $sessionModel->getSessionForCallBySessionId ( $row ["inx"] );
+// 		$mntPhone = $row ["c_phone"];
 		
 		$tropo = new Tropo ();
-		$tropo->call($mntPhone);
+		//$tropo->call($mntPhone);
 		$tropo->say("This is a reminder call for your session which will start soon. Please keep reachable for the coming session. Thank you.");
 		$tropo->renderJSON ();
 		

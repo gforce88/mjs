@@ -79,10 +79,18 @@ class LinemntController extends Zend_Controller_Action {
 				"id" => "mjsconf" . $row ["inx"],
 				"mute" => false,
 				"allowSignals" => array (
-						"playremind",
-						"exit" 
+						"stunoanswer",
+						"trlnoanswer" 
 				) 
 		);
+		$tropo->on ( array (
+				"event" => "stunoanswer",
+				"next" => "/linemnt/stunoanswer"
+		) );
+		$tropo->on ( array (
+				"event" => "trlnoanswer",
+				"next" => "/linemnt/trlnoanswer"
+		) );
 		
 		$tropo->on ( array (
 				"event" => "hangup",
@@ -109,6 +117,25 @@ class LinemntController extends Zend_Controller_Action {
 		$troposervice->callstu ( $paramArr );
 		$this->logger->logInfo ( "LinemntController", "welcomeAction", "call student phone:--- " . $paramArr ["stuphone"] );
 	}
+	
+	public function stunoanswerAction() {
+		$tropoJson = file_get_contents ( "php://input" );
+		$this->logger->logInfo ( "LinemntController", "stunoanswerAction", "student not answer : " . $tropoJson );
+		$tropo = new Tropo ();
+		$tropo->say("student not answer, the conference is end");
+		$tropo->renderJSON ();
+	
+	}
+	
+	public function trlnoanswerAction() {
+		$tropoJson = file_get_contents ( "php://input" );
+		$this->logger->logInfo ( "LinemntController", "nofityAction", "translator not answer: " . $tropoJson );
+		$tropo = new Tropo ();
+		$tropo->say("translator not answer, the conference is end");
+		$tropo->renderJSON ();
+	
+	}
+	
 	public function conferenceAction() {
 		$tropoJson = file_get_contents ( "php://input" );
 		$this->logger->logInfo ( "LinemntController", "conferenceAction", "conferenceAction message: " . $tropoJson );

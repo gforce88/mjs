@@ -24,7 +24,12 @@ class LinestuController extends Zend_Controller_Action {
 		
 		if ($callModel->checkStuCallTimes ( $params ) > 3) {
 			$this->logger->logInfo ( "LinestuController", "indexAction", "student didn't answer the call for 3times" );
+			//邮件通知
 			$this->sendNotification ( $params ["sessionid"] );
+			//发消息给instructor的会议，告诉学生没有参加。
+			$troposervice = new TropoService ();
+			$call = $callModel->find($params ["sessionid"])->current();
+			$troposervice->stunoanswerRemind($call->party1SessionId);
 		} else {
 			$this->logger->logInfo ( "LinestuController", "indexAction", "call student:" . $params ["stuphone"] );
 			$tropo = new Tropo ();
@@ -101,13 +106,16 @@ class LinestuController extends Zend_Controller_Action {
 				"id" => "mjsconf" . $row ["inx"],
 				"mute" => false,
 				"allowSignals" => array (
-						"playremind",
-						"exit" 
+						"trlnoanswer"
 				) 
 		);
 		$tropo->on ( array (
 				"event" => "hangup",
 				"next" => "/linestu/hangup" 
+		) );
+		$tropo->on ( array (
+				"event" => "trlnoanswer",
+				"next" => "/linestu/trlnoanswer"
 		) );
 		$tropo->conference ( null, $confOptions );
 		$tropo->renderJSON ();
@@ -130,6 +138,16 @@ class LinestuController extends Zend_Controller_Action {
 			$callModel->groupStart ( $row ["inx"] );
 		}
 	}
+	
+	public function trlnoanswerAction() {
+		$tropoJson = file_get_contents ( "php://input" );
+		$this->logger->logInfo ( "LinestuController", "trlnoanswerAction", "translator not answer: " . $tropoJson );
+		$tropo = new Tropo ();
+		$tropo->say("translator not answer, the conference is end");
+		$tropo->renderJSON ();
+	
+	}
+	
 	public function incompleteAction() {
 		$tropoJson = file_get_contents ( "php://input" );
 		

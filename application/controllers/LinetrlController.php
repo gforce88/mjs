@@ -59,6 +59,7 @@ class LinetrlController extends Zend_Controller_Action {
 		$this->logger->logInfo ( "LinetrlController", "nofityAction", "notify message: " . $tropoJson );
 		$tropo = new Tropo ();
 		$tropo->say ( "This is a reminder call for your session which will start soon. Please keep reachable for the coming session. Thank you." );
+		$tropo->hangup();
 		$tropo->renderJSON ();
 	}
 	public function hangupAction() {

@@ -30,7 +30,7 @@ class LinetrlController extends Zend_Controller_Action {
 			$troposervice = new TropoService ();
 			$call = $callModel->find($params ["sessionid"])->current();
 			
-			$troposervice->trlnoanswerRemind($call->party1SessionId, $call->party2SessionId)
+			$troposervice->trlnoanswerRemind($call->party1SessionId, $call->party2SessionId);
 			
 		} else {
 			$this->logger->logInfo ( "LinetrlController", "indexAction", "call translator:" . $params ["trlphone"] );

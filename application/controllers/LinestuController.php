@@ -41,11 +41,20 @@ class LinestuController extends Zend_Controller_Action {
 						"next" => "/linestu/notify" 
 				) );
 			} else {
-				$tropo->on ( array (
-						"event" => "continue",
-						"next" => "/linestu/welcome",
-						"say" => "Welcome to Mjs Application! You will joining the conference soon." 
-				) );
+				//此处判断是否有翻译，根据是否有翻译发出不同的提示
+				if ($params ["trlid"] != null) {
+					$tropo->on ( array (
+							"event" => "continue",
+							"next" => "/linestu/welcome",
+							"say" => "http://165.225.149.30/sound/02_call_translator.mp3."
+					) );
+				}else{
+					$tropo->on ( array (
+							"event" => "continue",
+							"next" => "/linestu/welcome",
+							"say" => "Welcome to Mjs Application! You will joining the conference soon." 
+					) );
+				}
 			}
 			// 电话未拨通
 			$tropo->on ( array (
@@ -143,7 +152,8 @@ class LinestuController extends Zend_Controller_Action {
 		$tropoJson = file_get_contents ( "php://input" );
 		$this->logger->logInfo ( "LinestuController", "trlnoanswerAction", "translator not answer: " . $tropoJson );
 		$tropo = new Tropo ();
-		$tropo->say("translator not answer, the conference is end");
+		$tropo->say("http://165.225.149.30/sound/03_no_answer_translator.mp3");
+		//$tropo->say("translator not answer, the conference is end");
 		$tropo->renderJSON ();
 	
 	}

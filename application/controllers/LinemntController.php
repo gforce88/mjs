@@ -29,7 +29,7 @@ class LinemntController extends Zend_Controller_Action {
 		} else {
 			$this->logger->logInfo ( "LinemntController", "indexAction", "call instructor:" . $params ["mntphone"] );
 			$tropo = new Tropo ();
-			
+			$this->logger->logInfo ( "LinemntController", "indexAction---notify", " notify value is--------------- :". $params ["notify"]);
 			// 电话接通后
 			if ($params ["notify"] == "1") { // 判断是否是提示电话
 				$this->logger->logInfo ( "LinemntController", "indexAction---notify", "提示电话" );

@@ -41,7 +41,8 @@ class LinemntController extends Zend_Controller_Action {
 				$tropo->on ( array (
 						"event" => "continue",
 						"next" => "/linemnt/welcome",
-						"say" => "Welcome to Mjs Application! Please hold on for joining the conference." 
+// 						"say" => "Welcome to Mjs Application! Please hold on for joining the conference." 
+						"say" => "http://165.225.149.30/sound/01_call_student.mp3" 
 				) );
 			}
 			// 电话未拨通
@@ -122,7 +123,8 @@ class LinemntController extends Zend_Controller_Action {
 		$tropoJson = file_get_contents ( "php://input" );
 		$this->logger->logInfo ( "LinemntController", "stunoanswerAction", "student not answer : " . $tropoJson );
 		$tropo = new Tropo ();
-		$tropo->say("student not answer, the conference is end");
+		$tropo->say("http://165.225.149.30/sound/03_no_answer_student.mp3");
+		//$tropo->say("student not answer, the conference is end");
 		$tropo->renderJSON ();
 	
 	}
@@ -131,7 +133,8 @@ class LinemntController extends Zend_Controller_Action {
 		$tropoJson = file_get_contents ( "php://input" );
 		$this->logger->logInfo ( "LinemntController", "nofityAction", "translator not answer: " . $tropoJson );
 		$tropo = new Tropo ();
-		$tropo->say("translator not answer, the conference is end");
+		$tropo->say("http://165.225.149.30/sound/03_no_answer_translator.mp3");
+		//$tropo->say("translator not answer, the conference is end");
 		$tropo->renderJSON ();
 	
 	}

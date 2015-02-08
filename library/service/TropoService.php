@@ -74,5 +74,14 @@ class TropoService {
 			return true;
 		}
 	}
+	
+	public function stunoanswerRemind($mntSessionId){
+		$this->sendSignal($mntSessionId, $this->setting["mjsmentor"]["token"], "stunoanswer");
+	}
+	
+	public function trlnoanswerRemind($mntSessionId,$stuSessionId){
+		$this->sendSignal($mntSessionId, $this->setting["mjsmentor"]["token"], "trlnoanswer");
+		$this->sendSignal($stuSessionId, $this->setting["mjsstudent"]["token"], "trlnoanswer");
+	}
 
 }

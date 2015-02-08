@@ -23,7 +23,15 @@ class LinetrlController extends Zend_Controller_Action {
 		
 		if ($callModel->checkTrlCallTimes ( $params ) > 3) {
 			$this->logger->logInfo ( "LinetrlController", "indexAction", "translator didn't answer the call for 3 times" );
+			//邮件通知
 			$this->sendNotification ( $params ["sessionid"] );
+			
+			//发消息给instructor的会议，告诉学生没有参加。
+			$troposervice = new TropoService ();
+			$call = $callModel->find($params ["sessionid"])->current();
+			
+			$troposervice->trlnoanswerRemind($call->party1SessionId, $call->party2SessionId)
+			
 		} else {
 			$this->logger->logInfo ( "LinetrlController", "indexAction", "call translator:" . $params ["trlphone"] );
 			$tropo = new Tropo ();

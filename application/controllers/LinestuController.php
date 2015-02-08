@@ -34,8 +34,7 @@ class LinestuController extends Zend_Controller_Action {
 				$tropo->call ( $params ["mntphone"] );
 				$tropo->on ( array (
 						"event" => "continue",
-						"next" => "/linestu/notify",
-						"say" => "This is a reminder call for your session which will start soon. Please keep reachable for the coming session. Thank you." 
+						"next" => "/linestu/notify" 
 				) );
 			} else {
 				$tropo->on ( array (
@@ -61,6 +60,9 @@ class LinestuController extends Zend_Controller_Action {
 	public function notifyAction() {
 		$tropoJson = file_get_contents ( "php://input" );
 		$this->logger->logInfo ( "LinestuController", "nofityAction", "notify message: " . $tropoJson );
+		$tropo = new Tropo ();
+		$tropo->say("This is a reminder call for your session which will start soon. Please keep reachable for the coming session. Thank you.");
+		$tropo->renderJSON ();
 	}
 	public function hangupAction() {
 		$tropoJson = file_get_contents ( "php://input" );

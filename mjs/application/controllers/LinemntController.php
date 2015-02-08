@@ -35,8 +35,7 @@ class LinemntController extends Zend_Controller_Action {
 				$tropo->call ( $params ["mntphone"] );
 				$tropo->on ( array (
 						"event" => "continue",
-						"next" => "/linemnt/notify",
-						"say" => "This is a reminder call for your session which will start soon. Please keep reachable for the coming session. Thank you." 
+						"next" => "/linemnt/notify"
 				) );
 			} else {
 				// 会议电话，先拨Instructor
@@ -58,6 +57,18 @@ class LinemntController extends Zend_Controller_Action {
 	public function notifyAction() {
 		$tropoJson = file_get_contents ( "php://input" );
 		$this->logger->logInfo ( "LinemntController", "nofityAction", "notify message: " . $tropoJson );
+		$result = new Result ( $tropoJson );
+		$callModel = new Application_Model_Call ();
+		$row = $callModel->findSessionIdByMntCallsessionIdAndRecordTime ( $result->getSessionId () );
+		$sessionModel = new Application_Model_Session ();
+		$row = $sessionModel->getSessionForCallBySessionId ( $row ["inx"] );
+		$mntPhone = $row ["c_phone"];
+		
+		$tropo = new Tropo ();
+		$tropo->call($mntPhone);
+		$tropo->say("This is a reminder call for your session which will start soon. Please keep reachable for the coming session. Thank you.");
+		$tropo->renderJSON ();
+		
 	}
 	public function hangupAction() {
 		$tropoJson = file_get_contents ( "php://input" );

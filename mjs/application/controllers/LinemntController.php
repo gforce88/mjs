@@ -30,18 +30,14 @@ class LinemntController extends Zend_Controller_Action {
 			$this->logger->logInfo ( "LinemntController", "indexAction", "call instructor:" . $params ["mntphone"] );
 			$tropo = new Tropo ();
 			$this->logger->logInfo ( "LinemntController", "indexAction---notify", " notify value is--------------- :". $params ["notify"]);
-			// 电话接通后
+			$tropo->call ( $params ["mntphone"] );
+			
 			if ($params ["notify"] == "1") { // 判断是否是提示电话
-				$this->logger->logInfo ( "LinemntController", "indexAction---notify", "提示电话" );
-				$tropo->call ( $params ["mntphone"] );
 				$tropo->on ( array (
 						"event" => "continue",
 						"next" => "/linemnt/notify"
 				) );
-			} else {
-				// 会议电话，先拨Instructor
-				$tropo->call ( $params ["mntphone"] );
-				$this->logger->logInfo ( "LinemntController", "indexAction---form", "正式会议电话" );
+			} else {// 会议电话，先拨Instructor
 				$tropo->on ( array (
 						"event" => "continue",
 						"next" => "/linemnt/welcome",

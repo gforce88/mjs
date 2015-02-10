@@ -64,13 +64,18 @@
 				        submitHandler: function(form) { form.submit(); } 
 				    });
 					$.validator.addMethod("jpphone", function(value, element) { 
-					     return this.optional(element) || /^\+(0){0,4}(81){1}[0-9]{9,11}$/.test(value); 
+					      //return this.optional(element) || /^\+(0){0,4}(81){1}[0-9]{9,11}$/.test(value); 
+					      return true; 
 					  }, "電話番号入力が正しくない"); 
 									    
 					$().ready(function(){
 						$("#studentForm").validate({
 							rules:{
 								phone:{
+									required:true,
+									jpphone:true
+								},
+								confirmphone:{
 									required:true,
 									jpphone:true
 								}
@@ -204,7 +209,7 @@
 										<label class="strong"><?php print $this->translate->_("stucol4");?></label>
 										<input  id="phone" name="phone" type="text" class="input-block-level form-control" placeholder="Student Telephone Number"/>
 										<label class="strong"><?php print $this->translate->_("stucol13");?></label>
-										<input  equalTo="#phone" required name="confirmphone" type="text" class="input-block-level form-control" placeholder="Confirm Student Telephone Number"/>
+										<input  equalTo="#phone" name="confirmphone" type="text" class="input-block-level form-control" placeholder="Confirm Student Telephone Number"/>
 										<button class="btn btn-block btn-inverse" type="submit"><?php print $this->translate->_("addstu");?></button>
 									</div>
 								</div>

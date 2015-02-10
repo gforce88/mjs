@@ -62,9 +62,24 @@
 					$.validator.setDefaults({
 				        submitHandler: function(form) { form.submit(); } 
 				    });
+					$.validator.addMethod("jpphone", function(value, element) { 
+					      //return this.optional(element) || /^\+(0){0,4}(81){1}[0-9]{9,11}$/.test(value); 
+					      return true; 
+					  }, "電話番号入力が正しくない"); 
 									    
 					$().ready(function(){
-						$("#studentForm").validate();
+						$("#studentForm").validate({
+							rules:{
+								phone:{
+									required:true,
+									jpphone:true
+								},
+								confirmphone:{
+									required:true,
+									jpphone:true
+								}
+							}
+							});
 					});
 					</script>
 

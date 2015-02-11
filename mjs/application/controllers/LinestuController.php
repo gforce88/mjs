@@ -316,10 +316,10 @@ class LinestuController extends Zend_Controller_Action {
 			$d2 = strtotime ( $session->scheduleStartTime );
 			$d3 = strtotime ( $session->actualEndTime );
 			$duration = ceil ( ($d3 - $d2) / 60 );
-			$mailcontent = $mailcontent . "student name :" . $student->firstName . " " . $student->lastName . "---- duration:" . $duration . " mins<br/>";
+			$mailcontent = $mailcontent . "学生の名:" . $student->firstName . " " . $student->lastName . "---- 学期時期:" . $duration . " 分<br/>";
 			$totalduration += $duration;
 		}
-		$mailcontent = $mailcontent . "<br/><br/>total duration :" . $totalduration . " mins";
+		$mailcontent = $mailcontent . "<br/><br/>学期時期 :" . $totalduration . " 分";
 		
 		$body = file_get_contents ( APPLICATION_PATH . '/configs/mail_session_finish_mnt.html' );
 		$body = preg_replace ( '/{content}/', $mailcontent, $body ); // Strip

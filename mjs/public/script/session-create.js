@@ -2,7 +2,7 @@ $().ready(function() {
 	$("#studentId").on('blur', function(e) {
 		$.getJSON("/student/findstujson?inx=" + this.value, function(json) {
 			if (json.err==0) {
-				alert("student account not exist or is suspend!");
+				alert("学生のアカウントが存在しないか、または一時停止!");
 				$("#firstName").val("");
 				$("#lastName").val("");
 				$("#phone").val("");
@@ -20,7 +20,7 @@ $().ready(function() {
 function deletesession(inx){
 	$.getJSON("/session/delete?inx=" + inx, function(json) {
 		if (json.err==0) {
-			alert("session which started can not be deleted");
+			alert("始まったセッションを削除することはできない");
 		} else {
 			window.location.reload();
 		}

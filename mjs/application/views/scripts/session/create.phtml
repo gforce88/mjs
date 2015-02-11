@@ -243,9 +243,13 @@
 
 					</div>
 					<!-- // Box END -->
-				<?php 
-				echo $this->resultmessage;
-				?>
+			
+				<script type="text/javascript">
+					var message = 	'<?php  echo $this->resultmessage;?>';
+					if(message!=null&&message!=""){
+						alert(message);
+					}
+				</script>
 				</div>
 
 			</div>

@@ -7,6 +7,7 @@ $().ready(function() {
 				$("#lastName").val("");
 				$("#phone").val("");
 				$("#email").val("");
+				$("#studentId").val("");
 			} else {
 				$("#firstName").val(json.firstName);
 				$("#lastName").val(json.lastName);

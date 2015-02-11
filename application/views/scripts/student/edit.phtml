@@ -256,14 +256,12 @@
 
 					</div>
 					<!-- // Box END -->
-				<?php 
-				echo $this->resultmessage;
-				if($this->params){
-					foreach ( $this->params as $key => $value ) {
-							//echo 'key:'.$key."   value:".$value."<br/>";
+				<script type="text/javascript">
+					var message = 	'<?php  echo $this->resultmessage;?>';
+					if(message!=null&&message!=""){
+						alert(message);
 					}
-				}
-				?>
+				</script>
 				</div>
 
 			</div>

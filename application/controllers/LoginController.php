@@ -18,7 +18,7 @@ class LoginController extends Zend_Controller_Action {
 			$username = $this->_request->username;
 			$password = $this->_request->password;
 			
-			if ($username == null && $password == null) {
+			if ($username == null || $password == null) {
 				$this->view->loginMessage = $this->view->translate->_ ( "usernamepasswordmessage" );
 			} else {
 				// 取得默认数据库适配器

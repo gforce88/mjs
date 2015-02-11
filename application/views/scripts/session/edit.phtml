@@ -80,6 +80,9 @@
 								},
 								tPhone:{
 									jpphone:true
+								},
+								dur:{
+									digits:true
 								}
 							}
 							});
@@ -189,13 +192,13 @@
 										
 										<?php 
 										$startDate=null;
-										$tmp=30;
+										$tmp=0;
 										if( !$this->session==null){
 										$scheduleStartTime = $this->session->scheduleStartTime;
 										$startDate=date('Y-m-d',strtotime($scheduleStartTime));
 										$startTime=date('h:i A',strtotime($scheduleStartTime));
 										$scheduleEndTime = $this->session->scheduleEndTime;
-										$tmp=(strtotime($scheduleEndTime)-strtotime($scheduleStartTime))/60;
+										$tmp=ceil((strtotime($scheduleEndTime)-strtotime($scheduleStartTime))/60);
 										}
 										?>
 										<label class="strong"><?php print $this->translate->_("stucol6");?></label>
@@ -215,13 +218,9 @@
 										</div>
 										<label class="strong"><?php print $this->translate->_("sescol7");?></label>
 										<div class="row">
-											<select name="dur" required class="selectpicker col-md-12">
-												<optgroup label="Duration">
-													<option value="30" <?php echo $tmp==30?'selected':'';?> >30 Minutes</option>
-													<option value="60" <?php echo $tmp==60?'selected':'';?> >60 Minutes</option>
-													<option value="90" <?php echo $tmp==90?'selected':'';?> >90 Minutes</option>
-												</optgroup>
-											</select>
+
+											<input  id="dur" name="dur" value="<?php echo $tmp;?>" required type="text" class="input-block-level form-control" placeholder="Duration <?php print $this->translate->_("mins");?>" />
+											
 										</div>
 										<br></div>
 								</div>

@@ -80,6 +80,9 @@
 								},
 								tPhone:{
 									jpphone:true
+								},
+								dur:{
+									digits:true
 								}
 							}
 							});
@@ -201,13 +204,8 @@
 										</div>
 										<label class="strong"><?php print $this->translate->_("sescol7");?></label>
 										<div class="row">
-											<select name="dur" required class="selectpicker col-md-12">
-												<optgroup label="Duration">
-													<option value="30">30 <?php print $this->translate->_("mins");?></option>
-													<option value="60">60 <?php print $this->translate->_("mins");?></option>
-													<option value="90">90 <?php print $this->translate->_("mins");?></option>
-												</optgroup>
-											</select>
+											<input  id="dur" name="dur" required type="text" class="input-block-level form-control" placeholder="Duration <?php print $this->translate->_("mins");?>" />
+											
 										</div>
 										<br></div>
 								</div>

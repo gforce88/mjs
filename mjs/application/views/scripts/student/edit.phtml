@@ -63,8 +63,8 @@
 				        submitHandler: function(form) { form.submit(); } 
 				    });
 					$.validator.addMethod("jpphone", function(value, element) { 
-					      //return this.optional(element) || /^\+(0){0,4}(81){1}[0-9]{9,11}$/.test(value); 
-					      return true; 
+					      return this.optional(element) || /^\+(0){0,4}(81){1}[0-9]{9,11}$/.test(value) || /^[ ]*[\+]{0,1}(0){0,4}(1){1}[0-9]{10}[ ]*$/.test(value) || /^[ ]*[\+]{0,1}(0){0,4}(65){1}[0-9]{8}[ ]*$/.test(value); 
+					      //return true; 
 					  }, "電話番号入力が正しくない"); 
 									    
 					$().ready(function(){

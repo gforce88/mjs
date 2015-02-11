@@ -382,8 +382,8 @@ class SessionController extends Zend_Controller_Action {
 				$mail->AddAddress ( $translatorEmail );
 			}
 			
-			$mail->Subject = $subject;
-			
+			$mail->Subject = "=?utf-8?B?".base64_encode($subject)."?=";
+
 			$mail->AltBody = "To view the message, please use an HTML compatible email viewer!"; // optional,
 			                                                                                     // comment
 			                                                                                     // out

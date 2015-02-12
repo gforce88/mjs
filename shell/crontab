@@ -33,7 +33,7 @@ BEGIN
 		for 
 			select inx
 			from students t
-			where period_diff(date_format(now(),'%Y%m'),date_format(t.membershipStartDate,'%Y%m')) <=t.membershipDur;
+			where period_diff(date_format(now(),'%Y%m'),date_format(t.membershipStartDate,'%Y%m')) <=t.membershipDur and t.acctStatus = 1;
 	DECLARE CONTINUE HANDLER FOR NOT FOUND SET not_found = 1;
 	select d_value from configue_default where d_key="tmm" into v_tmm;
 	open studentCursor;

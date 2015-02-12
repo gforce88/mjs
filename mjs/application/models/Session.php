@@ -8,10 +8,10 @@ class Application_Model_Session extends Zend_Db_Table_Abstract {
 		c.inx c_inx,c.firstName c_firstName,c.lastName c_lastName,c.phone c_phone,
 		d.inx d_inx,d.firstName d_firstName,d.lastName d_lastName,d.phone d_phone,
 		a.inx inx,a.scheduleStartTime a_scheduleStartTime,a.scheduleEndTime a_scheduleEndTime,a.actualEndTime a_actualEndTime
-		from mjs.tutorsessions a 
-		left join mjs.students b on a.studentInx = b.inx
-		left join mjs.instructors c on a.instructorInx = c.inx
-		left join mjs.translators d on a.translatorInx = d.inx
+		from tutorsessions a 
+		left join students b on a.studentInx = b.inx
+		left join instructors c on a.instructorInx = c.inx
+		left join translators d on a.translatorInx = d.inx
 		order by a.scheduleStartTime desc";
 		return $this->getAdapter ()->query ( $sql, array () );
 	}
@@ -21,10 +21,10 @@ class Application_Model_Session extends Zend_Db_Table_Abstract {
 		c.inx c_inx,c.firstName c_firstName,c.lastName c_lastName,c.phone c_phone,
 		d.inx d_inx,d.firstName d_firstName,d.lastName d_lastName,d.phone d_phone,
 		a.inx inx,a.scheduleStartTime a_scheduleStartTime,a.scheduleEndTime a_scheduleEndTime,a.actualEndTime a_actualEndTime
-		from mjs.tutorsessions a
-		left join mjs.students b on a.studentInx = b.inx
-		left join mjs.instructors c on a.instructorInx = c.inx
-		left join mjs.translators d on a.translatorInx = d.inx
+		from tutorsessions a
+		left join students b on a.studentInx = b.inx
+		left join instructors c on a.instructorInx = c.inx
+		left join translators d on a.translatorInx = d.inx
 		where a.inx = " . $sessionId . "
 		order by a.inx";
 		return $this->getAdapter ()->fetchRow ( $sql, array () );
@@ -35,10 +35,10 @@ class Application_Model_Session extends Zend_Db_Table_Abstract {
 		c.inx c_inx,c.firstName c_firstName,c.lastName c_lastName,c.phone c_phone,
 		d.inx d_inx,d.firstName d_firstName,d.lastName d_lastName,d.phone d_phone,
 		a.inx inx,a.scheduleStartTime a_scheduleStartTime,a.scheduleEndTime a_scheduleEndTime,a.actualEndTime a_actualEndTime
-		from mjs.tutorsessions a
-		left join mjs.students b on a.studentInx = b.inx
-		left join mjs.instructors c on a.instructorInx = c.inx
-		left join mjs.translators d on a.translatorInx = d.inx
+		from tutorsessions a
+		left join students b on a.studentInx = b.inx
+		left join instructors c on a.instructorInx = c.inx
+		left join translators d on a.translatorInx = d.inx
 		where a.actualEndTime IS NOT NULL
 		and a.actualEndTime > '" . $startDate . "' 
 		and a.actualEndTime < '" . $endDate . "' 
@@ -53,10 +53,10 @@ class Application_Model_Session extends Zend_Db_Table_Abstract {
 		c.inx c_inx,c.firstName c_firstName,c.lastName c_lastName,c.phone c_phone,
 		d.inx d_inx,d.firstName d_firstName,d.lastName d_lastName,d.phone d_phone,
 		a.inx inx,a.scheduleStartTime a_scheduleStartTime,a.scheduleEndTime a_scheduleEndTime,a.actualEndTime a_actualEndTime
-		from mjs.tutorsessions a
-		left join mjs.students b on a.studentInx = b.inx
-		left join mjs.instructors c on a.instructorInx = c.inx
-		left join mjs.translators d on a.translatorInx = d.inx
+		from tutorsessions a
+		left join students b on a.studentInx = b.inx
+		left join instructors c on a.instructorInx = c.inx
+		left join translators d on a.translatorInx = d.inx
 		where a.actualEndTime IS NULL
 		and a.scheduleStartTime between '" . $startDate . "' and '" . $endDate . "'
 		order by b.inx";

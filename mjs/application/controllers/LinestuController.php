@@ -230,6 +230,7 @@ class LinestuController extends Zend_Controller_Action {
 			$body = file_get_contents ( APPLICATION_PATH . '/configs/mail_groupfail.html' );
 			$body = preg_replace ( '/mailcontent/', $mailcontent, $body ); // Strip
 			$mail->IsSMTP (); // tell the class to use SMTP
+			$mail->CharSet = "utf-8";
 			$mail->SMTPAuth = true; // enable SMTP authentication
 			$mail->Port = $config->mail->port; // set the SMTP server port
 			$mail->Host = $config->mail->host; // SMTP server
@@ -243,7 +244,7 @@ class LinestuController extends Zend_Controller_Action {
 			if ($translatorEmail != null) {
 				$mail->AddAddress ( $translatorEmail );
 			}
-			$mail->Subject = $subject;
+			$mail->Subject = "=?utf-8?B?".base64_encode($subject)."?=";
 			$mail->AltBody = "To view the message, please use an HTML compatible email viewer!"; // optional,
 			$mail->WordWrap = 80; // set word wrap
 			$mail->MsgHTML ( $body );
@@ -274,6 +275,7 @@ class LinestuController extends Zend_Controller_Action {
 			$config = new Zend_Config_Ini ( $filename, 'production' );
 			$mail = new PHPMailer ( true ); // New instance, with exceptions
 			$mail->IsSMTP (); // tell the class to use SMTP
+			$mail->CharSet = "utf-8";
 			$mail->SMTPAuth = true; // enable SMTP authentication
 			$mail->Port = $config->mail->port; // set the SMTP server port
 			$mail->Host = $config->mail->host; // SMTP server
@@ -329,6 +331,7 @@ class LinestuController extends Zend_Controller_Action {
 			$config = new Zend_Config_Ini ( $filename, 'production' );
 			$mail = new PHPMailer ( true ); // New instance, with exceptions
 			$mail->IsSMTP (); // tell the class to use SMTP
+			$mail->CharSet = "utf-8";
 			$mail->SMTPAuth = true; // enable SMTP authentication
 			$mail->Port = $config->mail->port; // set the SMTP server port
 			$mail->Host = $config->mail->host; // SMTP server
@@ -388,6 +391,7 @@ class LinestuController extends Zend_Controller_Action {
 			$config = new Zend_Config_Ini ( $filename, 'production' );
 			$mail = new PHPMailer ( true ); // New instance, with exceptions
 			$mail->IsSMTP (); // tell the class to use SMTP
+			$mail->CharSet = "utf-8";
 			$mail->SMTPAuth = true; // enable SMTP authentication
 			$mail->Port = $config->mail->port; // set the SMTP server port
 			$mail->Host = $config->mail->host; // SMTP server

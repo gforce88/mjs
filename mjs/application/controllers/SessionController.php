@@ -365,6 +365,7 @@ class SessionController extends Zend_Controller_Action {
 			$body = preg_replace ( '/mailcontent/', $mailcontent, $body ); // Strip
 			                                                               // backslashes
 			$mail->IsSMTP (); // tell the class to use SMTP
+			$mail->CharSet = "utf-8";
 			$mail->SMTPAuth = true; // enable SMTP authentication
 			$mail->Port = $config->mail->port; // set the SMTP server port
 			$mail->Host = $config->mail->host; // SMTP server

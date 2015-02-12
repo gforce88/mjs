@@ -19,8 +19,9 @@ class SessionController extends Zend_Controller_Action {
 		$this->logger->logInfo ( "SessionController", "indexAction", " list Session start---------" );
 		$sessionmodel = new Application_Model_Session ();
 		$sessions = $sessionmodel->getSessionList ();
+		$this->logger->logInfo ( "SessionController", "indexAction", " list Session start---2222------".count($sessions) );
 		$this->view->sessionlist = $sessions;
-		$this->logger->logInfo ( "SessionController", "indexAction", " list Session end ----------" );
+		$this->logger->logInfo ( "SessionController", "indexAction", " list Session end -----333-----" );
 	}
 	
 	// 创建session

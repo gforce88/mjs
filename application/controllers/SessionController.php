@@ -16,9 +16,11 @@ class SessionController extends Zend_Controller_Action {
 		$this->view->translate = $translate;
 	}
 	public function indexAction() {
+		$this->logger->logInfo ( "SessionController", "indexAction", " list Session start---------" );
 		$sessionmodel = new Application_Model_Session ();
 		$sessions = $sessionmodel->getSessionList ();
 		$this->view->sessionlist = $sessions;
+		$this->logger->logInfo ( "SessionController", "indexAction", " list Session end ----------" );
 	}
 	
 	// 创建session

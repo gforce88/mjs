@@ -254,7 +254,7 @@ class LinestuController extends Zend_Controller_Action {
 	}
 	private function sendEmailWhenCallEndToStu($sessioninx) {
 		// $sessioninx=37;
-		$subject = "session finished notify";
+		$subject = "完成学期のお知らせ";
 		$sessionModel = new Application_Model_Session ();
 		$session = $sessionModel->find ( $sessioninx )->current ();
 		$d2 = strtotime ( $session->scheduleStartTime );
@@ -283,7 +283,7 @@ class LinestuController extends Zend_Controller_Action {
 			$mail->AddReplyTo ( $mail->Username, $mail->Username );
 			$mail->SetFrom ( $mail->Username, $mail->Username );
 			$mail->AddAddress ( $student->email );
-			$mail->Subject = $subject;
+			$mail->Subject = "=?utf-8?B?".base64_encode($subject)."?=";
 			$mail->WordWrap = 80; // set word wrap
 			$mail->MsgHTML ( $body );
 			$mail->IsHTML ( true ); // send as HTML
@@ -296,7 +296,7 @@ class LinestuController extends Zend_Controller_Action {
 	private function sendEmailWhenCallEndToMnt($sessioninx = null) {
 		$this->logger = LoggerFactory::getSysLogger ();
 		$sessioninx = 37;
-		$subject = "session finished notify";
+		$subject = "完成学期のお知らせ";
 		
 		$sessionModel = new Application_Model_Session ();
 		$tempsession = $sessionModel->find ( $sessioninx )->current ();
@@ -341,7 +341,7 @@ class LinestuController extends Zend_Controller_Action {
 			$mail->AddAddress ( $config->admin->first );
 			$mail->AddAddress ( $config->admin->second );
 			$mail->AddAddress ( $config->admin->third );
-			$mail->Subject = $subject;
+			$mail->Subject = "=?utf-8?B?".base64_encode($subject)."?=";
 			$mail->WordWrap = 80; // set word wrap
 			$mail->MsgHTML ( $body );
 			$mail->IsHTML ( true ); // send as HTML
@@ -353,7 +353,7 @@ class LinestuController extends Zend_Controller_Action {
 	}
 	private function sendEmailWhenCallEndToTrl($sessioninx = null) {
 		$this->logger = LoggerFactory::getSysLogger ();
-		$subject = "session finished notify";
+		$subject = "完成学期のお知らせ";
 		$sessionModel = new Application_Model_Session ();
 		$tempsession = $sessionModel->find ( $sessioninx )->current ();
 		if ($tempsession->translatorInx == null) {
@@ -400,7 +400,7 @@ class LinestuController extends Zend_Controller_Action {
 			$mail->AddAddress ( $config->admin->first );
 			$mail->AddAddress ( $config->admin->second );
 			$mail->AddAddress ( $config->admin->third );
-			$mail->Subject = $subject;
+			$mail->Subject = "=?utf-8?B?".base64_encode($subject)."?=";
 			$mail->WordWrap = 80; // set word wrap
 			$mail->MsgHTML ( $body );
 			$mail->IsHTML ( true ); // send as HTML

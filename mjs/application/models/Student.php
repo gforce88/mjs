@@ -90,5 +90,17 @@ class Application_Model_Student extends Zend_Db_Table_Abstract {
 		return $row->inx;
 	}
 	
+	
+	public function findNeedUpdateStudent(){
+		$sql = "select inx
+			from students t
+			where period_diff(date_format(now(),'%Y%m'),date_format(t.membershipStartDate,'%Y%m')) <=t.membershipDur 
+				and t.acctStatus = 1";
+		return $this->getAdapter ()->query ( $sql, array () );
+	}
+	public function findTmmConfigueDefault(){
+		$sql = "select d_value from configue_default where d_key='tmm'";
+		return $this->getAdapter ()->query ( $sql, array () );
+	}
 }
 

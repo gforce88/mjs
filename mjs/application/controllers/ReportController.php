@@ -31,6 +31,25 @@ class ReportController extends Zend_Controller_Action {
 		// $userEmail = $userModel->getUserEmail();
 		// $this->view->resultmessage = $userEmail;
 	}
+
+
+	public function resetAction() {
+		$studentModel = new Application_Model_Student();
+		$tmm = $studentModel->findTmmConfigueDefault();
+		$tmmvalue = "";
+		foreach ($tmm as $row){
+			$tmmvalue=$row["d_value"];
+		}
+		$updatestudents = $studentModel->findNeedUpdateStudent();
+		foreach ($updatestudents as $stuinx){
+			$stu = $studentModel->find($stuinx)->current();
+			$stu->totalMonthlyMins = $tmmvalue;
+			$stu->save();
+			$this->logger->logInfo ( "ReportController", "resetAction", "student accountId----".$stu->inx."--- reseted " );
+		}
+	}
+
+
 	
 	// 发送邮件到管理员
 	private function sendReportEmail($userEmail, $sessionList) {

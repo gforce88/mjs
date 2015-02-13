@@ -6,6 +6,12 @@ class ErrorController extends Zend_Controller_Action {
 		$translate->setlocale ( "JP" );
 		$this->view->translate = $translate;
 	}
+
+	public function pagenotfoundAction(){
+	
+		
+	}
+
 	public function errorAction() {
 		$errors = $this->_getParam ( 'error_handler' );
 		

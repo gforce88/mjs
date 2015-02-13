@@ -1,7 +1,6 @@
 $().ready(function() {
 	$("#studentId").on('blur', function(e) {
 		var sid = $("#studentId").val();
-		
 		if($.trim(sid)!=""){
 			$.getJSON("/student/findstujson?inx=" + this.value, function(json) {
 			if (json.err==0) {
@@ -24,11 +23,20 @@ $().ready(function() {
 });
 
 function deletesession(inx){
-	$.getJSON("/session/delete?inx=" + inx, function(json) {
+	var r = confirm("この指導セッションをキャンセルしたいのですか？");
+	if (r==true)
+    {
+    	$.getJSON("/session/delete?inx=" + inx, function(json) {
 		if (json.err==0) {
 			alert("始まったセッションを削除することはできない");
 		} else {
 			window.location.reload();
 		}
 	});
+    }
+  	else
+    {
+    	
+    }
+	
 }

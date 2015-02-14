@@ -298,16 +298,13 @@ class LinestuController extends Zend_Controller_Action {
 	}
 	private function sendEmailWhenCallEndToMnt($sessioninx = null) {
 		$this->logger->logInfo ( "LinestuController", "sendEmailWhenCallEndToMnt", "sendEmailWhenCallEndToMnt" );
-		$sessioninx = 37;
 		$subject = "完成学期のお知らせ";
 		
 		$sessionModel = new Application_Model_Session ();
 		$tempsession = $sessionModel->find ( $sessioninx )->current ();
-		$this->logger->logInfo ( "LinestuController", "sendEmailWhenCallEndToMnt", "1111111111111111111" );
 		$instructorModel = new Application_Model_Instructor ();
 		$instructor = $instructorModel->find ( $tempsession->instructorInx )->current ();
 		$instructorEmail = $instructor->email;
-		$this->logger->logInfo ( "LinestuController", "sendEmailWhenCallEndToMnt", "222222222222222222" );
 		// 查找老师当月参加的session
 		$sessions = $sessionModel->findSessionsWhenCallEnd ( $tempsession->instructorInx, "mnt" );
 		$this->logger->logInfo ( "LinestuController", "sendEmailWhenCallEndToMnt", "3333333333333333" );

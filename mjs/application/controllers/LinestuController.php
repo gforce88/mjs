@@ -87,9 +87,8 @@ class LinestuController extends Zend_Controller_Action {
 		// 更新session实际结束时间
 		$sessionModel = new Application_Model_Session ();
 		$sessionModel->finishSession ( $call ["inx"] );
-		
+		$session=$sessionModel->find ( $call ["inx"] )->current ();
 		// 更新学生记录的时间
-		$session = $sessionModel->find ( $sessionId )->current ();
 		$uesdmins = ceil ( (strtotime ( $session ["actualEndTime"] ) - strtotime ( $session ["scheduleStartTime"] )) / 60 );
 		$studentModel = new Application_Model_Student ();
 		$studentModel->updateMinsRemaining ( $call ["party2Inx"], $uesdmins );

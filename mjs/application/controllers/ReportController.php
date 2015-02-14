@@ -35,15 +35,16 @@ class ReportController extends Zend_Controller_Action {
 
 	public function resetAction() {
 		$studentModel = new Application_Model_Student();
-		$tmm = $studentModel->findTmmConfigueDefault();
-		$tmmvalue = "";
-		foreach ($tmm as $row){
-			$tmmvalue=$row["d_value"];
-		}
+		//$tmm = $studentModel->findTmmConfigueDefault();
+		//$tmmvalue = "";
+		//foreach ($tmm as $row){
+		//	$tmmvalue=$row["d_value"];
+		//}
 		$updatestudents = $studentModel->findNeedUpdateStudent();
 		foreach ($updatestudents as $stuinx){
 			$stu = $studentModel->find($stuinx)->current();
-			$stu->totalMonthlyMins = $tmmvalue;
+			//$stu->totalMonthlyMins = $tmmvalue;
+			$stu->minsRemaining =$stu->totalMonthlyMins；
 			$stu->save();
 			$this->logger->logInfo ( "ReportController", "resetAction", "student accountId----".$stu->inx."--- reseted " );
 		}

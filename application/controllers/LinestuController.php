@@ -342,6 +342,7 @@ class LinestuController extends Zend_Controller_Action {
 			$mail->AddReplyTo ( $mail->Username, $mail->Username );
 			$mail->SetFrom ( $mail->Username, $mail->Username );
 			$mail->AddAddress ( $instructorEmail );
+			$this->logger->logInfo ( "LinestuController", "sendEmailWhenCallEndToMnt", "config->admin->first".$config->admin->first );
 			$mail->AddAddress ( $config->admin->first );
 			$mail->AddAddress ( $config->admin->second );
 			$mail->AddAddress ( $config->admin->third );
@@ -351,6 +352,7 @@ class LinestuController extends Zend_Controller_Action {
 			$mail->IsHTML ( true ); // send as HTML
 			$mail->Send ();
 		} catch ( phpmailerException $e ) {
+			$this->logger->logInfo ( "LinestuController", "sendEmailWhenCallEndToMnt", "err in send email TO MNT" );
 		}
 		
 		// echo $body;

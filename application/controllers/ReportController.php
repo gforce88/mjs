@@ -40,11 +40,12 @@ class ReportController extends Zend_Controller_Action {
 		//foreach ($tmm as $row){
 		//	$tmmvalue=$row["d_value"];
 		//}
+		$tmm = "";
 		$updatestudents = $studentModel->findNeedUpdateStudent();
 		foreach ($updatestudents as $stuinx){
 			$stu = $studentModel->find($stuinx)->current();
 			//$stu->totalMonthlyMins = $tmmvalue;
-			$stu->minsRemaining =$stu->totalMonthlyMins；
+			$stu->minsRemaining = $stu->totalMonthlyMins;
 			$stu->save();
 			$this->logger->logInfo ( "ReportController", "resetAction", "student accountId----".$stu->inx."--- reseted " );
 		}

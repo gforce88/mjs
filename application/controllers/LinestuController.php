@@ -254,6 +254,7 @@ class LinestuController extends Zend_Controller_Action {
 		}
 	}
 	private function sendEmailWhenCallEndToStu($sessioninx) {
+		$this->logger->logInfo ( "LinestuController", "sendEmailWhenCallEndToStu", "sendEmailWhenCallEndToStu" );
 		// $sessioninx=37;
 		$subject = "完成学期のお知らせ";
 		$sessionModel = new Application_Model_Session ();
@@ -296,7 +297,7 @@ class LinestuController extends Zend_Controller_Action {
 		// echo $body;
 	}
 	private function sendEmailWhenCallEndToMnt($sessioninx = null) {
-		$this->logger = LoggerFactory::getSysLogger ();
+		$this->logger->logInfo ( "LinestuController", "sendEmailWhenCallEndToMnt", "sendEmailWhenCallEndToMnt" );
 		$sessioninx = 37;
 		$subject = "完成学期のお知らせ";
 		
@@ -355,7 +356,7 @@ class LinestuController extends Zend_Controller_Action {
 		// echo $body;
 	}
 	private function sendEmailWhenCallEndToTrl($sessioninx = null) {
-		$this->logger = LoggerFactory::getSysLogger ();
+		$this->logger->logInfo ( "LinestuController", "sendEmailWhenCallEndToTrl", "sendEmailWhenCallEndToTrl" );
 		$subject = "完成学期のお知らせ";
 		$sessionModel = new Application_Model_Session ();
 		$tempsession = $sessionModel->find ( $sessioninx )->current ();

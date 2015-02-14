@@ -307,20 +307,16 @@ class LinestuController extends Zend_Controller_Action {
 		$instructorEmail = $instructor->email;
 		// 查找老师当月参加的session
 		$sessions = $sessionModel->findSessionsWhenCallEnd ( $tempsession->instructorInx, "mnt" );
-		$this->logger->logInfo ( "LinestuController", "sendEmailWhenCallEndToMnt", "3333333333333333" );
 		$mailcontent = "";
 		$studentModel = new Application_Model_Student ();
 		$totalduration = 0;
 		foreach ( $sessions as $session ) {
-			$this->logger->logInfo ( "LinestuController", "sendEmailWhenCallEndToMnt", "44444444444444" );
 			$student = $studentModel->find ( $session->studentInx )->current ();
 			$d2 = strtotime ( $session->scheduleStartTime );
 			$d3 = strtotime ( $session->actualEndTime );
 			$duration = ceil ( ($d3 - $d2) / 60 );
 			$mailcontent = $mailcontent . "学生の名:" . $student->firstName . " " . $student->lastName . "---- 学期時期:" . $duration . " 分<br/>";
-			$this->logger->logInfo ( "LinestuController", "sendEmailWhenCallEndToMnt", "55555555555" );
 			$totalduration += $duration;
-			$this->logger->logInfo ( "LinestuController", "sendEmailWhenCallEndToMnt", "666666666666666" );
 		}
 		$mailcontent = $mailcontent . "<br/><br/>学期時期 :" . $totalduration . " 分";
 		

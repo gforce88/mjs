@@ -57,7 +57,7 @@ class LinemntController extends Zend_Controller_Action {
 		$tropoJson = file_get_contents ( "php://input" );
 		$this->logger->logInfo ( "LinemntController", "nofityAction", "notify message: " . $tropoJson );
 		$tropo = new Tropo ();
-		$tropo->say("This is a reminder call for your session which will start soon. Please keep reachable for the coming session. Thank you.");
+		$tropo->say("http://165.225.149.30/sound/remind_call.mp3");
 		$tropo->hangup();
 		$tropo->renderJSON ();
 		

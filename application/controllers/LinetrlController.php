@@ -46,7 +46,7 @@ class LinetrlController extends Zend_Controller_Action {
 				$tropo->on ( array (
 						"event" => "continue",
 						"next" => "/linetrl/welcome",
-						"say" => "Welcome to Mjs Application! You will joining the conference soon." 
+						"say" => "http://165.225.149.30/sound/joining_call.mp3"
 				) );
 			}
 			// 电话未拨通
@@ -66,7 +66,7 @@ class LinetrlController extends Zend_Controller_Action {
 		$tropoJson = file_get_contents ( "php://input" );
 		$this->logger->logInfo ( "LinetrlController", "nofityAction", "notify message: " . $tropoJson );
 		$tropo = new Tropo ();
-		$tropo->say ( "This is a reminder call for your session which will start soon. Please keep reachable for the coming session. Thank you." );
+		$tropo->say("http://165.225.149.30/sound/remind_call.mp3");
 		$tropo->hangup();
 		$tropo->renderJSON ();
 	}

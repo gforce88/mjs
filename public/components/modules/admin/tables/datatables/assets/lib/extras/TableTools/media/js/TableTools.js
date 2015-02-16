@@ -2176,7 +2176,7 @@ TableTools.BUTTONS = {
 		"sCharSet": "utf16le",
 		"bBomInc": true,
 		"sButtonClass": "DTTT_button_xls",
-		"sButtonText": "Excel",
+		"sButtonText": "Export",
 		"fnClick": function( nButton, oConfig, flash ) {
 			this.fnSetText( flash, this.fnGetTableData(oConfig) );
 		}

@@ -160,8 +160,8 @@ class LinetrlController extends Zend_Controller_Action {
 		if ($call ["party3Inx"] != null) {
 			$translatorEmail = $translatorModel->find ( $call ["party3Inx"] )->current ()->email;
 		}
-		$mailcontent = "session canceled As Translator didn't answer the call";
-		$this->sendEmail ( $studentEmail, $instructorEmail, $translatorEmail, $mailcontent, "session canceled As Translator didn't answer the call" );
+		$mailcontent = "通訳者が三回でも電話に出なかったため、補習授業をキャンセルした。";
+		$this->sendEmail ( $studentEmail, $instructorEmail, $translatorEmail, $mailcontent, "通訳者が三回でも電話に出なかったため、補習授業をキャンセルした。" );
 	}
 	private function sendEmail($studentEmail, $instructorEmail, $translatorEmail, $mailcontent, $subject) {
 		$loginfo = $studentEmail . "-" . $instructorEmail . "-" . $translatorEmail;

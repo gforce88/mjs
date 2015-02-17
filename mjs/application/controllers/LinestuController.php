@@ -217,8 +217,8 @@ class LinestuController extends Zend_Controller_Action {
 		if ($call ["party3Inx"] != null) {
 			$translatorEmail = $translatorModel->find ( $call ["party3Inx"] )->current ()->email;
 		}
-		$mailcontent = "session canceled As Student didn't answer the call";
-		$this->sendEmail ( $studentEmail, $instructorEmail, $translatorEmail, $mailcontent, "session canceled As Student didn't answer the call" );
+		$mailcontent = "学生が三回でも電話に出なかったため、補習授業をキャンセルした。";
+		$this->sendEmail ( $studentEmail, $instructorEmail, $translatorEmail, $mailcontent, "学生が三回でも電話に出なかったため、補習授業をキャンセルした。" );
 	}
 	private function sendEmail($studentEmail, $instructorEmail, $translatorEmail, $mailcontent, $subject) {
 		$loginfo = $studentEmail . "-" . $instructorEmail . "-" . $translatorEmail;

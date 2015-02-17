@@ -60,6 +60,7 @@ class Application_Model_Session extends Zend_Db_Table_Abstract {
 		left join translators d on a.translatorInx = d.inx
 		where a.actualEndTime IS NULL
 		and a.scheduleStartTime between '" . $startDate . "' and '" . $endDate . "'
+		and b.acctStatus = 1
 		order by b.inx";
 		$logger = LoggerFactory::getSysLogger ();
 		$logger->logInfo ( "Application_Model_Session", "getWillStartingSession", "sql is : " . $sql );

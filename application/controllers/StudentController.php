@@ -24,6 +24,7 @@ class StudentController extends Zend_Controller_Action {
 			$result = $student->updateStudent ( $params );
 			if ($result != null) {
 				$this->view->resultmessage = $this->view->translate->_("stumessageupdate");
+				$this->_redirect ( "/student/index" );
 			}
 		} else {
 			$inx = $this->_getParam ( "inx" );

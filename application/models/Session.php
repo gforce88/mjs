@@ -7,7 +7,8 @@ class Application_Model_Session extends Zend_Db_Table_Abstract {
 		b.inx b_inx,b.firstName b_firstName,b.lastName b_lastName,b.phone b_phone,
 		c.inx c_inx,c.firstName c_firstName,c.lastName c_lastName,c.phone c_phone,
 		d.inx d_inx,d.firstName d_firstName,d.lastName d_lastName,d.phone d_phone,
-		a.inx inx,a.scheduleStartTime a_scheduleStartTime,a.scheduleEndTime a_scheduleEndTime,a.actualEndTime a_actualEndTime
+		a.inx inx,a.scheduleStartTime a_scheduleStartTime,a.scheduleEndTime a_scheduleEndTime,a.actualEndTime a_actualEndTime,
+		a.iscancelled iscancelled 
 		from tutorsessions a 
 		left join students b on a.studentInx = b.inx
 		left join instructors c on a.instructorInx = c.inx
@@ -110,7 +111,7 @@ class Application_Model_Session extends Zend_Db_Table_Abstract {
 		$row = $this->find ( $sessionId )->current ();
 		$row->actualEndTime = date ( 'Y-m-d H:i:s' );
 		$row->save ();
-		return $newrow->inx;
+		return $row->inx;
 	}
 	public function findSessionsWhenCallEnd($inx, $type) {
 		$select = $this->select ();
@@ -130,6 +131,15 @@ class Application_Model_Session extends Zend_Db_Table_Abstract {
 		} else {
 			return null;
 		}
+	}
+
+	//电话3次不接改session状态为cancel
+	public function changeSessionToCancel($sessionId = null){
+		$row = $this->find ( $sessionId )->current ();
+		$row->iscancelled = 1;
+		$row->save();
+		return $row->inx;
+
 	}
 }
 

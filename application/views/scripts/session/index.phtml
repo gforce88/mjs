@@ -182,7 +182,12 @@
 								$d1=strtotime($newrow["a_actualEndTime"]);
 								$d2=strtotime($newrow["a_scheduleStartTime"]);
 								$d3=strtotime($newrow["a_scheduleEndTime"]);
-								$sessionstatus = $newrow["a_actualEndTime"]==null?$this->translate->_("tbd"):$this->translate->_("finished");
+								$sessionstatus = "";
+								if($newrow["iscancelled"]==0){
+									$sessionstatus = $newrow["a_actualEndTime"]==null?$this->translate->_("tbd"):$this->translate->_("finished");
+								}else{
+									$sessionstatus = $this->translate->_("cancelled");
+								}
 								$sessionduration = $newrow["a_actualEndTime"]==null?ceil(($d3-$d2)/60):ceil(($d1-$d2)/60);
 								
 								?>

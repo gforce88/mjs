@@ -146,6 +146,11 @@ class LinetrlController extends Zend_Controller_Action {
 	}
 	protected function sendNotification($callinx = null) {
 		$this->logger->logInfo ( "LinetrlController", "sendNotification", "send email to 3 part, cause  instructor" );
+
+		//更新session状态为cancel
+		$sessionModel = new Application_Model_Session ();
+		$sessionModel->changeSessionToCancel($callinx);
+
 		$callModel = new Application_Model_Call ();
 		$call = $callModel->find ( $callinx )->current ();
 		

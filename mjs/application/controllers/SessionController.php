@@ -267,6 +267,7 @@ class SessionController extends Zend_Controller_Action {
 							$this->logger->logInfo ( "SessionController", "editAction", " session edit with in 10 mins call instructor" );
 						}
 						$this->view->resultmessage = $this->view->translate->_ ( "sesupdate" );
+						$this->_redirect ( "/session/index" );
 					} else {
 						if (! $this->checkSessionStatus ( $params )) {
 							$this->view->resultmessage = $this->view->translate->_ ( "sessioncannotupdate" );

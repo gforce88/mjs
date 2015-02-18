@@ -302,7 +302,7 @@ class LinestuController extends Zend_Controller_Action {
 	}
 	private function sendEmailWhenCallEndToMnt($sessioninx = null) {
 		$this->logger->logInfo ( "LinestuController", "sendEmailWhenCallEndToMnt", "sendEmailWhenCallEndToMnt" );
-		$subject = "完成学期のお知らせ";
+		$subject = "メンタリング完了のお知らせ";
 		
 		$sessionModel = new Application_Model_Session ();
 		$tempsession = $sessionModel->find ( $sessioninx )->current ();
@@ -319,10 +319,10 @@ class LinestuController extends Zend_Controller_Action {
 			$d2 = strtotime ( $session->scheduleStartTime );
 			$d3 = strtotime ( $session->actualEndTime );
 			$duration = ceil ( ($d3 - $d2) / 60 );
-			$mailcontent = $mailcontent . "学生の名:" . $student->firstName . " " . $student->lastName . "---- 学期時期:" . $duration . " 分<br/>";
+			$mailcontent = $mailcontent . "生徒名:" . $student->firstName . " " . $student->lastName . "---- ご利用時間:" . $duration . " 分<br/>";
 			$totalduration += $duration;
 		}
-		$mailcontent = $mailcontent . "<br/><br/> 全部で 学期時期 :" . $totalduration . " 分";
+		$mailcontent = $mailcontent . "<br/><br/> 当月ご利用時間  :" . $totalduration . " 分<br/> 以上です。";
 		
 		$body = file_get_contents ( APPLICATION_PATH . '/configs/mail_session_finish_mnt.html' );
 		$body = preg_replace ( '/{content}/', $mailcontent, $body ); // Strip
@@ -380,10 +380,10 @@ class LinestuController extends Zend_Controller_Action {
 			$d2 = strtotime ( $session->scheduleStartTime );
 			$d3 = strtotime ( $session->actualEndTime );
 			$duration = ceil ( ($d3 - $d2) / 60 );
-			$mailcontent = $mailcontent . "学生の名 :" . $student->firstName . " " . $student->lastName . "---- 学期時期:" . $duration . " 分<br/>";
+			$mailcontent = $mailcontent . "生徒名:" . $student->firstName . " " . $student->lastName . "---- ご利用時間:" . $duration . " 分<br/>";
 			$totalduration += $duration;
 		}
-		$mailcontent = $mailcontent . "<br/><br/> 全部で 学期時期 :" . $totalduration . " 分";
+		$mailcontent = $mailcontent . "<br/><br/> 当月ご利用時間   :" . $totalduration . " 分<br/> 以上です。";
 		
 		$body = file_get_contents ( APPLICATION_PATH . '/configs/mail_session_finish_mnt.html' );
 		$body = preg_replace ( '/{content}/', $mailcontent, $body ); // Strip

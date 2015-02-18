@@ -65,21 +65,26 @@ class SessionController extends Zend_Controller_Action {
 					// $mailcontent = "session start date is: " .
 					// $session->scheduleStartTime . " session end date is :" .
 					// $session->scheduleEndTime;
-					$mailcontent = "お疲れ様です,<p/>
+					$mailcontent = "MJSメンタリングサービスです。<p/>
 					
-					新たな補習授業との手配が以下の通り<p/>
+					お世話になっております。<p/>
+
+					メンタリングサービスに予約が登録されたので、お知らせいたします。<p/>
+					予約時間になりましたらサービスより電話がありますので、<p/>
+					ご準備をよろしくお願いいたします。<p/>
 					
-					学生 " . $student->firstName . " " . $student->lastName . " <p/>
 					
-					指導先生 " . $instructor->firstName . " " . $instructor->lastName . " <p/>
+					生徒名： " . $student->firstName . " " . $student->lastName . " <p/>
 					
-					通訳 " . $translator->firstName . " " . $translator->lastName . " <p/>
+					メンター名： " . $instructor->firstName . " " . $instructor->lastName . " <p/>
 					
-					補習授業の手配が:" . $session->scheduleStartTime . "<p/>
+					通訳名： " . $translator->firstName . " " . $translator->lastName . " <p/>
 					
-					ありがとうございます。";
+					予約日時：" . $session->scheduleStartTime . "<p/>
 					
-					$this->sendEmail ( $studentEmail, $instructorEmail, $translatorEmail, $mailcontent, "新たな補習授業との手配が以下の通り" );
+					以上です。";
+					
+					$this->sendEmail ( $studentEmail, $instructorEmail, $translatorEmail, $mailcontent, "メンタリングサービス予約登録完了のお知らせ" );
 					
 					// 如果session创建时间在10分钟之内 立刻开始拨号
 					if ($inputTime < strtotime ( " +10 mins" )) {
@@ -337,13 +342,15 @@ class SessionController extends Zend_Controller_Action {
 				$translatorEmail = $translatorModel->find ( $translatorinx )->current ()->email;
 			}
 			
-			$mailcontent = "お疲れ様です,<p/>
+			$mailcontent = "MJSメンタリングサービスです。<p/>お世話になっております。<p/>
+
+				ご予約いただいていた、下記予約のキャンセルが完了したことをお知らせいたします。
 		
-				以前手配した" . $session->scheduleStartTime . " 補習授業を取消しました<p/>
+				予約日時：" . $session->scheduleStartTime . " <p/>
 		
-				ありがとうございます。";
+				以上です。";
 			
-			$this->sendEmail ( $studentEmail, $instructorEmail, $translatorEmail, $mailcontent, "補習授業時間を取消しました" );
+			$this->sendEmail ( $studentEmail, $instructorEmail, $translatorEmail, $mailcontent, "メンタリング予約キャンセルのお知らせ" );
 			
 			$sessionmodel->deleteSession ( $sessioninx );
 			// $this->redirect ( "/session" );
@@ -413,9 +420,14 @@ class SessionController extends Zend_Controller_Action {
 	private function checkStudentRemainMin($params = array()) {
 		$studentModel = new Application_Model_Student ();
 		$row = $studentModel->find ( $params ["studentId"] )->current ();
+		$startdate = $row->membershipStartDate;
+		$dur = $row->membershipDur;
+		$a = strtotime ( " -".$dur." months" );
+		$b = strtotime($startdate);
+		
 		$remainMin = $row->minsRemaining;
 		$this->logger->logInfo ( "SessionController", "checkStudentRemainMin", "remainMIn: " . $remainMin . " dur:" . $params ['dur'] );
-		return $remainMin > $params ["dur"];
+		return ($remainMin > $params ["dur"]) && ($a < $b);
 	}
 	
 	// 判断已经结束的session 和小于当前时间的session都不能改

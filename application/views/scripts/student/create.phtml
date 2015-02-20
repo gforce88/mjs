@@ -78,6 +78,9 @@
 								confirmphone:{
 									required:true,
 									jpphone:true
+								},
+								totalMonthlyMins:{
+									number:true
 								}
 							}
 							});
@@ -177,7 +180,7 @@
 										<label class="strong"><?php print $this->translate->_("stucol3");?></label>
 										<input name="lastName" type="text" required class="input-block-level form-control" placeholder="Student Last Name"/>
 										<label class="strong"><?php print $this->translate->_("stucol8");?></label>
-										<input required name="totalMonthlyMins" type="text" class="input-block-level form-control" value="<?php echo $this->tmm->d_value;?>" placeholder="<?php echo $this->tmm->d_value;?> Minutes"/>
+										<input required id="totalMonthlyMins"  name="totalMonthlyMins" type="text" class="input-block-level form-control" value="<?php echo $this->tmm->d_value;?>" placeholder="<?php echo $this->tmm->d_value;?> Minutes"/>
 										<label class="strong"><?php print $this->translate->_("stucol6");?></label>
 										<div class="input-group date" id="datepicker1">
 											<input required name="startdate" class="input-block-level form-control" type="text" placeholder="Select Start Date" />

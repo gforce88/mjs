@@ -198,25 +198,24 @@ class SessionController extends Zend_Controller_Action {
 						// $session->scheduleStartTime . " session end date is
 						// :" .
 						// $session->scheduleEndTime;
-						$mailcontent = "お疲れ様です,<p/>
+						$mailcontent = "MJSメンタリングサービスです。<p/>
+						お世話になっております。<p/>
+
+						ご予約いただいていた、下記予約の変更が完了したことをお知らせいたします。<p/>
 				
-					以前手配した" . $oldSessionDate . " 補習授業時間を変更しました <p/>
+					変更前予約日時：" . $oldSessionDate . " <p/>
 				
-					新たな" . $session->scheduleStartTime . " 補習授業時間は<p/>
-			
-					補習授業との参加者は以下の通り<p/>
+					変更後予約日時：" . $session->scheduleStartTime . " <p/>
 				
-					学生 " . $student->firstName . "  " . $student->lastName . " <p/>
+					生徒名： " . $student->firstName . "  " . $student->lastName . " <p/>
 			
-					指導先生 " . $instructor->firstName . " " . $instructor->lastName . " <p/>
+					メンター名： " . $instructor->firstName . " " . $instructor->lastName . " <p/>
 			
-					通訳 " . $translator->firstName . " " . $translator->lastName . " <p/>
-			
-					別途ご連絡させていただきます<p/>
+					通訳名：" . $translator->firstName . " " . $translator->lastName . " <p/>
 				
-					ありがとうございます。";
+					以上です。";
 						
-						$this->sendEmail ( $studentEmail, $instructorEmail, $translatorEmail, $mailcontent, "MJS補習授業時間を変更しました" );
+						$this->sendEmail ( $studentEmail, $instructorEmail, $translatorEmail, $mailcontent, "メンタリング予約時間変更完了" );
 						$this->logger->logInfo ( "SessionController", "editAction", " instructorOldEmail:" . $instructorOldEmail );
 						$this->logger->logInfo ( "SessionController", "editAction", " instructorEmail:" . $instructorEmail );
 						$this->logger->logInfo ( "SessionController", "editAction", " translatorOldEmail:" . $translatorOldEmail );

@@ -30,7 +30,10 @@ class TimerController extends Zend_Controller_Action {
 			$paramArr ["mntid"] = $row ["c_inx"];
 			$paramArr ["trlphone"] = $row ["d_phone"];
 			$paramArr ["trlid"] = $row ["d_inx"];
-			
+			$b_acctStatus = $row["b_acctStatus"];
+			if($b_acctStatus==0){//如果学生状态为suspend,删除session
+				$sessionmodel->deleteSession ( $row ["inx"] );
+			}
 			// 调用打电话应用并创建call记录
 			$callModel = new Application_Model_Call ();
 			$existRow = $callModel->find ( $row ["inx"] )->current ();

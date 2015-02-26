@@ -79,20 +79,22 @@ class LinemntController extends Zend_Controller_Action {
 				"name" => "conference",
 				"id" => "mjsconf" . $row ["inx"],
 				"mute" => false
-// 				,
-// 				"allowSignals" => array (
-// 						"stunoanswer",
-// 						"trlnoanswer" 
-// 				) 
+ 				,
+				"allowSignals" => array (
+						"stunoanswer",
+						"trlnoanswer",
+						"hangup",
+						"continue"
+				) 
 		);
-// 		$tropo->on ( array (
-// 				"event" => "stunoanswer",
-// 				"next" => "/linemnt/stunoanswer"
-// 		) );
-// 		$tropo->on ( array (
-// 				"event" => "trlnoanswer",
-// 				"next" => "/linemnt/trlnoanswer"
-// 		) );
+		$tropo->on ( array (
+				"event" => "stunoanswer",
+				"next" => "/linemnt/stunoanswer"
+ 		) );
+ 		$tropo->on ( array (
+				"event" => "trlnoanswer",
+				"next" => "/linemnt/trlnoanswer"
+ 		) );
 		
 		$tropo->on ( array (
 				"event" => "hangup",

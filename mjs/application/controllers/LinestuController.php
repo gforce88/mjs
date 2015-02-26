@@ -114,19 +114,21 @@ class LinestuController extends Zend_Controller_Action {
 				"name" => "conference",
 				"id" => "mjsconf" . $row ["inx"],
 				"mute" => false
-// 				,
-// 				"allowSignals" => array (
-// 					"trlnoanswer"
-// 				)				
+				,
+				"allowSignals" => array (
+					"trlnoanswer",
+					"hangup",
+					""
+				)				
 		);
 		$tropo->on ( array (
 				"event" => "hangup",
 				"next" => "/linestu/hangup" 
 		) );
-// 		$tropo->on ( array (
-// 				"event" => "trlnoanswer",
-// 				"next" => "/linestu/trlnoanswer" 
-// 		) );
+		$tropo->on ( array (
+				"event" => "trlnoanswer",
+				"next" => "/linestu/trlnoanswer" 
+		) );
 		$tropo->conference ( null, $confOptions );
 		$tropo->renderJSON ();
 		// call translator

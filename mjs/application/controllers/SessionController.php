@@ -1,9 +1,9 @@
 <?php
-require_once 'phpmailer/class.phpmailer.php';
 require_once 'log/LoggerFactory.php';
 require_once 'tropo/tropo.class.php';
 require_once 'util/HttpUtil.php';
 require_once 'service/TropoService.php';
+require_once 'service/EmailService.php';
 class SessionController extends Zend_Controller_Action {
 	private $logger;
 	public function init() {
@@ -83,9 +83,10 @@ class SessionController extends Zend_Controller_Action {
 					予約日時：" . $session->scheduleStartTime . "<p/>
 					
 					以上です。";
-					
-					$this->sendEmail ( $studentEmail, $instructorEmail, $translatorEmail, $mailcontent, "メンタリングサービス予約登録完了のお知らせ" );
-					
+					$emailService = new EmailService();
+					$emailService->sendEmail ( $studentEmail, null, null, $mailcontent, "メンタリングサービス予約登録完了のお知らせ" );
+					$emailService->sendEmail ( null, $instructorEmail, null, $mailcontent,"メンタリングサービス予約登録完了のお知らせ" );
+					$emailService->sendEmail ( null, null, $translatorEmail, $mailcontent, "メンタリングサービス予約登録完了のお知らせ" );
 					// 如果session创建时间在10分钟之内 立刻开始拨号
 					if ($inputTime < strtotime ( " +10 mins" )) {
 						$sessionModel = new Application_Model_Session ();
@@ -215,7 +216,10 @@ class SessionController extends Zend_Controller_Action {
 				
 					以上です。";
 						
-						$this->sendEmail ( $studentEmail, $instructorEmail, $translatorEmail, $mailcontent, "メンタリング予約時間変更完了" );
+						$emailService = new EmailService();
+						$emailService->sendEmail ( $studentEmail, null, null, $mailcontent, "メンタリング予約時間変更完了" );
+						$emailService->sendEmail ( null, $instructorEmail, null, $mailcontent, "メンタリング予約時間変更完了" );
+						$emailService->sendEmail ( null, null, $translatorEmail, $mailcontent, "メンタリング予約時間変更完了" );
 						$this->logger->logInfo ( "SessionController", "editAction", " instructorOldEmail:" . $instructorOldEmail );
 						$this->logger->logInfo ( "SessionController", "editAction", " instructorEmail:" . $instructorEmail );
 						$this->logger->logInfo ( "SessionController", "editAction", " translatorOldEmail:" . $translatorOldEmail );
@@ -229,9 +233,9 @@ class SessionController extends Zend_Controller_Action {
 					
 							ありがとうございます。";
 							
-							$studentEmail=null;
-							$translatorOldEmail=null;
-							$this->sendEmail ( $studentEmail, $instructorOldEmail, $translatorOldEmail, $mailcontent, "補習授業時間を取消しました" );
+							//$studentEmail=null;
+							//$translatorOldEmail=null;
+							$emailService->sendEmail ( null, $instructorOldEmail, null, $mailcontent, "補習授業時間を取消しました" );
 						}
 						if($translatorOldEmail!=null){
 							if($translatorOldEmail != $translatorEmail){
@@ -240,9 +244,9 @@ class SessionController extends Zend_Controller_Action {
 								以前手配した" . $session->scheduleStartTime . " 補習授業を取消しました<p/>
 				
 								ありがとうございます。";
-								$studentEmail=null;
-								$instructorOldEmail=null;
-								$this->sendEmail ( $studentEmail, $instructorOldEmail, $translatorOldEmail, $mailcontent, "補習授業時間を取消しました" );
+								//$studentEmail=null;
+								//$instructorOldEmail=null;
+								$emailService->sendEmail ( null, null, $translatorOldEmail, $mailcontent, "補習授業時間を取消しました" );
 							}
 						}
 						// 如果session创建时间在10分钟之内 立刻开始提示
@@ -348,8 +352,10 @@ class SessionController extends Zend_Controller_Action {
 				予約日時：" . $session->scheduleStartTime . " <p/>
 		
 				以上です。";
-			
-			$this->sendEmail ( $studentEmail, $instructorEmail, $translatorEmail, $mailcontent, "メンタリング予約キャンセルのお知らせ" );
+			$emailService = new EmailService();
+			$emailService->sendEmail ( $studentEmail, null, null, $mailcontent, "メンタリング予約キャンセルのお知らせ" );
+			$emailService->sendEmail ( null, $instructorEmail, null, $mailcontent, "メンタリング予約キャンセルのお知らせ" );
+			$emailService->sendEmail ( null, null, $translatorEmail, $mailcontent, "メンタリング予約キャンセルのお知らせ" );
 			
 			$sessionmodel->deleteSession ( $sessioninx );
 			// $this->redirect ( "/session" );
@@ -358,61 +364,6 @@ class SessionController extends Zend_Controller_Action {
 			);
 		}
 		$this->_helper->json ( $data, true, false, true );
-	}
-	private function sendEmail($studentEmail, $instructorEmail, $translatorEmail, $mailcontent, $subject) {
-		$loginfo = $studentEmail . "-" . $instructorEmail . "-" . $translatorEmail;
-		$this->logger->logInfo ( "SessionController", "sendEmail", $loginfo );
-		try {
-			$filename = APPLICATION_PATH . "/configs/application.ini";
-			$config = new Zend_Config_Ini ( $filename, 'production' );
-			$mail = new PHPMailer ( true ); // New instance, with exceptions
-			                                // enabled
-			$body = file_get_contents ( APPLICATION_PATH . '/configs/mail_session.html' );
-			// $body = preg_replace ( '/\\\\/', '', $body ); // Strip
-			$body = preg_replace ( '/mailcontent/', $mailcontent, $body ); // Strip
-			                                                               // backslashes
-			$mail->IsSMTP (); // tell the class to use SMTP
-			$mail->CharSet = "utf-8";
-			$mail->SMTPAuth = true; // enable SMTP authentication
-			$mail->Port = $config->mail->port; // set the SMTP server port
-			$mail->Host = $config->mail->host; // SMTP server
-			$mail->Username = $config->mail->username; // SMTP server username
-			$mail->Password = $config->mail->password; // SMTP server password
-			
-			$mail->IsSendmail (); // tell the class to use Sendmail
-			
-			$mail->AddReplyTo ( $mail->Username, $mail->Username );
-			$mail->SetFrom ( $mail->Username, $mail->Username );
-			if ($studentEmail != null) {
-				$mail->AddAddress ( $studentEmail );
-			}
-			if ($instructorEmail != null) {
-				$mail->AddAddress ( $instructorEmail );
-			}
-			if ($translatorEmail != null) {
-				$mail->AddAddress ( $translatorEmail );
-			}
-			
-			$mail->Subject = "=?utf-8?B?".base64_encode($subject)."?=";
-
-			$mail->AltBody = "To view the message, please use an HTML compatible email viewer!"; // optional,
-			                                                                                     // comment
-			                                                                                     // out
-			                                                                                     // and
-			                                                                                     // test
-			$mail->WordWrap = 80; // set word wrap
-			
-			$mail->MsgHTML ( $body );
-			
-			$mail->IsHTML ( true ); // send as HTML
-			
-			$mail->Send ();
-			$this->logger->logInfo ( "SessionController", "sendEmail", "mail has been sent" );
-			// echo 'Message has been sent.';
-		} catch ( phpmailerException $e ) {
-			$this->logger->logInfo ( "SessionController", "sendEmail", "error in sending email" );
-			// echo $e->errorMessage ();
-		}
 	}
 	
 	// 判断学生的剩余时间是否足够

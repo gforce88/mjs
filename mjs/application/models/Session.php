@@ -52,6 +52,7 @@ class Application_Model_Session extends Zend_Db_Table_Abstract {
 	public function getWillStartingSession($startDate = null, $endDate = null) {
 		$sql = "select
 		b.inx b_inx,b.firstName b_firstName,b.lastName b_lastName,b.phone b_phone,
+		b.acctStatus b_acctStatus,
 		c.inx c_inx,c.firstName c_firstName,c.lastName c_lastName,c.phone c_phone,
 		d.inx d_inx,d.firstName d_firstName,d.lastName d_lastName,d.phone d_phone,
 		a.inx inx,a.scheduleStartTime a_scheduleStartTime,a.scheduleEndTime a_scheduleEndTime,a.actualEndTime a_actualEndTime

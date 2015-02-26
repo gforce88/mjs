@@ -136,7 +136,10 @@ class LinestuController extends Zend_Controller_Action {
 		$paramArr ["mntid"] = $row ["c_inx"];
 		$paramArr ["trlphone"] = $row ["d_phone"];
 		$paramArr ["trlid"] = $row ["d_inx"];
+		$this->logger->logInfo ( "ttttttttttt", "tttttttttttttt", "trlid:--- " . $paramArr ["trlid"] );
+		
 		if ($paramArr ["trlid"] != null) {
+		$this->logger->logInfo ( "ttttttttttt", "tttttttttttttt", "111111111111" . $paramArr ["trlid"] );
 			$troposervice = new TropoService ();
 			$troposervice->calltrl ( $paramArr );
 			$this->logger->logInfo ( "LinestuController", "welcomeAction", "call translator phone:--- " . $paramArr ["trlphone"] );

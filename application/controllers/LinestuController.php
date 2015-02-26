@@ -46,15 +46,13 @@ class LinestuController extends Zend_Controller_Action {
 					$tropo->on ( array (
 							"event" => "continue",
 							"next" => "/linestu/welcome",
-// 							"say" => "http://165.225.149.30/sound/02_call_translator.mp3" 
-							"say" => "wait translator" 
+							"say" => "http://165.225.149.30/sound/02_call_translator.mp3" 
 					) );
 				} else {
 					$tropo->on ( array (
 							"event" => "continue",
 							"next" => "/linestu/welcome",
-// 							"say" => "http://165.225.149.30/sound/joining_call.mp3" 
-							"say" => "join the call" 
+							"say" => "http://165.225.149.30/sound/joining_call.mp3" 
 					) );
 				}
 			}
@@ -116,15 +114,19 @@ class LinestuController extends Zend_Controller_Action {
 				"name" => "conference",
 				"id" => "mjsconf" . $row ["inx"],
 				"mute" => false
+// 				,
+// 				"allowSignals" => array (
+// 					"trlnoanswer"
+// 				)				
 		);
 		$tropo->on ( array (
 				"event" => "hangup",
 				"next" => "/linestu/hangup" 
 		) );
-		$tropo->on ( array (
-				"event" => "trlnoanswer",
-				"next" => "/linestu/trlnoanswer" 
-		) );
+// 		$tropo->on ( array (
+// 				"event" => "trlnoanswer",
+// 				"next" => "/linestu/trlnoanswer" 
+// 		) );
 		$tropo->conference ( null, $confOptions );
 		$tropo->renderJSON ();
 		// call translator

@@ -46,7 +46,7 @@ class Application_Model_Session extends Zend_Db_Table_Abstract {
 		and a.actualEndTime < '" . $endDate . "' 
 		order by b.inx";
 		$logger = LoggerFactory::getSysLogger ();
-		$logger->logInfo ( "Application_Model_Session", "getReportSessionList", "sql is : " . $sql );
+		//$logger->logInfo ( "Application_Model_Session", "getReportSessionList", "sql is : " . $sql );
 		return $this->getAdapter ()->query ( $sql, array () );
 	}
 	public function getWillStartingSession($startDate = null, $endDate = null) {
@@ -64,7 +64,7 @@ class Application_Model_Session extends Zend_Db_Table_Abstract {
 		and a.scheduleStartTime between '" . $startDate . "' and '" . $endDate . "'
 		order by b.inx";
 		$logger = LoggerFactory::getSysLogger ();
-		$logger->logInfo ( "Application_Model_Session", "getWillStartingSession", "sql is : " . $sql );
+		//$logger->logInfo ( "Application_Model_Session", "getWillStartingSession", "sql is : " . $sql );
 		return $this->getAdapter ()->query ( $sql, array () );
 	}
 	public function deleteSession($inx = null) {

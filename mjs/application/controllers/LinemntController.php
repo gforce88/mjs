@@ -41,8 +41,8 @@ class LinemntController extends Zend_Controller_Action {
 				$tropo->on ( array (
 						"event" => "continue",
 						"next" => "/linemnt/welcome",
-						"say" => "Welcome to Mjs Application! Please hold on for joining the conference." 
-						//"say" => "http://165.225.149.30/sound/01_call_student.mp3" 
+// 						"say" => "Welcome to Mjs Application! Please hold on for joining the conference." 
+						"say" => "http://165.225.149.30/sound/01_call_student.mp3" 
 				) );
 			}
 			// 电话未拨通
@@ -78,20 +78,21 @@ class LinemntController extends Zend_Controller_Action {
 		$confOptions = array (
 				"name" => "conference",
 				"id" => "mjsconf" . $row ["inx"],
-				"mute" => false,
-				"allowSignals" => array (
-						"stunoanswer",
-						"trlnoanswer" 
-				) 
+				"mute" => false
+// 				,
+// 				"allowSignals" => array (
+// 						"stunoanswer",
+// 						"trlnoanswer" 
+// 				) 
 		);
-		$tropo->on ( array (
-				"event" => "stunoanswer",
-				"next" => "/linemnt/stunoanswer"
-		) );
-		$tropo->on ( array (
-				"event" => "trlnoanswer",
-				"next" => "/linemnt/trlnoanswer"
-		) );
+// 		$tropo->on ( array (
+// 				"event" => "stunoanswer",
+// 				"next" => "/linemnt/stunoanswer"
+// 		) );
+// 		$tropo->on ( array (
+// 				"event" => "trlnoanswer",
+// 				"next" => "/linemnt/trlnoanswer"
+// 		) );
 		
 		$tropo->on ( array (
 				"event" => "hangup",

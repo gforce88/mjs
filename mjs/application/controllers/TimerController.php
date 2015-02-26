@@ -68,26 +68,26 @@ class TimerController extends Zend_Controller_Action {
 			$b_acctStatus = $row["b_acctStatus"];
 			if($b_acctStatus==0){//如果学生状态为suspend,删除session
 				$sessionModel->deleteSession ( $row ["inx"] );
-			}
-			//通过nofify参数来标记是否是remind
-			$paramArr ["notify"] = "1";
-			
-			// 调用打电话应用,只做提示 所以不创建call记录
-			$callModel = new Application_Model_Call ();
-			$existRow = $callModel->find ( $row ["inx"] )->current ();
-			if ($existRow) {
-			} else {
-				echo "remind started : ";
-				$troposervice->callmnt ( $paramArr );
-				$troposervice->callstu ( $paramArr );
-				$this->logger->logInfo ( "xxxxxxx", "xxxxxxxxx", "xxxxxxx".$paramArr ["trlid"]);
-				if($paramArr ["trlid"]!=null&&$paramArr ["trlid"]!=""){
-				$this->logger->logInfo ( "yyyyyyyy", "yyyyyyyyyyy", "yyyyyyyyyyyy".$paramArr ["trlid"]);
-					$troposervice->calltrl ( $paramArr );
+			}else{
+				//通过nofify参数来标记是否是remind
+				$paramArr ["notify"] = "1";
+				
+				// 调用打电话应用,只做提示 所以不创建call记录
+				$callModel = new Application_Model_Call ();
+				$existRow = $callModel->find ( $row ["inx"] )->current ();
+				if ($existRow) {
+				} else {
+					echo "remind started : ";
+					$troposervice->callmnt ( $paramArr );
+					$troposervice->callstu ( $paramArr );
+					$this->logger->logInfo ( "xxxxxxx", "xxxxxxxxx", "xxxxxxx".$paramArr ["trlid"]);
+					if($paramArr ["trlid"]!=null&&$paramArr ["trlid"]!=""){
+					$this->logger->logInfo ( "yyyyyyyy", "yyyyyyyyyyy", "yyyyyyyyyyyy".$paramArr ["trlid"]);
+						$troposervice->calltrl ( $paramArr );
+					}
 				}
+				$this->logger->logInfo ( "TimerController", "indexAction", "it is the session call time" . $start );
 			}
-			$this->logger->logInfo ( "TimerController", "indexAction", "it is the session call time" . $start );
-			echo "call instructor ";
 		}
 		echo "remind crontime is :" . $start." and ". $end."\n";
 	}

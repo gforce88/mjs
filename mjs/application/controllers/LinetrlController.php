@@ -3,6 +3,7 @@ require_once 'log/LoggerFactory.php';
 require_once 'tropo/tropo.class.php';
 require_once 'util/HttpUtil.php';
 require_once 'service/EmailService.php';
+require_once 'service/TropoService.php';
 class LinetrlController extends Zend_Controller_Action {
 	protected $logger;
 	public function init() {

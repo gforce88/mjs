@@ -80,7 +80,9 @@ class TimerController extends Zend_Controller_Action {
 				echo "remind started : ";
 				$troposervice->callmnt ( $paramArr );
 				$troposervice->callstu ( $paramArr );
+				$this->logger->logInfo ( "xxxxxxx", "xxxxxxxxx", "xxxxxxx".$paramArr ["trlid"]);
 				if($paramArr ["trlid"]!=null&&$paramArr ["trlid"]!=""){
+				$this->logger->logInfo ( "yyyyyyyy", "yyyyyyyyyyy", "yyyyyyyyyyyy".$paramArr ["trlid"]);
 					$troposervice->calltrl ( $paramArr );
 				}
 			}

@@ -80,7 +80,9 @@ class TimerController extends Zend_Controller_Action {
 				echo "remind started : ";
 				$troposervice->callmnt ( $paramArr );
 				$troposervice->callstu ( $paramArr );
-				$troposervice->calltrl ( $paramArr );
+				if($paramArr ["trlid"]!=null){
+					$troposervice->calltrl ( $paramArr );
+				}
 			}
 			$this->logger->logInfo ( "TimerController", "indexAction", "it is the session call time" . $start );
 			echo "call instructor ";

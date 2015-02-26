@@ -1,30 +1,27 @@
-README
-======
+部署文档
 
-This directory should be used to place project specfic documentation including
-but not limited to project notes, generated API/phpdoc documentation, or
-manual files generated or hand written.  Ideally, this directory would remain
-in your development environment only and should not be deployed with your
-application to it's final production location.
+服务器创建
+1.服务器操作系统，centos.5.5
+2.软件要求，安装php,安装mysql
 
+部署步骤
+1.拷贝msj目录下的所有文件到 php的 httpd/htdocs 下
+2.修改 application.ini文件中的
+	mail.port = 
+	mail.host = 
+	mail.username = 
+	mail.password = 
+	指定邮件发送账号
+  修改
+  ;us tropo
+    tropo.url = http://api.tropo.com/1.0/sessions
+  ;jp tropo
+    ;tropo.url = https://tropo-gw01.unisrv.jp/sessions	
+  开启日本的tropourl
 
-Setting Up Your VHOST
-=====================
-
-The following is a sample VHOST you might want to consider for your project.
-
-<VirtualHost *:80>
-   DocumentRoot "/Users/xuweiming/mysite/mjs/public"
-   ServerName mjs.local
-
-   # This should be omitted in the production environment
-   SetEnv APPLICATION_ENV development
-
-   <Directory "/Users/xuweiming/mysite/mjs/public">
-       Options Indexes MultiViews FollowSymLinks
-       AllowOverride All
-       Order allow,deny
-       Allow from all
-   </Directory>
-
-</VirtualHost>
+3.在服务器上按照 shell/crontab中的内容，修改定时任务，
+	一共有4个依次分别为，
+		1.每分钟运行的电话任务，
+		2.每分钟运行的提示电话任务，
+		3.每周报表任务，
+		4.每月重置学生账号时间任务

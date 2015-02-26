@@ -113,10 +113,7 @@ class LinestuController extends Zend_Controller_Action {
 		$confOptions = array (
 				"name" => "conference",
 				"id" => "mjsconf" . $row ["inx"],
-				"mute" => false,
-				"allowSignals" => array (
-						"trlnoanswer" 
-				) 
+				"mute" => false
 		);
 		$tropo->on ( array (
 				"event" => "hangup",

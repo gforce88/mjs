@@ -3,7 +3,7 @@ require_once 'log/LoggerFactory.php';
 require_once 'tropo/tropo.class.php';
 require_once 'util/HttpUtil.php';
 require_once 'service/TropoService.php';
-require_once 'phpmailer/class.phpmailer.php';
+require_once 'service/EmailService.php';
 class LinestuController extends Zend_Controller_Action {
 	protected $logger;
 	public function init() {
@@ -24,12 +24,12 @@ class LinestuController extends Zend_Controller_Action {
 		
 		if ($callModel->checkStuCallTimes ( $params ) > 3) {
 			$this->logger->logInfo ( "LinestuController", "indexAction", "student didn't answer the call for 3times" );
-			//邮件通知
+			// 邮件通知
 			$this->sendNotification ( $params ["sessionid"] );
-			//发消息给instructor的会议，告诉学生没有参加。
+			// 发消息给instructor的会议，告诉学生没有参加。
 			$troposervice = new TropoService ();
-			$call = $callModel->find($params ["sessionid"])->current();
-			$troposervice->stunoanswerRemind($call->party1SessionId);
+			$call = $callModel->find ( $params ["sessionid"] )->current ();
+			$troposervice->stunoanswerRemind ( $call->party1SessionId );
 		} else {
 			$this->logger->logInfo ( "LinestuController", "indexAction", "call student:" . $params ["stuphone"] );
 			$tropo = new Tropo ();
@@ -41,18 +41,18 @@ class LinestuController extends Zend_Controller_Action {
 						"next" => "/linestu/notify" 
 				) );
 			} else {
-				//此处判断是否有翻译，根据是否有翻译发出不同的提示
+				// 此处判断是否有翻译，根据是否有翻译发出不同的提示
 				if ($params ["trlid"] != null) {
 					$tropo->on ( array (
 							"event" => "continue",
 							"next" => "/linestu/welcome",
-							"say" => "http://165.225.149.30/sound/02_call_translator.mp3"
+							"say" => "http://165.225.149.30/sound/02_call_translator.mp3" 
 					) );
-				}else{
+				} else {
 					$tropo->on ( array (
 							"event" => "continue",
 							"next" => "/linestu/welcome",
-							"say" => "http://165.225.149.30/sound/joining_call.mp3"
+							"say" => "http://165.225.149.30/sound/joining_call.mp3" 
 					) );
 				}
 			}
@@ -74,8 +74,8 @@ class LinestuController extends Zend_Controller_Action {
 		$tropoJson = file_get_contents ( "php://input" );
 		$this->logger->logInfo ( "LinestuController", "nofityAction", "notify message: " . $tropoJson );
 		$tropo = new Tropo ();
-		$tropo->say("http://165.225.149.30/sound/remind_call.mp3");
-		$tropo->hangup();
+		$tropo->say ( "http://165.225.149.30/sound/remind_call.mp3" );
+		$tropo->hangup ();
 		$tropo->renderJSON ();
 	}
 	public function hangupAction() {
@@ -87,7 +87,7 @@ class LinestuController extends Zend_Controller_Action {
 		// 更新session实际结束时间
 		$sessionModel = new Application_Model_Session ();
 		$sessionModel->finishSession ( $call ["inx"] );
-		$session=$sessionModel->find ( $call ["inx"] )->current ();
+		$session = $sessionModel->find ( $call ["inx"] )->current ();
 		// 更新学生记录的时间
 		$uesdmins = ceil ( (strtotime ( $session ["actualEndTime"] ) - strtotime ( $session ["scheduleStartTime"] )) / 60 );
 		$studentModel = new Application_Model_Student ();
@@ -115,7 +115,7 @@ class LinestuController extends Zend_Controller_Action {
 				"id" => "mjsconf" . $row ["inx"],
 				"mute" => false,
 				"allowSignals" => array (
-						"trlnoanswer"
+						"trlnoanswer" 
 				) 
 		);
 		$tropo->on ( array (
@@ -124,7 +124,7 @@ class LinestuController extends Zend_Controller_Action {
 		) );
 		$tropo->on ( array (
 				"event" => "trlnoanswer",
-				"next" => "/linestu/trlnoanswer"
+				"next" => "/linestu/trlnoanswer" 
 		) );
 		$tropo->conference ( null, $confOptions );
 		$tropo->renderJSON ();
@@ -147,17 +147,14 @@ class LinestuController extends Zend_Controller_Action {
 			$callModel->groupStart ( $row ["inx"] );
 		}
 	}
-	
 	public function trlnoanswerAction() {
 		$tropoJson = file_get_contents ( "php://input" );
 		$this->logger->logInfo ( "LinestuController", "trlnoanswerAction", "translator not answer: " . $tropoJson );
 		$tropo = new Tropo ();
-		$tropo->say("http://165.225.149.30/sound/03_no_answer_translator.mp3");
-		//$tropo->say("translator not answer, the conference is end");
+		$tropo->say ( "http://165.225.149.30/sound/03_no_answer_translator.mp3" );
+		// $tropo->say("translator not answer, the conference is end");
 		$tropo->renderJSON ();
-	
 	}
-	
 	public function incompleteAction() {
 		$tropoJson = file_get_contents ( "php://input" );
 		
@@ -203,9 +200,9 @@ class LinestuController extends Zend_Controller_Action {
 	}
 	protected function sendNotification($callinx = null) {
 		$this->logger->logInfo ( "LinestuController", "sendNotification", "send email to 3 part, cause  instructor" );
-		//更新session状态为cancel
+		// 更新session状态为cancel
 		$sessionModel = new Application_Model_Session ();
-		$sessionModel->changeSessionToCancel($callinx);
+		$sessionModel->changeSessionToCancel ( $callinx );
 		
 		$callModel = new Application_Model_Call ();
 		$call = $callModel->find ( $callinx )->current ();
@@ -222,40 +219,10 @@ class LinestuController extends Zend_Controller_Action {
 			$translatorEmail = $translatorModel->find ( $call ["party3Inx"] )->current ()->email;
 		}
 		$mailcontent = "学生が三回でも電話に出なかったため、補習授業をキャンセルした。";
-		$this->sendEmail ( $studentEmail, $instructorEmail, $translatorEmail, $mailcontent, "学生が三回でも電話に出なかったため、補習授業をキャンセルした。" );
-	}
-	private function sendEmail($studentEmail, $instructorEmail, $translatorEmail, $mailcontent, $subject) {
-		$loginfo = $studentEmail . "-" . $instructorEmail . "-" . $translatorEmail;
-		$this->logger->logInfo ( "LinestuController", "sendEmail", $loginfo );
-		try {
-			$filename = APPLICATION_PATH . "/configs/application.ini";
-			$config = new Zend_Config_Ini ( $filename, 'production' );
-			$mail = new PHPMailer ( true ); // New instance, with exceptions
-			$body = file_get_contents ( APPLICATION_PATH . '/configs/mail_groupfail.html' );
-			$body = preg_replace ( '/mailcontent/', $mailcontent, $body ); // Strip
-			$mail->IsSMTP (); // tell the class to use SMTP
-			$mail->CharSet = "utf-8";
-			$mail->SMTPAuth = true; // enable SMTP authentication
-			$mail->Port = $config->mail->port; // set the SMTP server port
-			$mail->Host = $config->mail->host; // SMTP server
-			$mail->Username = $config->mail->username; // SMTP server username
-			$mail->Password = $config->mail->password; // SMTP server password
-			$mail->IsSendmail (); // tell the class to use Sendmail
-			$mail->AddReplyTo ( $mail->Username, $mail->Username );
-			$mail->SetFrom ( $mail->Username, $mail->Username );
-			$mail->AddAddress ( $studentEmail );
-			$mail->AddAddress ( $instructorEmail );
-			if ($translatorEmail != null) {
-				$mail->AddAddress ( $translatorEmail );
-			}
-			$mail->Subject = "=?utf-8?B?".base64_encode($subject)."?=";
-			$mail->AltBody = "To view the message, please use an HTML compatible email viewer!"; // optional,
-			$mail->WordWrap = 80; // set word wrap
-			$mail->MsgHTML ( $body );
-			$mail->IsHTML ( true ); // send as HTML
-			$mail->Send ();
-		} catch ( phpmailerException $e ) {
-		}
+		$emailService = new EmailService ();
+		$emailService->sendEmail ( $studentEmail, null, null, $mailcontent, "学生が三回でも電話に出なかったため、補習授業をキャンセルした。" );
+		$emailService->sendEmail ( null, $instructorEmail, null, $mailcontent, "学生が三回でも電話に出なかったため、補習授業をキャンセルした。" );
+		$emailService->sendEmail ( null, null, $translatorEmail, $mailcontent, "学生が三回でも電話に出なかったため、補習授業をキャンセルした。" );
 	}
 	private function sendEmailWhenCallEndToStu($sessioninx) {
 		$this->logger->logInfo ( "LinestuController", "sendEmailWhenCallEndToStu", "sendEmailWhenCallEndToStu" );
@@ -290,7 +257,7 @@ class LinestuController extends Zend_Controller_Action {
 			$mail->AddReplyTo ( $mail->Username, $mail->Username );
 			$mail->SetFrom ( $mail->Username, $mail->Username );
 			$mail->AddAddress ( $student->email );
-			$mail->Subject = "=?utf-8?B?".base64_encode($subject)."?=";
+			$mail->Subject = "=?utf-8?B?" . base64_encode ( $subject ) . "?=";
 			$mail->WordWrap = 80; // set word wrap
 			$mail->MsgHTML ( $body );
 			$mail->IsHTML ( true ); // send as HTML
@@ -345,7 +312,7 @@ class LinestuController extends Zend_Controller_Action {
 			$mail->AddAddress ( $config->admin->first );
 			$mail->AddAddress ( $config->admin->second );
 			$mail->AddAddress ( $config->admin->third );
-			$mail->Subject = "=?utf-8?B?".base64_encode($subject)."?=";
+			$mail->Subject = "=?utf-8?B?" . base64_encode ( $subject ) . "?=";
 			$mail->WordWrap = 80; // set word wrap
 			$mail->MsgHTML ( $body );
 			$mail->IsHTML ( true ); // send as HTML
@@ -406,7 +373,7 @@ class LinestuController extends Zend_Controller_Action {
 			$mail->AddAddress ( $config->admin->first );
 			$mail->AddAddress ( $config->admin->second );
 			$mail->AddAddress ( $config->admin->third );
-			$mail->Subject = "=?utf-8?B?".base64_encode($subject)."?=";
+			$mail->Subject = "=?utf-8?B?" . base64_encode ( $subject ) . "?=";
 			$mail->WordWrap = 80; // set word wrap
 			$mail->MsgHTML ( $body );
 			$mail->IsHTML ( true ); // send as HTML

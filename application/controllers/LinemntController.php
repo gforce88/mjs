@@ -3,7 +3,7 @@ require_once 'log/LoggerFactory.php';
 require_once 'tropo/tropo.class.php';
 require_once 'util/HttpUtil.php';
 require_once 'service/TropoService.php';
-require_once 'phpmailer/class.phpmailer.php';
+require_once 'service/EmailService.php';
 class LinemntController extends Zend_Controller_Action {
 	protected $logger;
 	public function init() {
@@ -208,40 +208,10 @@ class LinemntController extends Zend_Controller_Action {
 			$translatorEmail = $translatorModel->find ( $call ["party3Inx"] )->current ()->email;
 		}
 		$mailcontent = "先生が三回でも電話に出なかったため、補習授業をキャンセルした。";
-		$this->sendEmail ( $studentEmail, $instructorEmail, $translatorEmail, $mailcontent, "先生が三回でも電話に出なかったため、補習授業をキャンセルした。" );
-	}
-	private function sendEmail($studentEmail, $instructorEmail, $translatorEmail, $mailcontent, $subject) {
-		$loginfo = $studentEmail . "-" . $instructorEmail . "-" . $translatorEmail;
-		$this->logger->logInfo ( "LinemntController", "sendEmail", $loginfo );
-		try {
-			$filename = APPLICATION_PATH . "/configs/application.ini";
-			$config = new Zend_Config_Ini ( $filename, 'production' );
-			$mail = new PHPMailer ( true ); // New instance, with exceptions
-			$body = file_get_contents ( APPLICATION_PATH . '/configs/mail_groupfail.html' );
-			$body = preg_replace ( '/mailcontent/', $mailcontent, $body ); // Strip
-			$mail->IsSMTP (); // tell the class to use SMTP
-			$mail->CharSet = "utf-8";
-			$mail->SMTPAuth = true; // enable SMTP authentication
-			$mail->Port = $config->mail->port; // set the SMTP server port
-			$mail->Host = $config->mail->host; // SMTP server
-			$mail->Username = $config->mail->username; // SMTP server username
-			$mail->Password = $config->mail->password; // SMTP server password
-			$mail->IsSendmail (); // tell the class to use Sendmail
-			$mail->AddReplyTo ( $mail->Username, $mail->Username );
-			$mail->SetFrom ( $mail->Username, $mail->Username );
-			$mail->AddAddress ( $studentEmail );
-			$mail->AddAddress ( $instructorEmail );
-			if ($translatorEmail != null) {
-				$mail->AddAddress ( $translatorEmail );
-			}
-			$mail->Subject = "=?utf-8?B?".base64_encode($subject)."?=";
-			$mail->AltBody = "To view the message, please use an HTML compatible email viewer!"; // optional,
-			$mail->WordWrap = 80; // set word wrap
-			$mail->MsgHTML ( $body );
-			$mail->IsHTML ( true ); // send as HTML
-			$mail->Send ();
-		} catch ( phpmailerException $e ) {
-		}
+		$emailService = new EmailService ();
+		$emailService->sendEmail ( $studentEmail, null, null, $mailcontent, "先生が三回でも電話に出なかったため、補習授業をキャンセルした。" );
+		$emailService->sendEmail ( null, $instructorEmail, null, $mailcontent, "先生が三回でも電話に出なかったため、補習授業をキャンセルした。" );
+		$emailService->sendEmail ( null, null, $translatorEmail, $mailcontent, "先生が三回でも電話に出なかったため、補習授業をキャンセルした。" );
 	}
 }
 

@@ -32,7 +32,7 @@ class TimerController extends Zend_Controller_Action {
 			$paramArr ["trlid"] = $row ["d_inx"];
 			$b_acctStatus = $row["b_acctStatus"];
 			if($b_acctStatus==0){//如果学生状态为suspend,删除session
-				$sessionmodel->deleteSession ( $row ["inx"] );
+				$sessionModel->deleteSession ( $row ["inx"] );
 			}
 			// 调用打电话应用并创建call记录
 			$callModel = new Application_Model_Call ();
@@ -65,6 +65,10 @@ class TimerController extends Zend_Controller_Action {
 			$paramArr ["mntid"] = $row ["c_inx"];
 			$paramArr ["trlphone"] = $row ["d_phone"];
 			$paramArr ["trlid"] = $row ["d_inx"];
+			$b_acctStatus = $row["b_acctStatus"];
+			if($b_acctStatus==0){//如果学生状态为suspend,删除session
+				$sessionModel->deleteSession ( $row ["inx"] );
+			}
 			//通过nofify参数来标记是否是remind
 			$paramArr ["notify"] = "1";
 			
@@ -89,7 +93,7 @@ class TimerController extends Zend_Controller_Action {
 		echo $end = strtotime(" +1 months");
 		echo date("Y-m-01 00:00:00",$end);
 		echo "<br />";
-		echo strtotime($time);
+		echo strtotime($end);
 		echo "<br />";
 		
 		

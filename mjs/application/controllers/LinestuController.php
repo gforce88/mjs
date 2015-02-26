@@ -118,7 +118,7 @@ class LinestuController extends Zend_Controller_Action {
 				"allowSignals" => array (
 					"trlnoanswer",
 					"hangup",
-					""
+					"continue"
 				)				
 		);
 		$tropo->on ( array (
@@ -128,6 +128,10 @@ class LinestuController extends Zend_Controller_Action {
 		$tropo->on ( array (
 				"event" => "trlnoanswer",
 				"next" => "/linestu/trlnoanswer" 
+		) );
+		$tropo->on ( array (
+				"event" => "continue",
+				"next" => "/linestu/conference"
 		) );
 		$tropo->conference ( null, $confOptions );
 		$tropo->renderJSON ();
@@ -153,6 +157,12 @@ class LinestuController extends Zend_Controller_Action {
 			$callModel->groupStart ( $row ["inx"] );
 		}
 	}
+	
+	public function conferenceAction() {
+		$tropoJson = file_get_contents ( "php://input" );
+		$this->logger->logInfo ( "LinestuController", "conferenceAction", "conferenceAction message: " . $tropoJson );
+	}
+	
 	public function trlnoanswerAction() {
 		$tropoJson = file_get_contents ( "php://input" );
 		$this->logger->logInfo ( "LinestuController", "trlnoanswerAction", "translator not answer: " . $tropoJson );

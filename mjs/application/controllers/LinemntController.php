@@ -41,8 +41,8 @@ class LinemntController extends Zend_Controller_Action {
 				$tropo->on ( array (
 						"event" => "continue",
 						"next" => "/linemnt/welcome",
-// 						"say" => "Welcome to Mjs Application! Please hold on for joining the conference." 
-						"say" => "http://165.225.149.30/sound/01_call_student.mp3" 
+						"say" => "Welcome to Mjs Application! Please hold on for joining the conference." 
+						//"say" => "http://165.225.149.30/sound/01_call_student.mp3" 
 				) );
 			}
 			// 电话未拨通

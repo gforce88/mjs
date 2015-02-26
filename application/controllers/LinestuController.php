@@ -46,13 +46,15 @@ class LinestuController extends Zend_Controller_Action {
 					$tropo->on ( array (
 							"event" => "continue",
 							"next" => "/linestu/welcome",
-							"say" => "http://165.225.149.30/sound/02_call_translator.mp3" 
+// 							"say" => "http://165.225.149.30/sound/02_call_translator.mp3" 
+							"say" => "wait translator" 
 					) );
 				} else {
 					$tropo->on ( array (
 							"event" => "continue",
 							"next" => "/linestu/welcome",
-							"say" => "http://165.225.149.30/sound/joining_call.mp3" 
+// 							"say" => "http://165.225.149.30/sound/joining_call.mp3" 
+							"say" => "join the call" 
 					) );
 				}
 			}

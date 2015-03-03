@@ -334,9 +334,6 @@ class LinestuController extends Zend_Controller_Action {
 			$mail->AddReplyTo ( $mail->Username, $mail->Username );
 			$mail->SetFrom ( $mail->Username, $mail->Username );
 			$mail->AddAddress ( $instructorEmail );
-			$mail->AddAddress ( $config->admin->first );
-			$mail->AddAddress ( $config->admin->second );
-			$mail->AddAddress ( $config->admin->third );
 			$mail->Subject = "=?utf-8?B?" . base64_encode ( $subject ) . "?=";
 			$mail->WordWrap = 80; // set word wrap
 			$mail->MsgHTML ( $body );
@@ -395,9 +392,6 @@ class LinestuController extends Zend_Controller_Action {
 			$mail->AddReplyTo ( $mail->Username, $mail->Username );
 			$mail->SetFrom ( $mail->Username, $mail->Username );
 			$mail->AddAddress ( $translatorEmail );
-			$mail->AddAddress ( $config->admin->first );
-			$mail->AddAddress ( $config->admin->second );
-			$mail->AddAddress ( $config->admin->third );
 			$mail->Subject = "=?utf-8?B?" . base64_encode ( $subject ) . "?=";
 			$mail->WordWrap = 80; // set word wrap
 			$mail->MsgHTML ( $body );

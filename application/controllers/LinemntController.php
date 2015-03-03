@@ -220,7 +220,7 @@ class LinemntController extends Zend_Controller_Action {
 				必要であれば再度の予約申込みをお願いいたします。<p/>
 				
 				予約日時：<<".$sessionStartTime.">><p/>
-				不参加者： <<".$instructorName.">><p/><p/>
+				不参加者： <<メンタ>><p/><p/>
 				
 				以上です。";
 		$emailService = new EmailService ();

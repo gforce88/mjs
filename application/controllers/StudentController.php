@@ -9,6 +9,7 @@ class StudentController extends Zend_Controller_Action {
 		$config = new Zend_Config_Ini($filename,'production');
 		$translate->setlocale ( $config->mjs->locale );
 		$this->view->translate = $translate;
+		$this->app = Zend_Registry::get ( "APP_SETTING" );
 		$this->logger = LoggerFactory::getSysLogger();
 	}
 	public function indexAction() {

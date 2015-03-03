@@ -10,6 +10,7 @@ class LinestuController extends Zend_Controller_Action {
 		$this->logger = LoggerFactory::getTropoLogger ();
 		$this->httpUtil = new HttpUtil ();
 		$this->setting = Zend_Registry::get ( "TROPO_SETTING" );
+		$this->app = Zend_Registry::get ( "APP_SETTING" );
 		$this->_helper->viewRenderer->setNeverRender ();
 	}
 	public function indexAction() {
@@ -38,33 +39,33 @@ class LinestuController extends Zend_Controller_Action {
 			if ($params ["notify"] == "1") { // 判断是否是提示电话
 				$tropo->on ( array (
 						"event" => "continue",
-						"next" => "/linestu/notify" 
+						"next" =>$this->app["ctx"].  "/linestu/notify" 
 				) );
 			} else {
 				// 此处判断是否有翻译，根据是否有翻译发出不同的提示
 				if ($params ["trlid"] != null) {
 					$tropo->on ( array (
 							"event" => "continue",
-							"next" => "/linestu/welcome",
-							"say" => "http://165.225.149.30/sound/02_call_translator.mp3" 
+							"next" =>$this->app["ctx"].  "/linestu/welcome",
+							"say" => $this->app["hostip"].$this->app["ctx"]."/sound/02_call_translator.mp3" 
 					) );
 				} else {
 					$tropo->on ( array (
 							"event" => "continue",
-							"next" => "/linestu/welcome",
-							"say" => "http://165.225.149.30/sound/joining_call.mp3" 
+							"next" =>$this->app["ctx"].  "/linestu/welcome",
+							"say" => $this->app["hostip"].$this->app["ctx"]."/sound/joining_call.mp3" 
 					) );
 				}
 			}
 			// 电话未拨通
 			$tropo->on ( array (
 					"event" => "incomplete",
-					"next" => "/linestu/incomplete" 
+					"next" =>$this->app["ctx"].  "/linestu/incomplete" 
 			) );
 			// tropo应用发生错误
 			$tropo->on ( array (
 					"event" => "error",
-					"next" => "/linestu/error" 
+					"next" =>$this->app["ctx"].  "/linestu/error" 
 			) );
 			
 			$tropo->renderJSON ();
@@ -74,7 +75,7 @@ class LinestuController extends Zend_Controller_Action {
 		$tropoJson = file_get_contents ( "php://input" );
 		$this->logger->logInfo ( "LinestuController", "nofityAction", "notify message: " . $tropoJson );
 		$tropo = new Tropo ();
-		$tropo->say ( "http://165.225.149.30/sound/remind_call.mp3" );
+		$tropo->say ( $this->app["hostip"].$this->app["ctx"]."/sound/remind_call.mp3" );
 		$tropo->hangup ();
 		$tropo->renderJSON ();
 	}
@@ -123,15 +124,15 @@ class LinestuController extends Zend_Controller_Action {
 		);
 		$tropo->on ( array (
 				"event" => "hangup",
-				"next" => "/linestu/hangup" 
+				"next" =>$this->app["ctx"].  "/linestu/hangup" 
 		) );
 		$tropo->on ( array (
 				"event" => "trlnoanswer",
-				"next" => "/linestu/trlnoanswer" 
+				"next" =>$this->app["ctx"].  "/linestu/trlnoanswer" 
 		) );
 		$tropo->on ( array (
 				"event" => "continue",
-				"next" => "/linestu/conference"
+				"next" =>$this->app["ctx"].  "/linestu/conference"
 		) );
 		$tropo->conference ( null, $confOptions );
 		$tropo->renderJSON ();
@@ -146,10 +147,7 @@ class LinestuController extends Zend_Controller_Action {
 		$paramArr ["mntid"] = $row ["c_inx"];
 		$paramArr ["trlphone"] = $row ["d_phone"];
 		$paramArr ["trlid"] = $row ["d_inx"];
-		$this->logger->logInfo ( "ttttttttttt", "tttttttttttttt", "trlid:--- " . $paramArr ["trlid"] );
-		
 		if ($paramArr ["trlid"] != null) {
-		$this->logger->logInfo ( "ttttttttttt", "tttttttttttttt", "111111111111" . $paramArr ["trlid"] );
 			$troposervice = new TropoService ();
 			$troposervice->calltrl ( $paramArr );
 			$this->logger->logInfo ( "LinestuController", "welcomeAction", "call translator phone:--- " . $paramArr ["trlphone"] );
@@ -167,7 +165,7 @@ class LinestuController extends Zend_Controller_Action {
 		$tropoJson = file_get_contents ( "php://input" );
 		$this->logger->logInfo ( "LinestuController", "trlnoanswerAction", "translator not answer: " . $tropoJson );
 		$tropo = new Tropo ();
-		$tropo->say ( "http://165.225.149.30/sound/03_no_answer_translator.mp3" );
+		$tropo->say ( $this->app["hostip"].$this->app["ctx"]."/sound/04_no_answer_translator.mp3" );
 		// $tropo->say("translator not answer, the conference is end");
 		$tropo->renderJSON ();
 	}
@@ -219,7 +217,7 @@ class LinestuController extends Zend_Controller_Action {
 		// 更新session状态为cancel
 		$sessionModel = new Application_Model_Session ();
 		$sessionModel->changeSessionToCancel ( $callinx );
-		
+		$sessionStartTime = $sessionModel->find($callinx)->current()->scheduleStartTime;
 		$callModel = new Application_Model_Call ();
 		$call = $callModel->find ( $callinx )->current ();
 		
@@ -227,18 +225,29 @@ class LinestuController extends Zend_Controller_Action {
 		$instructorEmail = $instructorModel->find ( $call ["party1Inx"] )->current ()->email;
 		
 		$studentModel = new Application_Model_Student ();
-		$studentEmail = $studentModel->find ( $call ["party2Inx"] )->current ()->email;
-		
+		$student = $studentModel->find ( $call ["party2Inx"] )->current ();
+		$studentEmail = $student->email;
+		$studentName = $student->firstName." ".$student->lastName;
 		$translatorModel = new Application_Model_Translator ();
 		$translatorEmail = "";
 		if ($call ["party3Inx"] != null) {
 			$translatorEmail = $translatorModel->find ( $call ["party3Inx"] )->current ()->email;
 		}
-		$mailcontent = "学生が三回でも電話に出なかったため、補習授業をキャンセルした。";
+		$mailcontent = "MJSメンタリングサービスです。<p/>
+				お世話になっております。<p/>
+				<p/>
+				ご登録いただいていた下記予約につき、参加予定者が揃わなかったため<p/>
+				自動的にキャンセルとなりました。<p/>
+				必要であれば再度の予約申込みをお願いいたします。<p/>
+				
+				予約日時：<<".$sessionStartTime.">><p/>
+				不参加者： <<".$studentName.">><p/><p/>
+				
+				以上です。";
 		$emailService = new EmailService ();
-		$emailService->sendEmail ( $studentEmail, null, null, $mailcontent, "学生が三回でも電話に出なかったため、補習授業をキャンセルした。" );
-		$emailService->sendEmail ( null, $instructorEmail, null, $mailcontent, "学生が三回でも電話に出なかったため、補習授業をキャンセルした。" );
-		$emailService->sendEmail ( null, null, $translatorEmail, $mailcontent, "学生が三回でも電話に出なかったため、補習授業をキャンセルした。" );
+		$emailService->sendEmail ( $studentEmail, null, null, $mailcontent, "メンタリングキャンセルのお知らせ" );
+		$emailService->sendEmail ( null, $instructorEmail, null, $mailcontent, "メンタリングキャンセルのお知らせ" );
+		$emailService->sendEmail ( null, null, $translatorEmail, $mailcontent, "メンタリングキャンセルのお知らせ" );
 	}
 	private function sendEmailWhenCallEndToStu($sessioninx) {
 		$this->logger->logInfo ( "LinestuController", "sendEmailWhenCallEndToStu", "sendEmailWhenCallEndToStu" );

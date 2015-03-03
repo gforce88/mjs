@@ -10,6 +10,7 @@ class LinetrlController extends Zend_Controller_Action {
 		$this->logger = LoggerFactory::getTropoLogger ();
 		$this->httpUtil = new HttpUtil ();
 		$this->setting = Zend_Registry::get ( "TROPO_SETTING" );
+		$this->app = Zend_Registry::get ( "APP_SETTING" );
 		$this->_helper->viewRenderer->setNeverRender ();
 	}
 	public function indexAction() {
@@ -24,15 +25,14 @@ class LinetrlController extends Zend_Controller_Action {
 		
 		if ($callModel->checkTrlCallTimes ( $params ) > 3) {
 			$this->logger->logInfo ( "LinetrlController", "indexAction", "translator didn't answer the call for 3 times" );
-			//邮件通知
+			// 邮件通知
 			$this->sendNotification ( $params ["sessionid"] );
 			
-			//发消息给instructor的会议，告诉学生没有参加。
+			// 发消息给instructor的会议，告诉学生没有参加。
 			$troposervice = new TropoService ();
-			$call = $callModel->find($params ["sessionid"])->current();
+			$call = $callModel->find ( $params ["sessionid"] )->current ();
 			
-			$troposervice->trlnoanswerRemind($call->party1SessionId, $call->party2SessionId);
-			
+			$troposervice->trlnoanswerRemind ( $call->party1SessionId, $call->party2SessionId );
 		} else {
 			$this->logger->logInfo ( "LinetrlController", "indexAction", "call translator:" . $params ["trlphone"] );
 			$tropo = new Tropo ();
@@ -41,24 +41,24 @@ class LinetrlController extends Zend_Controller_Action {
 			if ($params ["notify"] == "1") { // 判断是否是提示电话
 				$tropo->on ( array (
 						"event" => "continue",
-						"next" => "/linetrl/notify" 
+						"next" => $this->app ["ctx"] . "/linetrl/notify" 
 				) );
 			} else {
 				$tropo->on ( array (
 						"event" => "continue",
-						"next" => "/linetrl/welcome",
-						"say" => "http://165.225.149.30/sound/joining_call.mp3"
+						"next" => $this->app ["ctx"] . "/linetrl/welcome",
+						"say" => $this->app["hostip"].$this->app["ctx"]."/sound/joining_call.mp3" 
 				) );
 			}
 			// 电话未拨通
 			$tropo->on ( array (
 					"event" => "incomplete",
-					"next" => "/linetrl/incomplete" 
+					"next" => $this->app ["ctx"] . "/linetrl/incomplete" 
 			) );
 			// tropo应用发生错误
 			$tropo->on ( array (
 					"event" => "error",
-					"next" => "/linetrl/error" 
+					"next" => $this->app ["ctx"] . "/linetrl/error" 
 			) );
 			$tropo->renderJSON ();
 		}
@@ -67,8 +67,8 @@ class LinetrlController extends Zend_Controller_Action {
 		$tropoJson = file_get_contents ( "php://input" );
 		$this->logger->logInfo ( "LinetrlController", "nofityAction", "notify message: " . $tropoJson );
 		$tropo = new Tropo ();
-		$tropo->say("http://165.225.149.30/sound/remind_call.mp3");
-		$tropo->hangup();
+		$tropo->say ( $this->app["hostip"].$this->app["ctx"]."/sound/remind_call.mp3" );
+		$tropo->hangup ();
 		$tropo->renderJSON ();
 	}
 	public function hangupAction() {
@@ -97,7 +97,7 @@ class LinetrlController extends Zend_Controller_Action {
 		);
 		$tropo->on ( array (
 				"event" => "hangup",
-				"next" => "/linetrl/hangup" 
+				"next" => $this->app ["ctx"] . "/linetrl/hangup" 
 		) );
 		$tropo->conference ( null, $confOptions );
 		$tropo->renderJSON ();
@@ -147,11 +147,12 @@ class LinetrlController extends Zend_Controller_Action {
 	}
 	protected function sendNotification($callinx = null) {
 		$this->logger->logInfo ( "LinetrlController", "sendNotification", "send email to 3 part, cause  instructor" );
-
-		//更新session状态为cancel
+		
+		// 更新session状态为cancel
 		$sessionModel = new Application_Model_Session ();
-		$sessionModel->changeSessionToCancel($callinx);
-
+		$sessionModel->changeSessionToCancel ( $callinx );
+		
+		$sessionStartTime = $sessionModel->find($callinx)->current()->scheduleStartTime;
 		$callModel = new Application_Model_Call ();
 		$call = $callModel->find ( $callinx )->current ();
 		
@@ -163,14 +164,27 @@ class LinetrlController extends Zend_Controller_Action {
 		
 		$translatorModel = new Application_Model_Translator ();
 		$translatorEmail = "";
+		$translatorName = "";
 		if ($call ["party3Inx"] != null) {
-			$translatorEmail = $translatorModel->find ( $call ["party3Inx"] )->current ()->email;
+			$translator = $translatorModel->find ( $call ["party3Inx"] )->current ();
+			$translatorEmail = $translator->email;
+			$translatorName = $translator->firstName." ".$translator->lastName;
 		}
-		$mailcontent = "通訳者が三回でも電話に出なかったため、補習授業をキャンセルした。";
+		$mailcontent = "MJSメンタリングサービスです。<p/>
+				お世話になっております。<p/>
+				<p/>
+				ご登録いただいていた下記予約につき、参加予定者が揃わなかったため<p/>
+				自動的にキャンセルとなりました。<p/>
+				必要であれば再度の予約申込みをお願いいたします。<p/>
+				
+				予約日時：<<".$sessionStartTime.">><p/>
+				不参加者： <<".$translatorName.">><p/><p/>
+				
+				以上です。";
 		$emailService = new EmailService ();
-		$emailService->sendEmail ( $studentEmail, null, null, $mailcontent, "通訳者が三回でも電話に出なかったため、補習授業をキャンセルした。" );
-		$emailService->sendEmail ( null, $instructorEmail, null, $mailcontent, "通訳者が三回でも電話に出なかったため、補習授業をキャンセルした。" );
-		$emailService->sendEmail ( null, null, $translatorEmail, $mailcontent, "通訳者が三回でも電話に出なかったため、補習授業をキャンセルした。" );
+		$emailService->sendEmail ( $studentEmail, null, null, $mailcontent, "メンタリングキャンセルのお知らせ" );
+		$emailService->sendEmail ( null, $instructorEmail, null, $mailcontent, "メンタリングキャンセルのお知らせ" );
+		$emailService->sendEmail ( null, null, $translatorEmail, $mailcontent, "メンタリングキャンセルのお知らせ" );
 	}
 }
 

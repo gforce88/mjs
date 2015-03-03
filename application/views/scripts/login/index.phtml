@@ -25,8 +25,8 @@
 	<link rel="stylesheet/less" href="less/admin/module.admin.page.login.less" />
 	-->
 
-<!--[if lt IE 9]><link rel="stylesheet" href="components/library/bootstrap/css/bootstrap.min.css" /><![endif]-->
-<link rel="stylesheet" href="/css/admin/module.admin.page.login.min.css" />
+<!--[if lt IE 9]><link rel="stylesheet" href="<?php echo APP_CTX?>/components/library/bootstrap/css/bootstrap.min.css" /><![endif]-->
+<link rel="stylesheet" href="<?php echo APP_CTX?>/css/admin/module.admin.page.login.min.css" />
 
 <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
 <!--[if lt IE 9]>
@@ -35,14 +35,14 @@
     <![endif]-->
 
 
-<script src="/components/library/jquery/jquery.min.js?v=v2.3.0"></script>
-<script src="/components/library/jquery/jquery-migrate.min.js?v=v2.3.0"></script>
-<script src="/components/library/modernizr/modernizr.js?v=v2.3.0"></script>
-<script src="/components/plugins/less-js/less.min.js?v=v2.3.0"></script>
+<script src="<?php echo APP_CTX?>/components/library/jquery/jquery.min.js?v=v2.3.0"></script>
+<script src="<?php echo APP_CTX?>/components/library/jquery/jquery-migrate.min.js?v=v2.3.0"></script>
+<script src="<?php echo APP_CTX?>/components/library/modernizr/modernizr.js?v=v2.3.0"></script>
+<script src="<?php echo APP_CTX?>/components/plugins/less-js/less.min.js?v=v2.3.0"></script>
 <script
-	src="/components/modules/admin/charts/flot/assets/lib/excanvas.js?v=v2.3.0"></script>
+	src="<?php echo APP_CTX?>/components/modules/admin/charts/flot/assets/lib/excanvas.js?v=v2.3.0"></script>
 <script
-	src="/components/plugins/browser/ie/ie.prototype.polyfill.js?v=v2.3.0"></script>
+	src="<?php echo APP_CTX?>/components/plugins/browser/ie/ie.prototype.polyfill.js?v=v2.3.0"></script>
 <script>if (/*@cc_on!@*/false && document.documentMode === 10) { document.documentElement.className+=' ie ie10'; }</script>
 
 </head>
@@ -63,7 +63,7 @@
 					<div class="widget-body">
 
 						<!-- Form -->
-						<form method="post" action="/login" class="row" method="post">
+						<form method="post" action="<?php echo APP_CTX?>/login" class="row" method="post">
 							<label><?php print $this->translate->_("usernameoremail");?></label>
 							<input name="username" type="text"
 								class="input-block-level form-control"
@@ -110,7 +110,7 @@
 		commonPath = '',
 		rootPath = '../',
 		DEV = false,
-		componentsPath = 'components/';
+		componentsPath = '<?php echo APP_CTX?>/components/';
 	
 	var primaryColor = '#e5412d',
 		dangerColor = '#b55151',
@@ -123,19 +123,19 @@
 	</script>
 
 	<script
-		src="/components/library/bootstrap/js/bootstrap.min.js?v=v2.3.0"></script>
+		src="<?php echo APP_CTX?>/components/library/bootstrap/js/bootstrap.min.js?v=v2.3.0"></script>
 	<script
-		src="/components/plugins/nicescroll/jquery.nicescroll.min.js?v=v2.3.0"></script>
-	<script src="/components/plugins/breakpoints/breakpoints.js?v=v2.3.0"></script>
+		src="<?php echo APP_CTX?>/components/plugins/nicescroll/jquery.nicescroll.min.js?v=v2.3.0"></script>
+	<script src="<?php echo APP_CTX?>/components/plugins/breakpoints/breakpoints.js?v=v2.3.0"></script>
 	<script
-		src="/components/modules/admin/forms/elements/uniform/assets/lib/js/jquery.uniform.min.js?v=v2.3.0"></script>
+		src="<?php echo APP_CTX?>/components/modules/admin/forms/elements/uniform/assets/lib/js/jquery.uniform.min.js?v=v2.3.0"></script>
 	<script
-		src="/components/modules/admin/forms/elements/uniform/assets/custom/js/uniform.init.js?v=v2.3.0"></script>
+		src="<?php echo APP_CTX?>/components/modules/admin/forms/elements/uniform/assets/custom/js/uniform.init.js?v=v2.3.0"></script>
 	<script
-		src="/components/plugins/jquery.event.move/js/jquery.event.move.js?v=v2.3.0"></script>
+		src="<?php echo APP_CTX?>/components/plugins/jquery.event.move/js/jquery.event.move.js?v=v2.3.0"></script>
 	<script
-		src="/components/plugins/jquery.event.swipe/js/jquery.event.swipe.js?v=v2.3.0"></script>
-	<script src="/components/core/js/megamenu.js?v=v2.3.0"></script>
-	<script src="/components/core/js/core.init.js?v=v2.3.0"></script>
+		src="<?php echo APP_CTX?>/components/plugins/jquery.event.swipe/js/jquery.event.swipe.js?v=v2.3.0"></script>
+	<script src="<?php echo APP_CTX?>/components/core/js/megamenu.js?v=v2.3.0"></script>
+	<script src="<?php echo APP_CTX?>/components/core/js/core.init.js?v=v2.3.0"></script>
 </body>
 </html>

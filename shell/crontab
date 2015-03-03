@@ -2,13 +2,13 @@ crontab -l for display
 crontab -e for edit
 
 每分钟执行
-* * * * * curl http://localhost/timer >> croncall.log
+* * * * * curl http://localhost/mjs/public/timer >> croncall.log
 每分钟执行
-* * * * * curl http://localhost/timer/remind >> cronremind.log
+* * * * * curl http://localhost/mjs/public/timer/remind >> cronremind.log
 每周一 00：01：00执行
-1 0 * * 1 curl http://localhost/report >> cronremind.log
+1 0 * * 1 curl http://localhost/mjs/public/report >> cronremind.log
 
 每月1号  00：01：00 执行
-1 0 1 * * curl http://localhost/report/reset >> cronremind.log
+1 0 1 * * curl http://localhost/mjs/public/report/reset >> cronremind.log
 
 

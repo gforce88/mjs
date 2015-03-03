@@ -28,13 +28,13 @@
 	In development, use the LESS files and the less.js compiler
 	instead of the minified CSS loaded by default.
 	**********************************************************
-	<link rel="stylesheet/less" href="/less/admin/module.admin.page.tables.less" />
+	<link rel="stylesheet/less" href="<?php echo APP_CTX?>/less/admin/module.admin.page.tables.less" />
 					-->
 					<!--[if lt IE 9]>
-					<link rel="stylesheet" href="/components/library/bootstrap/css/bootstrap.min.css" />
+					<link rel="stylesheet" href="<?php echo APP_CTX?>/components/library/bootstrap/css/bootstrap.min.css" />
 					<![endif]-->
-					<link rel="stylesheet" href="/css/admin/module.admin.page.tables.min.css" />
-					<link rel="stylesheet" href="/css/admin/menu.css" />
+					<link rel="stylesheet" href="<?php echo APP_CTX?>/css/admin/module.admin.page.tables.min.css" />
+					<link rel="stylesheet" href="<?php echo APP_CTX?>/css/admin/menu.css" />
 
 					<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
 					<!--[if lt IE 9]>
@@ -42,14 +42,14 @@
 					<script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
 					<![endif]-->
 
-					<script src="/components/library/jquery/jquery.min.js?v=v2.3.0"></script>
-					<script src="/components/library/jquery/jquery-migrate.min.js?v=v2.3.0"></script>
-					<script src="/components/library/modernizr/modernizr.js?v=v2.3.0"></script>
-					<script src="/components/plugins/less-js/less.min.js?v=v2.3.0"></script>
-					<script src="/components/modules/admin/charts/flot/assets/lib/excanvas.js?v=v2.3.0"></script>
-					<script src="/components/plugins/browser/ie/ie.prototype.polyfill.js?v=v2.3.0"></script>
-					<script src="/components/library/jquery-ui/js/jquery-ui.min.js?v=v2.3.0"></script>
-					<script src="/components/plugins/jquery-ui-touch-punch/jquery.ui.touch-punch.min.js?v=v2.3.0"></script>
+					<script src="<?php echo APP_CTX?>/components/library/jquery/jquery.min.js?v=v2.3.0"></script>
+					<script src="<?php echo APP_CTX?>/components/library/jquery/jquery-migrate.min.js?v=v2.3.0"></script>
+					<script src="<?php echo APP_CTX?>/components/library/modernizr/modernizr.js?v=v2.3.0"></script>
+					<script src="<?php echo APP_CTX?>/components/plugins/less-js/less.min.js?v=v2.3.0"></script>
+					<script src="<?php echo APP_CTX?>/components/modules/admin/charts/flot/assets/lib/excanvas.js?v=v2.3.0"></script>
+					<script src="<?php echo APP_CTX?>/components/plugins/browser/ie/ie.prototype.polyfill.js?v=v2.3.0"></script>
+					<script src="<?php echo APP_CTX?>/components/library/jquery-ui/js/jquery-ui.min.js?v=v2.3.0"></script>
+					<script src="<?php echo APP_CTX?>/components/plugins/jquery-ui-touch-punch/jquery.ui.touch-punch.min.js?v=v2.3.0"></script>
 					<script>if (/*@cc_on!@*/false && document.documentMode === 10) { document.documentElement.className+=' ie ie10'; }</script>
 
 </head>
@@ -76,20 +76,20 @@
 									<div class="row">
 										<div class="col-sm-3">
 											<div class="widget">
-												<a href="/student/index" class="display-block bg-info innerAll text-center text-white"></i>
+												<a href="<?php echo APP_CTX?>/student/index" class="display-block bg-info innerAll text-center text-white"></i>
 											</a>
 											<div class="text-center innerAll">
-												<a href="/student/index" class="strong  "><?php print $this->translate->_("menua");?></a>
+												<a href="<?php echo APP_CTX?>/student/index" class="strong  "><?php print $this->translate->_("menua");?></a>
 												<div class="clearfix"></div>
 											</div>
 										</div>
 									</div>
 									<div class="col-sm-3">
 										<div class="widget">
-											<a href="/student/create" class="display-block bg-lightred innerAll text-center text-white"></i>
+											<a href="<?php echo APP_CTX?>/student/create" class="display-block bg-lightred innerAll text-center text-white"></i>
 										</a>
 										<div class="text-center innerAll">
-											<a href="/student/create" class="strong  "><?php print $this->translate->_("menub");?></a>
+											<a href="<?php echo APP_CTX?>/student/create" class="strong  "><?php print $this->translate->_("menub");?></a>
 											<div class="clearfix"></div>
 										</div>
 									</div>
@@ -97,20 +97,20 @@
 
 								<div class="col-sm-3">
 									<div class="widget">
-										<a href="/session/index" class="display-block bg-purple innerAll text-center text-white"></i>
+										<a href="<?php echo APP_CTX?>/session/index" class="display-block bg-purple innerAll text-center text-white"></i>
 									</a>
 									<div class="text-center innerAll">
-										<a href="/session/index" class="strong"><?php print $this->translate->_("menuc");?></a>
+										<a href="<?php echo APP_CTX?>/session/index" class="strong"><?php print $this->translate->_("menuc");?></a>
 										<div class="clearfix"></div>
 									</div>
 								</div>
 							</div>
 							<div class="col-sm-3">
 								<div class="widget">
-									<a href="/session/create" class="display-block bg-gray border-bottom innerAll text-center"></i>
+									<a href="<?php echo APP_CTX?>/session/create" class="display-block bg-gray border-bottom innerAll text-center"></i>
 								</a>
 								<div class="text-center innerAll">
-									<a href="/session/create" class="strong  "><?php print $this->translate->_("menud");?></a>
+									<a href="<?php echo APP_CTX?>/session/create" class="strong  "><?php print $this->translate->_("menud");?></a>
 									<div class="clearfix"></div>
 
 								</div>
@@ -196,7 +196,7 @@
 							</td>
 							<td>
 								<div class="btn-group btn-group-sm">
-									<a href="/student/edit?inx=<?php echo $newrow->inx?>" target="_self"
+									<a href="<?php echo APP_CTX?>/student/edit?inx=<?php echo $newrow->inx?>" target="_self"
 										class="btn btn-inverse"> <i class="fa fa-pencil"></i>
 									</a>
 								</div>
@@ -234,7 +234,7 @@
 		commonPath = '/',
 		rootPath = '../',
 		DEV = false,
-		componentsPath = '/components/';
+		componentsPath = '<?php echo APP_CTX?>/components/';
 	
 	var primaryColor = '#e5412d',
 		dangerColor = '#b55151',
@@ -246,23 +246,23 @@
 	var themerPrimaryColor = primaryColor;
 	</script>
 
-<script src="/components/library/bootstrap/js/bootstrap.min.js?v=v2.3.0"></script>
-<script src="/components/plugins/nicescroll/jquery.nicescroll.min.js?v=v2.3.0"></script>
-<script src="/components/plugins/breakpoints/breakpoints.js?v=v2.3.0"></script>
-<script src="/components/modules/admin/tables/datatables/assets/lib/js/jquery.dataTables.min.js?v=v2.3.0"></script>
-<script src="/components/modules/admin/tables/datatables/assets/lib/extras/TableTools/media/js/TableTools.min.js?v=v2.3.0"></script>
-<script src="/components/modules/admin/tables/datatables/assets/lib/extras/ColVis/media/js/ColVis.min.js?v=v2.3.0"></script>
-<script src="/components/modules/admin/tables/datatables/assets/custom/js/DT_bootstrap.js?v=v2.3.0"></script>
-<script src="/components/modules/admin/tables/datatables/assets/custom/js/datatables.init.js?v=v2.3.0"></script>
-<script src="/components/modules/admin/forms/elements/fuelux-checkbox/fuelux-checkbox.js?v=v2.3.0"></script>
-<script src="/components/modules/admin/forms/elements/bootstrap-select/assets/lib/js/bootstrap-select.js?v=v2.3.0"></script>
-<script src="/components/modules/admin/forms/elements/bootstrap-select/assets/custom/js/bootstrap-select.init.js?v=v2.3.0"></script>
-<script src="/components/modules/admin/tables/datatables/assets/lib/extras/FixedHeader/FixedHeader.js?v=v2.3.0"></script>
-<script src="/components/modules/admin/tables/datatables/assets/lib/extras/ColReorder/media/js/ColReorder.min.js?v=v2.3.0"></script>
-<script src="/components/modules/admin/tables/classic/assets/js/tables-classic.init.js?v=v2.3.0"></script>
-<script src="/components/plugins/jquery.event.move/js/jquery.event.move.js?v=v2.3.0"></script>
-<script src="/components/plugins/jquery.event.swipe/js/jquery.event.swipe.js?v=v2.3.0"></script>
-<script src="/components/core/js/megamenu.js?v=v2.3.0"></script>
-<script src="/components/core/js/core.init.js?v=v2.3.0"></script>
+<script src="<?php echo APP_CTX?>/components/library/bootstrap/js/bootstrap.min.js?v=v2.3.0"></script>
+<script src="<?php echo APP_CTX?>/components/plugins/nicescroll/jquery.nicescroll.min.js?v=v2.3.0"></script>
+<script src="<?php echo APP_CTX?>/components/plugins/breakpoints/breakpoints.js?v=v2.3.0"></script>
+<script src="<?php echo APP_CTX?>/components/modules/admin/tables/datatables/assets/lib/js/jquery.dataTables.min.js?v=v2.3.0"></script>
+<script src="<?php echo APP_CTX?>/components/modules/admin/tables/datatables/assets/lib/extras/TableTools/media/js/TableTools.min.js?v=v2.3.0"></script>
+<script src="<?php echo APP_CTX?>/components/modules/admin/tables/datatables/assets/lib/extras/ColVis/media/js/ColVis.min.js?v=v2.3.0"></script>
+<script src="<?php echo APP_CTX?>/components/modules/admin/tables/datatables/assets/custom/js/DT_bootstrap.js?v=v2.3.0"></script>
+<script src="<?php echo APP_CTX?>/components/modules/admin/tables/datatables/assets/custom/js/datatables.init.js?v=v2.3.0"></script>
+<script src="<?php echo APP_CTX?>/components/modules/admin/forms/elements/fuelux-checkbox/fuelux-checkbox.js?v=v2.3.0"></script>
+<script src="<?php echo APP_CTX?>/components/modules/admin/forms/elements/bootstrap-select/assets/lib/js/bootstrap-select.js?v=v2.3.0"></script>
+<script src="<?php echo APP_CTX?>/components/modules/admin/forms/elements/bootstrap-select/assets/custom/js/bootstrap-select.init.js?v=v2.3.0"></script>
+<script src="<?php echo APP_CTX?>/components/modules/admin/tables/datatables/assets/lib/extras/FixedHeader/FixedHeader.js?v=v2.3.0"></script>
+<script src="<?php echo APP_CTX?>/components/modules/admin/tables/datatables/assets/lib/extras/ColReorder/media/js/ColReorder.min.js?v=v2.3.0"></script>
+<script src="<?php echo APP_CTX?>/components/modules/admin/tables/classic/assets/js/tables-classic.init.js?v=v2.3.0"></script>
+<script src="<?php echo APP_CTX?>/components/plugins/jquery.event.move/js/jquery.event.move.js?v=v2.3.0"></script>
+<script src="<?php echo APP_CTX?>/components/plugins/jquery.event.swipe/js/jquery.event.swipe.js?v=v2.3.0"></script>
+<script src="<?php echo APP_CTX?>/components/core/js/megamenu.js?v=v2.3.0"></script>
+<script src="<?php echo APP_CTX?>/components/core/js/core.init.js?v=v2.3.0"></script>
 </body>
 </html>

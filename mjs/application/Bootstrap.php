@@ -5,6 +5,9 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
 		// Set default timezone
 		$systemSetting = $this->getOption("system");
 		date_default_timezone_set($systemSetting["timezone"]);
+		$app = $this->getOption("app");
+		defined("APP_CTX") || define("APP_CTX", $app["ctx"]);
+		Zend_Registry::set("APP_SETTING", $app);
 	}
 	
 	protected function _initLog(){

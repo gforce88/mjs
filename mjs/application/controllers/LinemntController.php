@@ -10,6 +10,7 @@ class LinemntController extends Zend_Controller_Action {
 		$this->logger = LoggerFactory::getTropoLogger ();
 		$this->httpUtil = new HttpUtil ();
 		$this->setting = Zend_Registry::get ( "TROPO_SETTING" );
+		$this->app = Zend_Registry::get ( "APP_SETTING" );
 		$this->_helper->viewRenderer->setNeverRender ();
 	}
 	public function indexAction() {
@@ -35,20 +36,20 @@ class LinemntController extends Zend_Controller_Action {
 			if ($params ["notify"] == "1") { // 判断是否是提示电话
 				$tropo->on ( array (
 						"event" => "continue",
-						"next" => "/linemnt/notify"
+						"next" =>$this->app["ctx"]. "/linemnt/notify"
 				) );
 			} else {// 会议电话，先拨Instructor
 				$tropo->on ( array (
 						"event" => "continue",
-						"next" => "/linemnt/welcome",
+						"next" =>$this->app["ctx"]. "/linemnt/welcome",
 // 						"say" => "Welcome to Mjs Application! Please hold on for joining the conference." 
-						"say" => "http://165.225.149.30/sound/01_call_student.mp3" 
+						"say" => $this->app["hostip"].$this->app["ctx"]."/sound/01_call_student.mp3" 
 				) );
 			}
 			// 电话未拨通
 			$tropo->on ( array (
 					"event" => "incomplete",
-					"next" => "/linemnt/incomplete" 
+					"next" =>$this->app["ctx"]. "/linemnt/incomplete" 
 			) );
 			$tropo->renderJSON ();
 		}
@@ -57,7 +58,7 @@ class LinemntController extends Zend_Controller_Action {
 		$tropoJson = file_get_contents ( "php://input" );
 		$this->logger->logInfo ( "LinemntController", "nofityAction", "notify message: " . $tropoJson );
 		$tropo = new Tropo ();
-		$tropo->say("http://165.225.149.30/sound/remind_call.mp3");
+		$tropo->say($this->app["hostip"].$this->app["ctx"]."/sound/remind_call.mp3");
 		$tropo->hangup();
 		$tropo->renderJSON ();
 		
@@ -89,20 +90,20 @@ class LinemntController extends Zend_Controller_Action {
 		);
 		$tropo->on ( array (
 				"event" => "stunoanswer",
-				"next" => "/linemnt/stunoanswer"
+				"next" =>$this->app["ctx"]. "/linemnt/stunoanswer"
  		) );
  		$tropo->on ( array (
 				"event" => "trlnoanswer",
-				"next" => "/linemnt/trlnoanswer"
+				"next" =>$this->app["ctx"]. "/linemnt/trlnoanswer"
  		) );
 		
 		$tropo->on ( array (
 				"event" => "hangup",
-				"next" => "/linemnt/hangup" 
+				"next" =>$this->app["ctx"]. "/linemnt/hangup" 
 		) );
 		$tropo->on ( array (
 				"event" => "continue",
-				"next" => "/linemnt/conference" 
+				"next" =>$this->app["ctx"]. "/linemnt/conference" 
 		) );
 		$tropo->conference ( null, $confOptions );
 		$tropo->renderJSON ();
@@ -126,7 +127,7 @@ class LinemntController extends Zend_Controller_Action {
 		$tropoJson = file_get_contents ( "php://input" );
 		$this->logger->logInfo ( "LinemntController", "stunoanswerAction", "student not answer : " . $tropoJson );
 		$tropo = new Tropo ();
-		$tropo->say("http://165.225.149.30/sound/03_no_answer_student.mp3");
+		$tropo->say($this->app["hostip"].$this->app["ctx"]."/sound/03_no_answer_student.mp3");
 		//$tropo->say("student not answer, the conference is end");
 		$tropo->renderJSON ();
 	
@@ -136,7 +137,7 @@ class LinemntController extends Zend_Controller_Action {
 		$tropoJson = file_get_contents ( "php://input" );
 		$this->logger->logInfo ( "LinemntController", "nofityAction", "translator not answer: " . $tropoJson );
 		$tropo = new Tropo ();
-		$tropo->say("http://165.225.149.30/sound/03_no_answer_translator.mp3");
+		$tropo->say($this->app["hostip"].$this->app["ctx"]."/sound/04_no_answer_translator.mp3");
 		//$tropo->say("translator not answer, the conference is end");
 		$tropo->renderJSON ();
 	
@@ -195,13 +196,14 @@ class LinemntController extends Zend_Controller_Action {
 		//更新session状态为cancel
 		$sessionModel = new Application_Model_Session ();
 		$sessionModel->changeSessionToCancel($callinx);
-
+		$sessionStartTime = $sessionModel->find($callinx)->current()->scheduleStartTime;
 		$callModel = new Application_Model_Call ();
 		$call = $callModel->find ( $callinx )->current ();
 		
 		$instructorModel = new Application_Model_Instructor ();
-		$instructorEmail = $instructorModel->find ( $call ["party1Inx"] )->current ()->email;
-		
+		$instructor = $instructorModel->find ( $call ["party1Inx"] )->current ();
+		$instructorEmail = $instructor->email;
+		$instructorName = $instructor->firstName." ".$instructor->lastName;
 		$studentModel = new Application_Model_Student ();
 		$studentEmail = $studentModel->find ( $call ["party2Inx"] )->current ()->email;
 		
@@ -210,11 +212,21 @@ class LinemntController extends Zend_Controller_Action {
 		if ($call ["party3Inx"] != null) {
 			$translatorEmail = $translatorModel->find ( $call ["party3Inx"] )->current ()->email;
 		}
-		$mailcontent = "先生が三回でも電話に出なかったため、補習授業をキャンセルした。";
+		$mailcontent = "MJSメンタリングサービスです。<p/>
+				お世話になっております。<p/>
+				<p/>
+				ご登録いただいていた下記予約につき、参加予定者が揃わなかったため<p/>
+				自動的にキャンセルとなりました。<p/>
+				必要であれば再度の予約申込みをお願いいたします。<p/>
+				
+				予約日時：<<".$sessionStartTime.">><p/>
+				不参加者： <<".$instructorName.">><p/><p/>
+				
+				以上です。";
 		$emailService = new EmailService ();
-		$emailService->sendEmail ( $studentEmail, null, null, $mailcontent, "先生が三回でも電話に出なかったため、補習授業をキャンセルした。" );
-		$emailService->sendEmail ( null, $instructorEmail, null, $mailcontent, "先生が三回でも電話に出なかったため、補習授業をキャンセルした。" );
-		$emailService->sendEmail ( null, null, $translatorEmail, $mailcontent, "先生が三回でも電話に出なかったため、補習授業をキャンセルした。" );
+		$emailService->sendEmail ( $studentEmail, null, null, $mailcontent, "メンタリングキャンセルのお知らせ" );
+		$emailService->sendEmail ( null, $instructorEmail, null, $mailcontent, "メンタリングキャンセルのお知らせ" );
+		$emailService->sendEmail ( null, null, $translatorEmail, $mailcontent, "メンタリングキャンセルのお知らせ" );
 	}
 }
 

@@ -3,6 +3,7 @@ require_once 'log/LoggerFactory.php';
 require_once 'tropo/tropo.class.php';
 require_once 'util/HttpUtil.php';
 require_once 'service/TropoService.php';
+require_once 'service/EmailService.php';
 class TimerController extends Zend_Controller_Action {
 	protected $logger;
 	public function init() {
@@ -32,16 +33,18 @@ class TimerController extends Zend_Controller_Action {
 			$paramArr ["trlid"] = $row ["d_inx"];
 			$b_acctStatus = $row["b_acctStatus"];
 			if($b_acctStatus==0){//如果学生状态为suspend,删除session
+				$this->sendcancelEmail($row ["inx"]);
 				$sessionModel->deleteSession ( $row ["inx"] );
-			}
-			// 调用打电话应用并创建call记录
-			$callModel = new Application_Model_Call ();
-			$existRow = $callModel->find ( $row ["inx"] )->current ();
-			if ($existRow) {
-			} else {
-				echo "start session at ";
-				$callModel->createCall ( $paramArr );
-				$troposervice->callmnt ( $paramArr );
+			}else{
+				// 调用打电话应用并创建call记录
+				$callModel = new Application_Model_Call ();
+				$existRow = $callModel->find ( $row ["inx"] )->current ();
+				if ($existRow) {
+				} else {
+					echo "start session at ";
+					$callModel->createCall ( $paramArr );
+					$troposervice->callmnt ( $paramArr );
+				}
 			}
 			$this->logger->logInfo ( "TimerController", "indexAction", "it is the session call time" . $start );
 		}
@@ -67,6 +70,7 @@ class TimerController extends Zend_Controller_Action {
 			$paramArr ["trlid"] = $row ["d_inx"];
 			$b_acctStatus = $row["b_acctStatus"];
 			if($b_acctStatus==0){//如果学生状态为suspend,删除session
+				$this->sendcancelEmail($row ["inx"]);
 				$sessionModel->deleteSession ( $row ["inx"] );
 			}else{
 				//通过nofify参数来标记是否是remind
@@ -92,18 +96,33 @@ class TimerController extends Zend_Controller_Action {
 		echo "remind crontime is :" . $start." and ". $end."\n";
 	}
 	
-	public function ttAction(){
-		echo $start = date("Y-m-01 00:00:00");
-		echo $end = strtotime(" +1 months");
-		echo date("Y-m-01 00:00:00",$end);
-		echo "<br />";
-		echo strtotime($end);
-		echo "<br />";
+	protected  function sendcancelEmail($sessioninx = null){
+		$sessionmodel = new Application_Model_Session ();
+		$session = $sessionmodel->find ( $sessioninx )->current ();
+		$studentinx = $session->studentInx;
+		$instructorinx = $session->instructorInx;
+		$translatorinx = $session->translatorInx;
+		$studentModel = new Application_Model_Student ();
+		$studentEmail = $studentModel->find ( $studentinx )->current ()->email;
+		$instructorModel = new Application_Model_Instructor ();
+		$instructorEmail = $instructorModel->find ( $instructorinx )->current ()->email;
+		$translatorEmail = "";
+		if ($translatorinx != null) {
+			$translatorModel = new Application_Model_Translator ();
+			$translatorEmail = $translatorModel->find ( $translatorinx )->current ()->email;
+		}
+			
+		$mailcontent = "MJSメンタリングサービスです。<p/>お世話になっております。<p/>
 		
+				ご予約いただいていた、下記予約のキャンセルが完了したことをお知らせいたします。
 		
+				予約日時：" . $session->scheduleStartTime . " <p/>
 		
-		echo "<br />";
-		echo "<br />";
+				以上です。";
+		$emailService = new EmailService();
+		$emailService->sendEmail ( $studentEmail, null, null, $mailcontent, "メンタリング予約キャンセルのお知らせ" );
+		$emailService->sendEmail ( null, $instructorEmail, null, $mailcontent, "メンタリング予約キャンセルのお知らせ" );
+		$emailService->sendEmail ( null, null, $translatorEmail, $mailcontent, "メンタリング予約キャンセルのお知らせ" );
 	}
 }
 

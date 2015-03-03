@@ -11,6 +11,7 @@ class SessionController extends Zend_Controller_Action {
 		$translate->addTranslation ( APPLICATION_PATH . "/language/Jp.ini", 'JP' );
 		$filename = APPLICATION_PATH . "/configs/application.ini";
 		$config = new Zend_Config_Ini ( $filename, 'production' );
+		$this->app = Zend_Registry::get ( "APP_SETTING" );
 		$translate->setlocale ( $config->mjs->locale );
 		$this->logger = LoggerFactory::getSysLogger ();
 		$this->view->translate = $translate;

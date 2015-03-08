@@ -138,12 +138,14 @@
 						<!-- Table heading -->
 						<thead>
 							<tr>
+								<!-- commented by Huan for bug 106
 								<th class="text-center">
 									<div class="checkbox checkbox-single margin-none">
 										<label class="checkbox-custom"> <i class="fa fa-fw fa-square-o"></i>
 											<input type="checkbox"></label>
 									</div>
 								</th>
+								-->
 								<th><?php print $this->translate->_("stucol1");?></th>
 								<th><?php print $this->translate->_("stucol2");?></th>
 								<th><?php print $this->translate->_("stucol3");?></th>
@@ -172,12 +174,14 @@
 							foreach ($this->studentlist as $newrow){
 						?>
 						<tr class="gradeX">
+							<!--commented by Huan for bug 106
 							<td class="text-center">
 								<div class="checkbox checkbox-single margin-none">
 									<label class="checkbox-custom"> <i class="fa fa-fw fa-square-o"></i>
 										<input type="checkbox"></label>
 								</div>
 							</td>
+							-->
 							<td><?php echo $newrow->inx;?></td>
 							<td><?php echo $newrow->firstName;?></td>
 							<td><?php echo $newrow->lastName;?></td>

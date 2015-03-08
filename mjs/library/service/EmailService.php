@@ -9,42 +9,71 @@ class EmailService {
 	public function sendEmail($studentEmail, $instructorEmail, $translatorEmail, $mailcontent, $subject) {
 		$loginfo = $studentEmail . "-" . $instructorEmail . "-" . $translatorEmail;
 		$this->logger->logInfo ( "EmailService", "sendEmail", $loginfo );
+		$emailFlag = -1;
 		try {
+			/*
+
 			$filename = APPLICATION_PATH . "/configs/application.ini";
 			$config = new Zend_Config_Ini ( $filename, 'production' );
 			$mail = new PHPMailer ( true ); // New instance, with exceptions
 			$body = file_get_contents ( APPLICATION_PATH . '/configs/mail_groupfail.html' );
 			$body = preg_replace ( '/mailcontent/', $mailcontent, $body ); // Strip
 			$mail->IsSMTP (); // tell the class to use SMTP
-			$mail->SMTPDebug = 1;
 			$mail->CharSet = "utf-8";
 			$mail->SMTPAuth = true; // enable SMTP authentication
 			$mail->Port = $config->mail->port; // set the SMTP server port
 			$mail->Host = $config->mail->host; // SMTP server
 			$mail->Username = $config->mail->username; // SMTP server username
-			$mail->Password = "=**4qjAE9n"; // SMTP password
-			$mail->SMTPSecure = 'ssl';
+			$mail->Password = $config->mail->password; // SMTP server password
 			$mail->IsSendmail (); // tell the class to use Sendmail
-			$mail->AddReplyTo ( $mail->Username, "Notifications" );
+			$mail->AddReplyTo ( $mail->Username, $mail->Username );
 			$mail->SetFrom ( $mail->Username, $mail->Username );
-			$mail->IsHTML(true);  
+			*/
+			$this->logger->logInfo ( "EmailService", "sendEmail", "start send email with clients solution" );
 
+			$filename = APPLICATION_PATH . "/configs/application.ini";
+			$config = new Zend_Config_Ini ( $filename, 'production' );
+			$body = file_get_contents ( APPLICATION_PATH . '/configs/mail_groupfail.html' );
+			$body = preg_replace ( '/mailcontent/', $mailcontent, $body ); // Strip
 
-			if ($studentEmail != null) {
+			$mail = new PHPMailer();
+
+			$mail->IsSMTP();
+			$mail->CharSet = "utf-8";                                      
+			$mail->Host = "smtp.gmail.com";  // specify main and backup server
+			$mail->Port = 465; // or 587
+			$mail->SMTPAuth = true;     // turn on SMTP authentication
+			
+			$mail->SMTPSecure = 'ssl';
+
+			$mail->Username = $config->mail->username; // SMTP server username
+			$mail->Password = "=**4qjAE9n"; // SMTP password
+			$mail->SetFrom ( $mail->Username, $mail->Username );
+			$mail->AddReplyTo ( $mail->Username, $mail->Username );
+			
+
+			if ($studentEmail != null && $studentEmail != "") {
 				$mail->AddAddress ( $studentEmail );
+				$emailFlag = 1;
 			}
-			if ($instructorEmail != null) {
+			if ($instructorEmail != null && $instructorEmail != "") {
 				$mail->AddAddress ( $instructorEmail );
+				$emailFlag = 2;
 			}
-			if ($translatorEmail != null) {
+			if ($translatorEmail != null && $translatorEmail != "") {
 				$mail->AddAddress ( $translatorEmail );
+				$emailFlag = 3;
 			}
 			$mail->Subject = "=?utf-8?B?" . base64_encode ( $subject ) . "?=";
 			$mail->AltBody = "To view the message, please use an HTML compatible email viewer!"; // optional,
 			$mail->WordWrap = 80; // set word wrap
 			$mail->MsgHTML ( $body );
 			$mail->IsHTML ( true ); // send as HTML
-			$mail->Send ();
+			$this->logger->logInfo ( "EmailService", "sendEmail", "ready to send with clients solution" );
+			if($emailFlag != -1){
+				$mail->Send ();
+			}
+			$this->logger->logInfo ( "EmailService", "sendEmail", "mail send finish" );
 		} catch ( phpmailerException $e ) {
 		}
 	}

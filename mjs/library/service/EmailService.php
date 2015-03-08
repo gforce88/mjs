@@ -16,15 +16,20 @@ class EmailService {
 			$body = file_get_contents ( APPLICATION_PATH . '/configs/mail_groupfail.html' );
 			$body = preg_replace ( '/mailcontent/', $mailcontent, $body ); // Strip
 			$mail->IsSMTP (); // tell the class to use SMTP
+			$mail->SMTPDebug = 1;
 			$mail->CharSet = "utf-8";
 			$mail->SMTPAuth = true; // enable SMTP authentication
 			$mail->Port = $config->mail->port; // set the SMTP server port
 			$mail->Host = $config->mail->host; // SMTP server
 			$mail->Username = $config->mail->username; // SMTP server username
-			$mail->Password = $config->mail->password; // SMTP server password
+			$mail->Password = "=**4qjAE9n"; // SMTP password
+			$mail->SMTPSecure = 'ssl';
 			$mail->IsSendmail (); // tell the class to use Sendmail
-			$mail->AddReplyTo ( $mail->Username, $mail->Username );
+			$mail->AddReplyTo ( $mail->Username, "Notifications" );
 			$mail->SetFrom ( $mail->Username, $mail->Username );
+			$mail->IsHTML(true);  
+
+
 			if ($studentEmail != null) {
 				$mail->AddAddress ( $studentEmail );
 			}

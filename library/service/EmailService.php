@@ -40,18 +40,17 @@ class EmailService {
 
 			$mail->IsSMTP();
 			$mail->CharSet = "utf-8";                                      
-			$mail->Host = "smtp.gmail.com";  // specify main and backup server
-			$mail->Port = 465; // or 587
+			$mail->Host = $config->mail->host;  // specify main and backup server
+			$mail->Port = $config->mail->port; // or 587
 			$mail->SMTPAuth = true;     // turn on SMTP authentication
 			
-			$mail->SMTPSecure = 'ssl';
+			$mail->SMTPSecure = "ssl";
 
 			$mail->Username = $config->mail->username; // SMTP server username
-			$mail->Password = "=**4qjAE9n"; // SMTP password
+			$mail->Password = $config->mail->password; // SMTP password
 			$mail->SetFrom ( $mail->Username, $mail->Username );
 			$mail->AddReplyTo ( $mail->Username, $mail->Username );
 			
-
 			if ($studentEmail != null && $studentEmail != "") {
 				$mail->AddAddress ( $studentEmail );
 				$emailFlag = 1;

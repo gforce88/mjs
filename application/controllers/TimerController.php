@@ -124,5 +124,9 @@ class TimerController extends Zend_Controller_Action {
 		$emailService->sendEmail ( null, $instructorEmail, null, $mailcontent, "メンタリング予約キャンセルのお知らせ" );
 		$emailService->sendEmail ( null, null, $translatorEmail, $mailcontent, "メンタリング予約キャンセルのお知らせ" );
 	}
+
+	public function aaaAction(){
+		echo date('Y-m-d',strtotime('+1 months -1 days',strtotime('2015-03-08 00:00:00')));
+	}
 }
 

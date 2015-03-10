@@ -84,7 +84,12 @@ class ReportController extends Zend_Controller_Action {
 			$mail->Username = $config->mail->username; // SMTP server username
 			$mail->Password = $config->mail->password; // SMTP server password
 			
-			$mail->IsSendmail (); // tell the class to use Sendmail
+			$mail->CharSet = "utf-8";
+			$mail->SMTPAuth = true;     // turn on SMTP authentication
+				
+			$mail->SMTPSecure = 'ssl';
+			
+			//$mail->IsSendmail (); // tell the class to use Sendmail
 			
 			$mail->AddReplyTo ( $mail->Username, $mail->Username );
 			$mail->SetFrom ( $mail->Username, $mail->Username );

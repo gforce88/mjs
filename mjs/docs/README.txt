@@ -27,3 +27,10 @@
 		4.每月重置学生账号时间任务
 4.修改配置文件中的 app.hostip = "http://165.225.149.30" 地址改为服务器地址 指定语音文件
 
+5.需要修改的js文件 session-create.js
+6.需要修改的css文件
+	module.admin.page.signup.min.css
+	module.admin.page.tables.min.css
+	module.admin.page.courses_2.min.css
+	module.admin.page.form_elements.min.css
+	module.admin.page.login.min.css

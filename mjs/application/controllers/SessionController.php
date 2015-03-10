@@ -20,7 +20,7 @@ class SessionController extends Zend_Controller_Action {
 		$this->logger->logInfo ( "SessionController", "indexAction", " list Session start---------" );
 		$sessionmodel = new Application_Model_Session ();
 		$sessions = $sessionmodel->getSessionList ();
-		$this->logger->logInfo ( "SessionController", "indexAction", " list Session start---2222------".count($sessions) );
+		$this->logger->logInfo ( "SessionController", "indexAction", " list Session start---2222------" . count ( $sessions ) );
 		$this->view->sessionlist = $sessions;
 		$this->logger->logInfo ( "SessionController", "indexAction", " list Session end -----333-----" );
 	}
@@ -84,9 +84,9 @@ class SessionController extends Zend_Controller_Action {
 					予約日時：" . $session->scheduleStartTime . "<p/>
 					
 					以上です。";
-					$emailService = new EmailService();
+					$emailService = new EmailService ();
 					$emailService->sendEmail ( $studentEmail, null, null, $mailcontent, "メンタリングサービス予約登録完了のお知らせ" );
-					$emailService->sendEmail ( null, $instructorEmail, null, $mailcontent,"メンタリングサービス予約登録完了のお知らせ" );
+					$emailService->sendEmail ( null, $instructorEmail, null, $mailcontent, "メンタリングサービス予約登録完了のお知らせ" );
 					$emailService->sendEmail ( null, null, $translatorEmail, $mailcontent, "メンタリングサービス予約登録完了のお知らせ" );
 					// 如果session创建时间在10分钟之内 立刻开始拨号
 					if ($inputTime < strtotime ( " +10 mins" )) {
@@ -143,28 +143,27 @@ class SessionController extends Zend_Controller_Action {
 				$current = time ();
 				if ($inputTime > $current) {
 					if ($this->checkStudentRemainMin ( $params ) && $this->checkSessionStatus ( $params )) {
-						//获取原来的session
+						// 获取原来的session
 						$sessionModel = new Application_Model_Session ();
 						$oldSession = $sessionModel->find ( $inx = $params ["inx"] )->current ();
 						
-						//获取原来的老师email
+						// 获取原来的老师email
 						$instructorModel = new Application_Model_Instructor ();
-						$instructorOld = $instructorModel->find($oldSession->instructorInx)->current();
+						$instructorOld = $instructorModel->find ( $oldSession->instructorInx )->current ();
 						$instructorOldEmail = $instructorOld->email;
 						
-						//获取原来的翻译email
+						// 获取原来的翻译email
 						$translatorModel = new Application_Model_Translator ();
 						$translatorOldEmail = null;
-						if($oldSession->translatorInx!=null){
-							$translatorOld = $translatorModel->find($oldSession->translatorInx)->current();
+						if ($oldSession->translatorInx != null) {
+							$translatorOld = $translatorModel->find ( $oldSession->translatorInx )->current ();
 							$translatorOldEmail = $translatorOld->email;
 						}
 						
-						//根据名字更新或增加老师
+						// 根据名字更新或增加老师
 						$instructorId = $instructorModel->saveOrupdateInstructor ( $params );
 						
-						
-						//根据名字更新或增加翻译
+						// 根据名字更新或增加翻译
 						$translatorId = null;
 						if (($params ['tFirstName'] != "") && ($params ['tLastName'] != "")) {
 							$translatorId = $translatorModel->saveOrupdateTranslator ( $params );
@@ -174,15 +173,15 @@ class SessionController extends Zend_Controller_Action {
 						$sessionInx = $sessionModel->updateSession ( $params, $instructorId, $translatorId );
 						$session = $sessionModel->find ( $sessionInx )->current ();
 						
-						//获取新的老师邮箱
+						// 获取新的老师邮箱
 						$instructorEmail = $instructorModel->find ( $instructorId )->current ()->email;
 						
-						//获取新的翻译邮箱
+						// 获取新的翻译邮箱
 						$translatorEmail = "";
 						if ($translatorId != "") {
 							$translatorEmail = $translatorModel->find ( $translatorId )->current ()->email;
 						}
-						//获取学生邮箱
+						// 获取学生邮箱
 						$studentModel = new Application_Model_Student ();
 						$studentEmail = $studentModel->find ( $params ["studentId"] )->current ()->email;
 						
@@ -217,7 +216,7 @@ class SessionController extends Zend_Controller_Action {
 				
 					以上です。";
 						
-						$emailService = new EmailService();
+						$emailService = new EmailService ();
 						$emailService->sendEmail ( $studentEmail, null, null, $mailcontent, "メンタリング予約時間変更完了" );
 						$emailService->sendEmail ( null, $instructorEmail, null, $mailcontent, "メンタリング予約時間変更完了" );
 						$emailService->sendEmail ( null, null, $translatorEmail, $mailcontent, "メンタリング予約時間変更完了" );
@@ -234,19 +233,19 @@ class SessionController extends Zend_Controller_Action {
 					
 							ありがとうございます。";
 							
-							//$studentEmail=null;
-							//$translatorOldEmail=null;
+							// $studentEmail=null;
+							// $translatorOldEmail=null;
 							$emailService->sendEmail ( null, $instructorOldEmail, null, $mailcontent, "補習授業時間を取消しました" );
 						}
-						if($translatorOldEmail!=null){
-							if($translatorOldEmail != $translatorEmail){
+						if ($translatorOldEmail != null) {
+							if ($translatorOldEmail != $translatorEmail) {
 								$mailcontent = "お疲れ様です,<p/>
 								
 								以前手配した" . $session->scheduleStartTime . " 補習授業を取消しました<p/>
 				
 								ありがとうございます。";
-								//$studentEmail=null;
-								//$instructorOldEmail=null;
+								// $studentEmail=null;
+								// $instructorOldEmail=null;
 								$emailService->sendEmail ( null, null, $translatorOldEmail, $mailcontent, "補習授業時間を取消しました" );
 							}
 						}
@@ -353,7 +352,7 @@ class SessionController extends Zend_Controller_Action {
 				予約日時：" . $session->scheduleStartTime . " <p/>
 		
 				以上です。";
-			$emailService = new EmailService();
+			$emailService = new EmailService ();
 			$emailService->sendEmail ( $studentEmail, null, null, $mailcontent, "メンタリング予約キャンセルのお知らせ" );
 			$emailService->sendEmail ( null, $instructorEmail, null, $mailcontent, "メンタリング予約キャンセルのお知らせ" );
 			$emailService->sendEmail ( null, null, $translatorEmail, $mailcontent, "メンタリング予約キャンセルのお知らせ" );
@@ -369,16 +368,20 @@ class SessionController extends Zend_Controller_Action {
 	
 	// 判断学生的剩余时间是否足够
 	private function checkStudentRemainMin($params = array()) {
+		$sessionDate = $params ["startDate"];
 		$studentModel = new Application_Model_Student ();
 		$row = $studentModel->find ( $params ["studentId"] )->current ();
 		$startdate = $row->membershipStartDate;
 		$dur = $row->membershipDur;
-		$a = strtotime ( " -".$dur." months" );
-		$b = strtotime($startdate);
+		$a = strtotime ( "+" . $dur . " months -1 days", strtotime ( $startdate ) );
+		$b = strtotime ( $sessionDate );
+		
+		$this->logger->logInfo ( "SessionController", "checkStudentRemainMin","a--->". date ( 'Y-m-d H:i:s',$a) );
+		$this->logger->logInfo ( "SessionController", "checkStudentRemainMin","b--->".date ( 'Y-m-d H:i:s',$b) );
 		
 		$remainMin = $row->minsRemaining;
 		$this->logger->logInfo ( "SessionController", "checkStudentRemainMin", "remainMIn: " . $remainMin . " dur:" . $params ['dur'] );
-		return ($remainMin > $params ["dur"]) && ($a < $b);
+		return ($remainMin > $params ["dur"]) && ($a >= $b);
 	}
 	
 	// 判断已经结束的session 和小于当前时间的session都不能改

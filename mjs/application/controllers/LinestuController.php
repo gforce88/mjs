@@ -278,7 +278,8 @@ class LinestuController extends Zend_Controller_Action {
 			$mail->Host = $config->mail->host; // SMTP server
 			$mail->Username = $config->mail->username; // SMTP server username
 			$mail->Password = $config->mail->password; // SMTP server password
-			$mail->IsSendmail (); // tell the class to use Sendmail
+			$mail->SMTPSecure = "ssl";
+			//$mail->IsSendmail (); // tell the class to use Sendmail
 			$mail->AddReplyTo ( $mail->Username, $mail->Username );
 			$mail->SetFrom ( $mail->Username, $mail->Username );
 			$mail->AddAddress ( $student->email );
@@ -330,7 +331,8 @@ class LinestuController extends Zend_Controller_Action {
 			$mail->Host = $config->mail->host; // SMTP server
 			$mail->Username = $config->mail->username; // SMTP server username
 			$mail->Password = $config->mail->password; // SMTP server password
-			$mail->IsSendmail (); // tell the class to use Sendmail
+			$mail->SMTPSecure = "ssl";
+			//$mail->IsSendmail (); // tell the class to use Sendmail
 			$mail->AddReplyTo ( $mail->Username, $mail->Username );
 			$mail->SetFrom ( $mail->Username, $mail->Username );
 			$mail->AddAddress ( $instructorEmail );
@@ -388,7 +390,8 @@ class LinestuController extends Zend_Controller_Action {
 			$mail->Host = $config->mail->host; // SMTP server
 			$mail->Username = $config->mail->username; // SMTP server username
 			$mail->Password = $config->mail->password; // SMTP server password
-			$mail->IsSendmail (); // tell the class to use Sendmail
+			$mail->SMTPSecure = "ssl";
+			//$mail->IsSendmail (); // tell the class to use Sendmail
 			$mail->AddReplyTo ( $mail->Username, $mail->Username );
 			$mail->SetFrom ( $mail->Username, $mail->Username );
 			$mail->AddAddress ( $translatorEmail );

@@ -371,17 +371,11 @@ class SessionController extends Zend_Controller_Action {
 		$sessionDate = $params ["startDate"];
 		$studentModel = new Application_Model_Student ();
 		$row = $studentModel->find ( $params ["studentId"] )->current ();
-		$startdate = $row->membershipStartDate;
-		$dur = $row->membershipDur;
-		$a = strtotime ( "+" . $dur . " months -1 days", strtotime ( $startdate ) );
-		$b = strtotime ( $sessionDate );
 		
-		$this->logger->logInfo ( "SessionController", "checkStudentRemainMin","a--->". date ( 'Y-m-d H:i:s',$a) );
-		$this->logger->logInfo ( "SessionController", "checkStudentRemainMin","b--->".date ( 'Y-m-d H:i:s',$b) );
 		
 		$remainMin = $row->minsRemaining;
 		$this->logger->logInfo ( "SessionController", "checkStudentRemainMin", "remainMIn: " . $remainMin . " dur:" . $params ['dur'] );
-		return ($remainMin > $params ["dur"]) && ($a >= $b);
+		return $remainMin > $params ["dur"];
 	}
 	
 	// 判断已经结束的session 和小于当前时间的session都不能改

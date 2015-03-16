@@ -307,15 +307,22 @@ class LinestuController extends Zend_Controller_Action {
 		$mailcontent = "";
 		$studentModel = new Application_Model_Student ();
 		$totalduration = 0;
+		// Updated email body per request by JP team - GE
+		$mailcontent = $mailcontent . "<p>";
+		$mailcontent = $mailcontent . "生徒名:" . $student->firstName . " " . $student->lastName . "<br/>";
+		$mailcontent = $mailcontent ."----<br/>";
 		foreach ( $sessions as $session ) {
 			$student = $studentModel->find ( $session->studentInx )->current ();
 			$d2 = strtotime ( $session->scheduleStartTime );
 			$d3 = strtotime ( $session->actualEndTime );
 			$duration = ceil ( ($d3 - $d2) / 60 );
-			$mailcontent = $mailcontent . "生徒名:" . $student->firstName . " " . $student->lastName . "---- ご利用時間:" . $duration . " 分<br/>";
+			//$mailcontent = $mailcontent . "生徒名:" . $student->firstName . " " . $student->lastName . "<br/>----<br/>ご利用時間:" . $duration . " 分<br/>";
+			$mailcontent = $mailcontent . "実施日時: ".$session->scheduleStartTime.", ご利用時間: " . $duration . " 分<br/>";
 			$totalduration += $duration;
 		}
-		$mailcontent = $mailcontent . "<br/><br/> 当月ご利用時間  :" . $totalduration . " 分<br/> 以上です。";
+		$mailcontent = $mailcontent . "<br/>当月ご利用時間 : " . $totalduration . " 分";
+		$mailcontent = $mailcontent . "</p>";
+		$mailcontent = $mailcontent ."<p>以上です。</p>";
 		
 		$body = file_get_contents ( APPLICATION_PATH . '/configs/mail_session_finish_mnt.html' );
 		$body = preg_replace ( '/{content}/', $mailcontent, $body ); // Strip

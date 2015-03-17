@@ -41,6 +41,7 @@
 					    "aoColumnDefs": [
 				          { 'bSortable': false, 'aTargets': [ 0 ] }
 				       	],
+				       	"aaSorting": [[ 8, "desc" ]] ,
 				       	"sScrollX": "100%",
 				       	"sScrollXInner": "100%",
 				        "bScrollCollapse": true,

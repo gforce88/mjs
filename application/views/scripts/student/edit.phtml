@@ -62,8 +62,11 @@
 					$.validator.setDefaults({
 				        submitHandler: function(form) { form.submit(); } 
 				    });
-					$.validator.addMethod("jpphone", function(value, element) { 
+					$.validator.addMethod("jpphone", function(value, element) {    
+						  /* commentted by Huan for Feathre #118
 					      return this.optional(element) || /^\+(0){0,4}(81){1}[0-9]{9,11}$/.test(value) || /^[ ]*[\+]{0,1}(0){0,4}(1){1}[0-9]{10}[ ]*$/.test(value) || /^[ ]*[\+]{0,1}(0){0,4}(65){1}[0-9]{8}[ ]*$/.test(value); 
+					      */
+					      return this.optional(element) || /^\+\d{3,18}$/.test(value) || /^\d{3,18}$/.test(value);
 					      //return true; 
 					  }, "有効な電話番号を入力してください。"); 
 									    

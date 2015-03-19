@@ -46,7 +46,8 @@ class Application_Model_Session extends Zend_Db_Table_Abstract {
 		and a.actualEndTime < '" . $endDate . "' 
 		order by b.inx";
 		$logger = LoggerFactory::getSysLogger ();
-		//$logger->logInfo ( "Application_Model_Session", "getReportSessionList", "sql is : " . $sql );
+		// $logger->logInfo ( "Application_Model_Session",
+		// "getReportSessionList", "sql is : " . $sql );
 		return $this->getAdapter ()->query ( $sql, array () );
 	}
 	public function getWillStartingSession($startDate = null, $endDate = null) {
@@ -64,7 +65,8 @@ class Application_Model_Session extends Zend_Db_Table_Abstract {
 		and a.scheduleStartTime between '" . $startDate . "' and '" . $endDate . "'
 		order by b.inx";
 		$logger = LoggerFactory::getSysLogger ();
-		//$logger->logInfo ( "Application_Model_Session", "getWillStartingSession", "sql is : " . $sql );
+		// $logger->logInfo ( "Application_Model_Session",
+		// "getWillStartingSession", "sql is : " . $sql );
 		return $this->getAdapter ()->query ( $sql, array () );
 	}
 	public function deleteSession($inx = null) {
@@ -122,8 +124,10 @@ class Application_Model_Session extends Zend_Db_Table_Abstract {
 		$end = date ( "Y-m-01 00:00:00", $end );
 		if ($type == "mnt") {
 			$select->where ( ' instructorInx = ?', $inx );
-		} else {
+		} else if ($type == "trl") {
 			$select->where ( ' translatorInx = ?', $inx );
+		} else {
+			$select->where ( ' studentInx = ?', $inx );
 		}
 		$select->where ( ' actualEndTime > ?', $start );
 		$select->where ( ' actualEndTime < ?', $end );
@@ -134,14 +138,13 @@ class Application_Model_Session extends Zend_Db_Table_Abstract {
 			return null;
 		}
 	}
-
-	//电话3次不接改session状态为cancel
-	public function changeSessionToCancel($sessionId = null){
+	
+	// 电话3次不接改session状态为cancel
+	public function changeSessionToCancel($sessionId = null) {
 		$row = $this->find ( $sessionId )->current ();
 		$row->iscancelled = 1;
-		$row->save();
+		$row->save ();
 		return $row->inx;
-
 	}
 }
 

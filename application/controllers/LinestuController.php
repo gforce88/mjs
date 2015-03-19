@@ -249,6 +249,7 @@ class LinestuController extends Zend_Controller_Action {
 		$emailService->sendEmail ( null, $instructorEmail, null, $mailcontent, "メンタリングキャンセルのお知らせ" );
 		$emailService->sendEmail ( null, null, $translatorEmail, $mailcontent, "メンタリングキャンセルのお知らせ" );
 	}
+	
 	private function sendEmailWhenCallEndToStu($sessioninx) {
 		$this->logger->logInfo ( "LinestuController", "sendEmailWhenCallEndToStu", "sendEmailWhenCallEndToStu" );
 		// $sessioninx=37;
@@ -260,7 +261,7 @@ class LinestuController extends Zend_Controller_Action {
 		$student = $studentModel->find ( $tempsession->studentInx )->current ();
 		$studentEmail = $student->email;
 		// 查找学生当月参加的session
-		$sessions = $sessionModel->findSessionsWhenCallEnd ( $tempsession->instructorInx, "stu" );
+		$sessions = $sessionModel->findSessionsWhenCallEnd ( $tempsession->studentInx, "stu" );
 		$mailcontent = "";
 		$totalduration = 0;
 		$mailcontent = $mailcontent . "<p>";

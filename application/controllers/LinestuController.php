@@ -252,20 +252,34 @@ class LinestuController extends Zend_Controller_Action {
 	private function sendEmailWhenCallEndToStu($sessioninx) {
 		$this->logger->logInfo ( "LinestuController", "sendEmailWhenCallEndToStu", "sendEmailWhenCallEndToStu" );
 		// $sessioninx=37;
-		$subject = "完成学期のお知らせ";
+		$subject = "メンタリング完了のお知らせ";
+		
 		$sessionModel = new Application_Model_Session ();
-		$session = $sessionModel->find ( $sessioninx )->current ();
-		$d2 = strtotime ( $session->scheduleStartTime );
-		$d3 = strtotime ( $session->actualEndTime );
-		$duration = ceil ( ($d3 - $d2) / 60 );
-		$body = file_get_contents ( APPLICATION_PATH . '/configs/mail_session_finish_stu.html' );
-		$date = $session->scheduleStartTime;
-		$studentModel = new Application_Model_Student ();
-		$student = $studentModel->find ( $session->studentInx )->current ();
-		$tmm = $student->minsRemaining;
-		$body = preg_replace ( '/{date}/', $date, $body ); // Strip
-		$body = preg_replace ( '/{duration}/', $duration, $body ); // Strip
-		$body = preg_replace ( '/{tmm}/', $tmm, $body ); // Strip
+		$tempsession = $sessionModel->find ( $sessioninx )->current ();
+		$studentModel = new Application_Model_Student();
+		$student = $studentModel->find ( $tempsession->studentInx )->current ();
+		$studentEmail = $student->email;
+		// 查找学生当月参加的session
+		$sessions = $sessionModel->findSessionsWhenCallEnd ( $tempsession->instructorInx, "stu" );
+		$mailcontent = "";
+		$totalduration = 0;
+		$mailcontent = $mailcontent . "<p>";
+		$mailcontent = $mailcontent . "生徒名:" . $student->firstName . " " . $student->lastName . "<br/>";
+		$mailcontent = $mailcontent ."----<br/>";
+		foreach ( $sessions as $session ) {
+			$d2 = strtotime ( $session->scheduleStartTime );
+			$d3 = strtotime ( $session->actualEndTime );
+			$duration = ceil ( ($d3 - $d2) / 60 );
+			//$mailcontent = $mailcontent . "生徒名:" . $student->firstName . " " . $student->lastName . "<br/>----<br/>ご利用時間:" . $duration . " 分<br/>";
+			$mailcontent = $mailcontent . "実施日時: ".$session->scheduleStartTime.", ご利用時間: " . $duration . " 分<br/>";
+			$totalduration += $duration;
+		}
+		$mailcontent = $mailcontent . "<br/>当月ご利用時間 : " . $totalduration . " 分";
+		$mailcontent = $mailcontent . "</p>";
+		$mailcontent = $mailcontent ."<p>以上です。</p>";
+		
+		$body = file_get_contents ( APPLICATION_PATH . '/configs/mail_session_finish_mnt.html' );
+		$body = preg_replace ( '/{content}/', $mailcontent, $body ); // Strip
 		
 		try {
 			$filename = APPLICATION_PATH . "/configs/application.ini";
@@ -282,16 +296,15 @@ class LinestuController extends Zend_Controller_Action {
 			//$mail->IsSendmail (); // tell the class to use Sendmail
 			$mail->AddReplyTo ( $mail->Username, $mail->Username );
 			$mail->SetFrom ( $mail->Username, $mail->Username );
-			$mail->AddAddress ( $student->email );
+			$mail->AddAddress ( $studentEmail );
 			$mail->Subject = "=?utf-8?B?" . base64_encode ( $subject ) . "?=";
 			$mail->WordWrap = 80; // set word wrap
 			$mail->MsgHTML ( $body );
 			$mail->IsHTML ( true ); // send as HTML
 			$mail->Send ();
 		} catch ( phpmailerException $e ) {
+			$this->logger->logInfo ( "LinestuController", "sendEmailWhenCallEndToMnt", "err in send email TO MNT" );
 		}
-		
-		// echo $body;
 	}
 	private function sendEmailWhenCallEndToMnt($sessioninx = null) {
 		$this->logger->logInfo ( "LinestuController", "sendEmailWhenCallEndToMnt", "sendEmailWhenCallEndToMnt" );
@@ -356,7 +369,7 @@ class LinestuController extends Zend_Controller_Action {
 	}
 	private function sendEmailWhenCallEndToTrl($sessioninx = null) {
 		$this->logger->logInfo ( "LinestuController", "sendEmailWhenCallEndToTrl", "sendEmailWhenCallEndToTrl" );
-		$subject = "完成学期のお知らせ";
+		$subject = "メンタリング完了のお知らせ";
 		$sessionModel = new Application_Model_Session ();
 		$tempsession = $sessionModel->find ( $sessioninx )->current ();
 		if ($tempsession->translatorInx == null) {
